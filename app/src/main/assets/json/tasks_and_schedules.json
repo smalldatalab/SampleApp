@@ -111,6 +111,18 @@
           "taskCompletionTimeString": "1 Question"
         }
       ]
+    },
+    {
+      "scheduleType": "once",
+      "tasks": [
+        {
+          "taskTitle": "YADL Full",
+          "taskID": "YADL-FULL-123456",
+          "taskFileName": "yadl",
+          "taskClassName": "org.researchstack.sampleapp.SDL.APHYADLFullAssessmentTaskViewController",
+          "taskCompletionTimeString": "1 Question"
+        }
+      ]
     }
   ]
 }

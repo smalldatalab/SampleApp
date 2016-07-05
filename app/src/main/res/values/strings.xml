@@ -12,4 +12,8 @@
     </string>
     <string name="sample_notification_example">Notification Permission</string>
     <string name="grant">Grant</string>
+    <string name="yadl_image_path">images/yadl</string>
+    <string name="yadl_image_ext">jpeg</string>
+    <string name="medl_image_path">images/medl</string>
+    <string name="medl_image_ext">jpg</string>
 </resources>

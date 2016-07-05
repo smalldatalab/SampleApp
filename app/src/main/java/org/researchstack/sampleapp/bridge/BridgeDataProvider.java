@@ -536,11 +536,11 @@ public abstract class BridgeDataProvider extends DataProvider
 
             // loading the task json here is bad, but the taskID is in the schedule
             // json but the readable id is in the task json
-            TaskModel taskModel = loadTaskModel(context, task);
-            TaskResult result = db.loadLatestTaskResult(taskModel.identifier);
+//            TaskModel taskModel = loadTaskModel(context, task);
+            TaskResult result = db.loadLatestTaskResult(task.taskID);
 
             // cache cron string for later lookup
-            loadedTaskCrons.put(taskModel.identifier, schedule.scheduleString);
+            loadedTaskCrons.put(task.taskID, schedule.scheduleString);
 
             if(result == null)
             {
