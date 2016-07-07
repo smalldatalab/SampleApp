@@ -528,11 +528,13 @@ public abstract class BridgeDataProvider extends DataProvider
             // only supporting one task per schedule for now
             SchedulesAndTasksModel.TaskScheduleModel task = schedule.tasks.get(0);
 
-            if(task.taskFileName == null)
-            {
-                LogExt.e(getClass(), "No filename found for task with id: " + task.taskID);
-                continue;
-            }
+            //note that PAM does not require a filename
+
+//            if(task.taskFileName == null)
+//            {
+//                LogExt.e(getClass(), "No filename found for task with id: " + task.taskID);
+//                continue;
+//            }
 
             // loading the task json here is bad, but the taskID is in the schedule
             // json but the readable id is in the task json
@@ -610,11 +612,16 @@ public abstract class BridgeDataProvider extends DataProvider
 
         for(StepResult stepResult : taskResult.getResults().values())
         {
-            SurveyAnswer surveyAnswer = SurveyAnswer.create(stepResult);
-            files.add(new BridgeDataInput(surveyAnswer,
-                    SurveyAnswer.class,
-                    stepResult.getIdentifier() + ".json",
-                    FormatHelper.DEFAULT_FORMAT.format(stepResult.getEndDate())));
+            //check for null stepResult here
+            //InstructionSteps have a null stepResult
+            if(stepResult != null) {
+                SurveyAnswer surveyAnswer = SurveyAnswer.create(stepResult);
+                files.add(new BridgeDataInput(surveyAnswer,
+                        SurveyAnswer.class,
+                        stepResult.getIdentifier() + ".json",
+                        FormatHelper.DEFAULT_FORMAT.format(stepResult.getEndDate())));
+            }
+
         }
 
         uploadBridgeData(context,

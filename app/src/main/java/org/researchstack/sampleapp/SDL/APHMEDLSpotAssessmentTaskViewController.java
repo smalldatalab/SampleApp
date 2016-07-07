@@ -5,18 +5,16 @@ import android.content.Context;
 import org.researchstack.backbone.task.Task;
 import org.researchstack.skin.ResourceManager;
 import org.researchstack.skin.model.SchedulesAndTasksModel;
-import edu.cornell.tech.foundry.sdl_rsx.task.YADLFullAssessmentTask;
-import org.researchstack.sampleapp.SampleResourceManager;
+
+import edu.cornell.tech.foundry.sdl_rsx.task.MEDLSpotAssessmentTask;
 
 /**
- * Created by jk on 6/30/16.
+ * Created by jk on 7/6/16.
  */
-public class APHYADLFullAssessmentTaskViewController implements TaskFactory {
-
+public class APHMEDLSpotAssessmentTaskViewController implements TaskFactory {
     public Task createTask(Context context, SchedulesAndTasksModel.TaskScheduleModel scheduledTask, ResourceManager resourceManager, int resourceType)
     {
         String jsonPath = resourceManager.generatePath(resourceType, scheduledTask.taskFileName);
-        return YADLFullAssessmentTask.create(scheduledTask.taskID, jsonPath, context);
+        return MEDLSpotAssessmentTask.create(scheduledTask.taskID, jsonPath, context);
     }
-
 }

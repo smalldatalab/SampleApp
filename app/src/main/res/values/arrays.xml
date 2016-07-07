@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="task_class_name_packages">
+        <item>org.researchstack.sampleapp.SDL</item>
+    </string-array>
+</resources>

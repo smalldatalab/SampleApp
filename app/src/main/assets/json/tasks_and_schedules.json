@@ -113,13 +113,65 @@
       ]
     },
     {
-      "scheduleType": "once",
+      "scheduleType": "recurring",
+      "scheduleString": "* * * * *",
       "tasks": [
         {
           "taskTitle": "YADL Full",
           "taskID": "YADL-FULL-123456",
           "taskFileName": "yadl",
-          "taskClassName": "org.researchstack.sampleapp.SDL.APHYADLFullAssessmentTaskViewController",
+          "taskClassName": "APHYADLFullAssessmentTaskViewController",
+          "taskCompletionTimeString": "1 Question"
+        }
+      ]
+    },
+    {
+      "scheduleType": "recurring",
+      "scheduleString": "* * * * *",
+      "tasks": [
+        {
+          "taskTitle": "YADL Spot",
+          "taskID": "YADL-SPOT-123456",
+          "taskFileName": "yadl",
+          "taskClassName": "APHYADLSpotAssessmentTaskViewController",
+          "taskCompletionTimeString": "1 Question"
+        }
+      ]
+    },
+    {
+      "scheduleType": "recurring",
+      "scheduleString": "* * * * *",
+      "tasks": [
+        {
+          "taskTitle": "MEDL Full",
+          "taskID": "MEDL-FULL-123456",
+          "taskFileName": "medl",
+          "taskClassName": "APHMEDLFullAssessmentTaskViewController",
+          "taskCompletionTimeString": "1 Question"
+        }
+      ]
+    },
+    {
+      "scheduleType": "recurring",
+      "scheduleString": "* * * * *",
+      "tasks": [
+        {
+          "taskTitle": "MEDL Spot",
+          "taskID": "MEDL-SPOT-123456",
+          "taskFileName": "medl",
+          "taskClassName": "APHMEDLSpotAssessmentTaskViewController",
+          "taskCompletionTimeString": "1 Question"
+        }
+      ]
+    },
+    {
+      "scheduleType": "recurring",
+      "scheduleString": "* * * * *",
+      "tasks": [
+        {
+          "taskTitle": "PAM",
+          "taskID": "PAM-123456",
+          "taskClassName": "APHPAMTaskViewController",
           "taskCompletionTimeString": "1 Question"
         }
       ]
