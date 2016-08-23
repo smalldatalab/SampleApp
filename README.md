@@ -1,6 +1,10 @@
-# Sample App
+# Northwell Impulsivity Research Study: Android
 
-This repo is to provide developers with an example codebase of how they'd implement the ResearchStack framework into their research study app. The project uses a most of the resources found the in the ResearchKit™ Asthma repo found [here](https://github.com/ResearchKit/AsthmaHealth)
+Forked from the ResearchStack SampleApp repo: https://github.com/ResearchStack/SampleApp.
+
+# Requirements
+
+The app requires a Sage Bridge server to build against. The Bridge Study Name/Identifier should be placed in `gradle.properties`. The Bridge public key file should be placed at the top level of `app/src/main/assets' and named "bridge_key.pem".
 
 # App Content Attribution
 
