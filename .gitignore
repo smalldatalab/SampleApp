@@ -2,6 +2,9 @@
 *.apk
 *.ap_
 
+# Scratch directory for local logs etc.
+scratch/
+
 # Credentials
 *.pem
 

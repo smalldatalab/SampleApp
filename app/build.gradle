@@ -7,7 +7,7 @@ android {
     buildToolsVersion '23.0.2'
 
     defaultConfig {
-        applicationId 'org.cornelltech.sampleapp'
+        applicationId 'org.smalldatalab.northwell.impulse'
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -32,7 +32,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', 'STUDY_ID', studyId
             buildConfigField 'String', 'STUDY_NAME', studyName
-            buildConfigField 'String', 'STUDY_BASE_URL', "\"https://webservices-staging.sagebridge.org/\""
+            buildConfigField 'String', 'STUDY_BASE_URL', "\"https://webservices.sagebridge.org/\""
         }
     }
 
