@@ -4,7 +4,7 @@ Forked from the ResearchStack SampleApp repo: https://github.com/ResearchStack/S
 
 # Requirements
 
-The app requires a Sage Bridge server to build against. The Bridge Study Name/Identifier should be placed in `gradle.properties`. The Bridge public key file should be placed at the top level of `app/src/main/assets' and named "bridge_key.pem".
+The app requires a Sage Bridge server to build against. The Bridge Study Name/Identifier should be placed in `gradle.properties`. The Bridge public key file should be placed at the top level of `app/src/main/assets` and named "bridge_key.pem".
 
 # App Content Attribution
 
