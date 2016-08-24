@@ -49,6 +49,9 @@ android {
     dexOptions {
         javaMaxHeapSize '4g' //specify the heap size for the dex process
     }
+    sourceSets {
+        main { assets.srcDirs = ['src/main/assets', 'src/northwell-impulse-common/assets'] }
+    }
 }
 
 dependencies {
