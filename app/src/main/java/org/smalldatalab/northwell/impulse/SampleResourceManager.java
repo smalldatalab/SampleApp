@@ -38,7 +38,7 @@ public class SampleResourceManager extends ResourceManager
     @Override
     public Resource getConsentPDF()
     {
-        return new Resource(Resource.TYPE_PDF, BASE_PATH_HTML, "study_overview_consent_form");
+        return new Resource(Resource.TYPE_PDF, BASE_PATH_HTML, "DMTValidationConsent072616");
     }
 
     @Override
