@@ -1,5 +1,6 @@
 package org.smalldatalab.northwell.impulse;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.researchstack.backbone.ResourcePathManager;
 import org.researchstack.skin.ResourceManager;
@@ -44,6 +45,7 @@ public class SampleResourceManager extends ResourceManager
     @Override
     public Resource getConsentSections()
     {
+        Log.d("Sample Resource Manager", "Getting consent...");
         return new Resource(Resource.TYPE_JSON,
                 BASE_PATH_JSON,
                 "consent_section",
