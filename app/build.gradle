@@ -49,12 +49,15 @@ android {
     dexOptions {
         javaMaxHeapSize '4g' //specify the heap size for the dex process
     }
+    sourceSets {
+        main { assets.srcDirs = ['src/main/assets', 'src/northwell-impulse-common/assets'] }
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'org.researchstack:skin:1.0.0.rc4'
+    compile 'org.researchstack:skin:1.1.1'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'net.zetetic:android-database-sqlcipher:3.3.1-2@aar'
     apt 'co.touchlab.squeaky:squeaky-processor:0.4.0.0'

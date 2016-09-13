@@ -65,7 +65,7 @@ public class SampleResearchStack extends ResearchStack
     @Override
     protected UiManager createUiManagerImplementation(Context context)
     {
-        return new SampleUiManager();
+        return new ImpulseUiManager();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.smalldatalab.northwell.impulse;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.researchstack.backbone.ResourcePathManager;
 import org.researchstack.skin.ResourceManager;
@@ -38,12 +39,13 @@ public class SampleResourceManager extends ResourceManager
     @Override
     public Resource getConsentPDF()
     {
-        return new Resource(Resource.TYPE_PDF, BASE_PATH_HTML, "study_overview_consent_form");
+        return new Resource(Resource.TYPE_PDF, BASE_PATH_HTML, "DMTValidationConsent072616");
     }
 
     @Override
     public Resource getConsentSections()
     {
+        Log.d("Sample Resource Manager", "Getting consent...");
         return new Resource(Resource.TYPE_JSON,
                 BASE_PATH_JSON,
                 "consent_section",
