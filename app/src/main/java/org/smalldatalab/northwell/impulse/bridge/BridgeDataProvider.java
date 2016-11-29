@@ -608,27 +608,27 @@ public abstract class BridgeDataProvider extends DataProvider
             }
         }
 
-        List<BridgeDataInput> files = new ArrayList<>();
-
-        for(StepResult stepResult : taskResult.getResults().values())
-        {
-            //check for null stepResult here
-            //InstructionSteps have a null stepResult
-            if(stepResult != null) {
-                SurveyAnswer surveyAnswer = SurveyAnswer.create(stepResult);
-                files.add(new BridgeDataInput(surveyAnswer,
-                        SurveyAnswer.class,
-                        stepResult.getIdentifier() + ".json",
-                        FormatHelper.DEFAULT_FORMAT.format(stepResult.getEndDate())));
-            }
-
-        }
-
-        uploadBridgeData(context,
-                new Info(context,
-                        getGuid(taskResult.getIdentifier()),
-                        getCreatedOnDate(taskResult.getIdentifier())),
-                files);
+//        List<BridgeDataInput> files = new ArrayList<>();
+//
+//        for(StepResult stepResult : taskResult.getResults().values())
+//        {
+//            //check for null stepResult here
+//            //InstructionSteps have a null stepResult
+//            if(stepResult != null) {
+//                SurveyAnswer surveyAnswer = SurveyAnswer.create(stepResult);
+//                files.add(new BridgeDataInput(surveyAnswer,
+//                        SurveyAnswer.class,
+//                        stepResult.getIdentifier() + ".json",
+//                        FormatHelper.DEFAULT_FORMAT.format(stepResult.getEndDate())));
+//            }
+//
+//        }
+//
+//        uploadBridgeData(context,
+//                new Info(context,
+//                        getGuid(taskResult.getIdentifier()),
+//                        getCreatedOnDate(taskResult.getIdentifier())),
+//                files);
     }
 
     public void uploadBridgeData(Context context, Info info, BridgeDataInput... dataFiles)
