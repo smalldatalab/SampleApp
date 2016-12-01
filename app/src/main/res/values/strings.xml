@@ -19,4 +19,5 @@
     <string name="medl_image_ext">jpg</string>
     <string name="overlay_image_path">images</string>
     <string name="overlay_image_ext">png</string>
+    <string name="impulse_external_id">External ID</string>
 </resources>
