@@ -74,6 +74,7 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
 
             ConfirmationTextAnswerFormat confirmationFormat = new ConfirmationTextAnswerFormat();
             ConfirmationStep cs = new ConfirmationStep("confirmExternalId", "Confirm Participant ID", confirmationFormat, "externalId");
+            cs.setPlaceholder("Confirm Participant ID");
 
             OrderedTask task = new OrderedTask("PasscodeTask", step, qs, cs);
             startActivityForResult(ConsentTaskActivity.newIntent(this, task),
