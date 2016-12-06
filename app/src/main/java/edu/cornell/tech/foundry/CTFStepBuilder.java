@@ -1,4 +1,4 @@
-package org.smalldatalab.northwell.impulse.RSExtensions;
+package edu.cornell.tech.foundry;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import edu.cornell.tech.foundry.CTFStepGeneratorServiceProvider.CTFStepGeneratorService;
 
 /**
  * Created by jameskizer on 12/6/16.
@@ -194,23 +196,26 @@ public class CTFStepBuilder {
     @Nullable
     protected
     Step createStepForObject(Context context, String type, JsonObject jsonObject) {
-        try {
-            String identifier = jsonObject.get("identifier").getAsString();
+//        try {
+//            String identifier = jsonObject.get("identifier").getAsString();
+//
+//            JsonElement paramFilenameElement = jsonObject.get("parameterFileName");
+//            String parameterFileName = "no parameter file name";
+//            if (paramFilenameElement != null && !paramFilenameElement.isJsonNull()) {
+//                parameterFileName = jsonObject.get("parameterFileName").getAsString();
+//            }
+//
+//            InstructionStep instructionStep;
+//            instructionStep = new InstructionStep(identifier , identifier, parameterFileName);
+//            return instructionStep;
+//        }
+//        catch(Exception e) {
+//            Log.w(this.TAG, "malformed element: " + jsonObject.getAsString(), e);
+//            return null;
+//        }
 
-            JsonElement paramFilenameElement = jsonObject.get("parameterFileName");
-            String parameterFileName = "no parameter file name";
-            if (paramFilenameElement != null && !paramFilenameElement.isJsonNull()) {
-                parameterFileName = jsonObject.get("parameterFileName").getAsString();
-            }
-
-            InstructionStep instructionStep;
-            instructionStep = new InstructionStep(identifier , identifier, parameterFileName);
-            return instructionStep;
-        }
-        catch(Exception e) {
-            Log.w(this.TAG, "malformed element: " + jsonObject.getAsString(), e);
-            return null;
-        }
+        CTFStepGeneratorService stepGenerator = CTFStepGeneratorService.getInstance();
+        return stepGenerator.generateStep(context, type, jsonObject);
     }
 
 //    @Nullable

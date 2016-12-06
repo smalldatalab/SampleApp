@@ -17,7 +17,7 @@ import org.researchstack.backbone.step.InstructionStep;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
-import org.smalldatalab.northwell.impulse.RSExtensions.CTFStepBuilder;
+import edu.cornell.tech.foundry.CTFStepBuilder;
 import org.smalldatalab.northwell.impulse.SDL.TaskFactory;
 import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
 import org.researchstack.skin.ResourceManager;
