@@ -565,7 +565,7 @@ public abstract class BridgeDataProvider extends DataProvider
 
     private TaskModel loadTaskModel(Context context, SchedulesAndTasksModel.TaskScheduleModel task)
     {
-        TaskModel taskModel = ResourceManager.getInstance()
+         TaskModel taskModel = ResourceManager.getInstance()
                 .getTask(task.taskFileName)
                 .create(context);
 
