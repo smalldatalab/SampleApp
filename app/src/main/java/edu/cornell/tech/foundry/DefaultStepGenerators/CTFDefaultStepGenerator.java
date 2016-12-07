@@ -28,7 +28,14 @@ public class CTFDefaultStepGenerator implements CTFStepGenerator {
         this.supportedTypes = Arrays.asList(
                 "CTFSemanticDifferentialForm",
                 "CTFBehaviorVSRStep",
-                "CTFGoNoGoActiveStep"
+                "CTFGoNoGoActiveStep",
+                "singleChoiceText",
+                "textfield",
+                "numericInteger",
+                "textfield",
+                "multipleChoiceText",
+                "PAMMultipleSelection",
+                "timePicker"
         );
     }
 
@@ -36,14 +43,8 @@ public class CTFDefaultStepGenerator implements CTFStepGenerator {
         try {
             String identifier = jsonObject.get("identifier").getAsString();
 
-            JsonElement paramFilenameElement = jsonObject.get("parameterFileName");
-            String parameterFileName = "no parameter file name";
-            if (paramFilenameElement != null && !paramFilenameElement.isJsonNull()) {
-                parameterFileName = jsonObject.get("parameterFileName").getAsString();
-            }
-
             InstructionStep instructionStep;
-            instructionStep = new InstructionStep(identifier , identifier, parameterFileName);
+            instructionStep = new InstructionStep(identifier, identifier, type);
             return instructionStep;
         }
         catch(Exception e) {
