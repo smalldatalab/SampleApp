@@ -29,7 +29,6 @@ public class CTFDefaultStepGenerator implements CTFStepGenerator {
                 "CTFSemanticDifferentialForm",
                 "CTFBehaviorVSRStep",
                 "CTFGoNoGoActiveStep",
-                "numericInteger",
                 "PAMMultipleSelection",
                 "timePicker"
         );

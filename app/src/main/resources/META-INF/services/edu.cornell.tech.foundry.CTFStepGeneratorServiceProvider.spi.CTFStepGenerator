@@ -3,4 +3,5 @@ edu.cornell.tech.foundry.DefaultStepGenerators.InstructionStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.TextFieldStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.SingleChoiceStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.MultipleChoiceStepGenerator
+edu.cornell.tech.foundry.DefaultStepGenerators.IntegerStepGenerator
 org.smalldatalab.northwell.impulse.SDL.PAMStepGenerator
