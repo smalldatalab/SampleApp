@@ -1,4 +1,4 @@
-package edu.cornell.tech.foundry;
+package edu.cornell.tech.foundry.DefaultStepGenerators;
 
 import android.content.Context;
 import android.util.Log;
@@ -28,8 +28,6 @@ public class CTFDefaultStepGenerator implements CTFStepGenerator {
         this.supportedTypes = Arrays.asList(
                 "CTFSemanticDifferentialForm",
                 "CTFBehaviorVSRStep",
-                "PAM",
-                "instruction",
                 "CTFGoNoGoActiveStep"
         );
     }

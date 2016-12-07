@@ -99,8 +99,10 @@ public class SampleDataProvider extends BridgeDataProvider
                 Log.w(this.TAG, "could not create steps from task json", e);
                 return null;
             }
+            if (stepList != null && stepList.size() > 0) {
+                return new OrderedTask(task.taskID, stepList);
+            }
 
-            return new OrderedTask(task.taskID, stepList);
 
         }
 

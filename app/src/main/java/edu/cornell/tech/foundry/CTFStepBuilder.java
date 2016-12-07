@@ -167,76 +167,11 @@ public class CTFStepBuilder {
         return element;
     }
 
-//    @Nullable
-//    private JsonObject getJsonObjectForFilename(Context context, String filename) {
-//        String jsonPath = ResourceManager.getInstance().generatePath(SampleResourceManager.SURVEY, filename);
-//        InputStream stream = ResourceManager.getInstance().getResouceAsInputStream(context, jsonPath);
-//        Reader reader = null;
-//        try
-//        {
-//            reader = new InputStreamReader(stream, "UTF-8");
-//        }
-//        catch(UnsupportedEncodingException e)
-//        {
-//            throw new RuntimeException(e);
-//        }
-//
-//        JsonParser parser = new JsonParser();
-//        JsonObject jsonObject = null;
-//        try {
-//            jsonObject = parser.parse(reader).getAsJsonObject();
-//        }
-//        catch(Exception e) {
-//            Log.w(this.TAG, "could not convert file to task json", e);
-//            return null;
-//        }
-//        return jsonObject;
-//    }
-
     @Nullable
     protected
     Step createStepForObject(Context context, String type, JsonObject jsonObject) {
-//        try {
-//            String identifier = jsonObject.get("identifier").getAsString();
-//
-//            JsonElement paramFilenameElement = jsonObject.get("parameterFileName");
-//            String parameterFileName = "no parameter file name";
-//            if (paramFilenameElement != null && !paramFilenameElement.isJsonNull()) {
-//                parameterFileName = jsonObject.get("parameterFileName").getAsString();
-//            }
-//
-//            InstructionStep instructionStep;
-//            instructionStep = new InstructionStep(identifier , identifier, parameterFileName);
-//            return instructionStep;
-//        }
-//        catch(Exception e) {
-//            Log.w(this.TAG, "malformed element: " + jsonObject.getAsString(), e);
-//            return null;
-//        }
-
         CTFStepGeneratorService stepGenerator = CTFStepGeneratorService.getInstance();
         return stepGenerator.generateStep(context, type, jsonObject);
     }
 
-//    @Nullable
-//    protected InstructionStep createInstructionStepFromElement(Context context, JsonObject element) {
-//
-//        try {
-//            String identifier = element.get("identifier").getAsString();
-//
-//            JsonElement paramFilenameElement = element.get("parameterFileName");
-//            String parameterFileName = "no parameter file name";
-//            if (paramFilenameElement != null && !paramFilenameElement.isJsonNull()) {
-//                parameterFileName = element.get("parameterFileName").getAsString();
-//            }
-//
-//            InstructionStep instructionStep;
-//            instructionStep = new InstructionStep(identifier , identifier, parameterFileName);
-//            return instructionStep;
-//        }
-//        catch(Exception e) {
-//            Log.w(this.TAG, "malformed element: " + element.getAsString(), e);
-//            return null;
-//        }
-//    }
 }
