@@ -1,13 +1,12 @@
 package edu.cornell.tech.foundry.DefaultStepGenerators;
 
-import android.content.Context;
-
 import com.google.gson.JsonObject;
 
 import org.researchstack.backbone.step.Step;
 
 import java.util.List;
 
+import edu.cornell.tech.foundry.CTFStepBuilderHelper;
 import edu.cornell.tech.foundry.CTFStepGeneratorServiceProvider.spi.CTFStepGenerator;
 
 /**
@@ -24,5 +23,5 @@ public abstract class CTFBaseStepGenerator implements CTFStepGenerator {
         return this.supportedTypes;
     }
 
-    public abstract Step generateStep(Context context, String type, JsonObject jsonObject);
+    public abstract Step generateStep(CTFStepBuilderHelper helper, String type, JsonObject jsonObject);
 }

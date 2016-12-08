@@ -41,7 +41,7 @@ public class SampleDataProvider extends BridgeDataProvider
     public SampleDataProvider()
     {
         super();
-        CTFStepBuilder.init(new CTFStepBuilder());
+//        CTFStepBuilder.init(new CTFStepBuilder());
     }
 
     @Override
@@ -91,9 +91,10 @@ public class SampleDataProvider extends BridgeDataProvider
 
             System.out.print("got ordered task!!");
 
+            CTFStepBuilder stepBuilder = new CTFStepBuilder(context, ResourceManager.getInstance());
             List<Step> stepList = null;
             try {
-                stepList = CTFStepBuilder.getInstance().stepsForElementFilename(context, task.taskFileName);
+                stepList = stepBuilder.stepsForElementFilename(task.taskFileName);
             }
             catch(Exception e) {
                 Log.w(this.TAG, "could not create steps from task json", e);

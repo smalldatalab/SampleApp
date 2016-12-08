@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
+import edu.cornell.tech.foundry.CTFStepBuilderHelper;
 import edu.cornell.tech.foundry.CTFStepGeneratorServiceProvider.spi.CTFStepGenerator;
 
 /**
@@ -37,7 +38,7 @@ public class CTFStepGeneratorService {
 
     @Nullable
     public
-    Step generateStep(Context context, String type, JsonObject jsonObject) {
+    Step generateStep(CTFStepBuilderHelper helper, String type, JsonObject jsonObject) {
         Step step = null;
 
         try {
@@ -45,7 +46,7 @@ public class CTFStepGeneratorService {
             while (step == null && stepGenerators.hasNext()) {
                 CTFStepGenerator stepGenerator = stepGenerators.next();
                 if (stepGenerator.supportsType(type)) {
-                    step = stepGenerator.generateStep(context, type, jsonObject);
+                    step = stepGenerator.generateStep(helper, type, jsonObject);
                 }
             }
         } catch (ServiceConfigurationError serviceError) {

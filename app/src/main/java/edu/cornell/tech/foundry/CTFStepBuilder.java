@@ -7,18 +7,12 @@ import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.apache.commons.lang3.StringUtils;
-import org.researchstack.backbone.step.InstructionStep;
 import org.researchstack.backbone.step.Step;
+import org.researchstack.backbone.ui.step.body.StepBody;
 import org.researchstack.skin.ResourceManager;
-import org.smalldatalab.northwell.impulse.SampleResourceManager;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -33,37 +27,40 @@ public class CTFStepBuilder {
 
     private static final String TAG = "CTFStepBuilder";
     private static CTFStepBuilder instance;
+    private CTFStepBuilderHelper stepBuilderHelper;
+    private Context context;
 
-    public CTFStepBuilder()
-    {
+    public CTFStepBuilder(Context context, ResourceManager resourceManager) {
+        this.stepBuilderHelper = new CTFStepBuilderHelper(context, resourceManager);
     }
 
-    public static CTFStepBuilder getInstance()
-    {
-        if(instance == null)
-        {
-            throw new RuntimeException(
-                    "CTFStepBuilder instance is null.");
-        }
 
-        return instance;
-    }
-
-    public static void init(CTFStepBuilder instance)
-    {
-        CTFStepBuilder.instance = instance;
-    }
+//    public static CTFStepBuilder getInstance()
+//    {
+//        if(instance == null)
+//        {
+//            throw new RuntimeException(
+//                    "CTFStepBuilder instance is null.");
+//        }
+//
+//        return instance;
+//    }
+//
+//    public static void init(CTFStepBuilder instance)
+//    {
+//        CTFStepBuilder.instance = instance;
+//    }
 
     @Nullable
     private
-    List<Step> stepsForElement(Context context, JsonElement element) {
+    List<Step> stepsForElement(JsonElement element) {
         if (element.isJsonArray()) {
             JsonArray jsonArray = element.getAsJsonArray();
-            return this.generateSteps(context, jsonArray);
+            return this.generateSteps(jsonArray);
         }
         else if (element.isJsonObject()) {
             JsonObject jsonObject = element.getAsJsonObject();
-            return this.generateSteps(context, jsonObject);
+            return this.generateSteps(jsonObject);
         }
         else {
             return null;
@@ -72,14 +69,14 @@ public class CTFStepBuilder {
 
     @Nullable
     public
-    List<Step> stepsForElementFilename(Context context, String elementFilename) {
-        JsonElement element = this.getJsonElementForFilename(context, elementFilename);
+    List<Step> stepsForElementFilename(String elementFilename) {
+        JsonElement element = this.stepBuilderHelper.getJsonElementForFilename(elementFilename);
 
         System.out.print("got ordered task!!");
 
         List<Step> stepList = null;
         try {
-            stepList = this.stepsForElement(context, element);
+            stepList = this.stepsForElement(element);
         }
         catch(Exception e) {
             Log.w(this.TAG, "could not create steps from task json", e);
@@ -92,7 +89,7 @@ public class CTFStepBuilder {
 
     @Nullable
     private
-    List<Step> generateSteps(Context context, JsonObject element) {
+    List<Step> generateSteps(JsonObject element) {
 
         String type = element.get("type").getAsString();
         if(StringUtils.isEmpty(type)) {
@@ -102,34 +99,34 @@ public class CTFStepBuilder {
         switch(type)
         {
             case "elementList":
-                return this.generateSteps(context, element.get("elements").getAsJsonArray());
+                return this.generateSteps(element.get("elements").getAsJsonArray());
             case "elementFile":
                 JsonElement jsonElement = null;
                 try {
                     String elementFilename = element.get("elementFileName").getAsString();
-                    jsonElement = this.getJsonElementForFilename(context, elementFilename);
+                    jsonElement = this.stepBuilderHelper.getJsonElementForFilename(elementFilename);
                 }
                 catch(Exception e) {
                     Log.w(this.TAG, "malformed elementFile: " + element.getAsString(), e);
                     return null;
                 }
-                return this.stepsForElement(context, jsonElement);
+                return this.stepsForElement(jsonElement);
             default:
-                Step step = this.createStepForObject(context, type, element);
+                Step step = this.createStepForObject(type, element);
                 return Arrays.asList(step);
         }
     }
 
     @Nullable
     private
-    List<Step> generateSteps(Context context, JsonArray arrayOfElements) {
+    List<Step> generateSteps(JsonArray arrayOfElements) {
 
         List<Step> stepList = new ArrayList<>();
 
         Iterator<JsonElement> elementIter = arrayOfElements.iterator();
         while (elementIter.hasNext()){
             JsonObject element = elementIter.next().getAsJsonObject();
-            List<Step> addlStepList = generateSteps(context, element);
+            List<Step> addlStepList = this.generateSteps(element);
             if (addlStepList != null) {
                 stepList.addAll(addlStepList);
             }
@@ -139,39 +136,13 @@ public class CTFStepBuilder {
     }
 
 
-    //utilities
-    @Nullable
-    protected
-    JsonElement getJsonElementForFilename(Context context, String filename) {
-        String jsonPath = ResourceManager.getInstance().generatePath(SampleResourceManager.SURVEY, filename);
-        InputStream stream = ResourceManager.getInstance().getResouceAsInputStream(context, jsonPath);
-        Reader reader = null;
-        try
-        {
-            reader = new InputStreamReader(stream, "UTF-8");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            throw new RuntimeException(e);
-        }
 
-        JsonParser parser = new JsonParser();
-        JsonElement element = null;
-        try {
-            element = parser.parse(reader);
-        }
-        catch(Exception e) {
-            Log.w(this.TAG, "could not convert file to task json", e);
-            return null;
-        }
-        return element;
-    }
 
     @Nullable
     protected
-    Step createStepForObject(Context context, String type, JsonObject jsonObject) {
+    Step createStepForObject(String type, JsonObject jsonObject) {
         CTFStepGeneratorService stepGenerator = CTFStepGeneratorService.getInstance();
-        return stepGenerator.generateStep(context, type, jsonObject);
+        return stepGenerator.generateStep(this.stepBuilderHelper, type, jsonObject);
     }
 
 }

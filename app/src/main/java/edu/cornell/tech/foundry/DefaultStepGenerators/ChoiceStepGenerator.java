@@ -1,18 +1,16 @@
 package edu.cornell.tech.foundry.DefaultStepGenerators;
 
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.researchstack.backbone.answerformat.AnswerFormat;
 import org.researchstack.backbone.answerformat.ChoiceAnswerFormat;
-import org.researchstack.backbone.answerformat.TextAnswerFormat;
 import org.researchstack.backbone.model.Choice;
 
 import java.util.List;
 
+import edu.cornell.tech.foundry.CTFStepBuilderHelper;
 import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.ChoiceStepDescriptor;
 import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.ChoiceStepItemDescriptor;
 
@@ -48,10 +46,9 @@ public abstract class ChoiceStepGenerator extends QuestionStepGenerator {
         return choices;
     }
 
-    public AnswerFormat generateAnswerFormat(Context context, String type, JsonObject jsonObject) {
+    public AnswerFormat generateAnswerFormat(CTFStepBuilderHelper helper, String type, JsonObject jsonObject) {
 
-        Gson gson = new Gson();
-        ChoiceStepDescriptor choiceStepDescriptor = gson.fromJson(jsonObject, ChoiceStepDescriptor.class);
+        ChoiceStepDescriptor choiceStepDescriptor = helper.getGson().fromJson(jsonObject, ChoiceStepDescriptor.class);
 
         AnswerFormat.ChoiceAnswerStyle answerStyle = this.allowsMultiple()
                 ? AnswerFormat.ChoiceAnswerStyle.MultipleChoice
