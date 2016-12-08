@@ -28,9 +28,7 @@ public class CTFDefaultStepGenerator implements CTFStepGenerator {
         this.supportedTypes = Arrays.asList(
                 "CTFSemanticDifferentialForm",
                 "CTFBehaviorVSRStep",
-                "CTFGoNoGoActiveStep",
-                "PAMMultipleSelection",
-                "timePicker"
+                "CTFGoNoGoActiveStep"
         );
     }
 
