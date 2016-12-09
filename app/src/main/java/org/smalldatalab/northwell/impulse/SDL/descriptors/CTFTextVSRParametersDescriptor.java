@@ -35,6 +35,7 @@ public class CTFTextVSRParametersDescriptor {
 //    public JSONObject options;
 //    public String options;
     public JsonObject options;
+    public boolean shuffleOrder = true;
     public List<ChoiceStepItemDescriptor> items;
 
 }

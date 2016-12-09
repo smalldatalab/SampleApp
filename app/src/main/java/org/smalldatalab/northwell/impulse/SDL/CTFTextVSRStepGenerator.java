@@ -63,9 +63,14 @@ public class CTFTextVSRStepGenerator extends CTFBaseStepGenerator {
 
         CTFTextVSRParametersDescriptor parameters = helper.getGson().fromJson(stepDescriptor.parameters, CTFTextVSRParametersDescriptor.class);
 
+        Choice[] choices = this.generateChoices(parameters.items);
+        if (parameters.shuffleOrder) {
+            CTFHelpers.shuffle(choices);
+        }
+
         AnswerFormat answerFormat = new ChoiceAnswerFormat(
                 AnswerFormat.ChoiceAnswerStyle.MultipleChoice,
-                this.generateChoices(parameters.items)
+                choices
         );
 
         RSXMultipleImageSelectionSurveyOptions options = new RSXMultipleImageSelectionSurveyOptions(parameters.options, helper.getContext());

@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import org.researchstack.backbone.answerformat.IntegerAnswerFormat;
 import org.researchstack.backbone.answerformat.TextAnswerFormat;
@@ -29,12 +32,14 @@ public class CTFLikertQuestionBody implements StepBody {
     private StepResult<Integer> result;
     private CTFLikertScaleAnswerFormat format;
 
-    private int      viewType;
+    private int viewType;
+    private int sliderValue;
 
     public CTFLikertQuestionBody(Step step, StepResult result)
     {
         this.step = (CTFLikertScaleQuestionStep) step;
         this.result = result == null ? new StepResult<>(step) : result;
+
         this.format = (CTFLikertScaleAnswerFormat) this.step.getAnswerFormat();
     }
 
@@ -80,6 +85,52 @@ public class CTFLikertQuestionBody implements StepBody {
     {
         View formItemView = inflater.inflate(R.layout.ctf_likert_form_item, parent, false);
 
+        //set previous or default value
+        Integer integerResult = result.getResult();
+        if (integerResult != null) {
+            this.sliderValue = integerResult;
+        }
+        else {
+            this.sliderValue = this.format.getDefaultValue();
+        }
+
+        // Value Indicator
+        final TextView valueLabel = (TextView) formItemView.findViewById(R.id.value_label);
+        valueLabel.setText(""+this.sliderValue);
+
+        // Question
+        TextView titleLabel = (TextView) formItemView.findViewById(R.id.title_label);
+        titleLabel.setText(this.step.getTitle());
+
+        TextView minTextLabel = (TextView) formItemView.findViewById(R.id.min_text_label);
+        minTextLabel.setText(this.format.getMinimumValueDescription());
+
+        TextView midTextLabel = (TextView) formItemView.findViewById(R.id.mid_text_label);
+        midTextLabel.setText(this.format.getMidValueDescription());
+
+        TextView maxTextLabel = (TextView) formItemView.findViewById(R.id.max_text_label);
+        maxTextLabel.setText(this.format.getMaximumValueDescription());
+
+        // SeekBar
+        SeekBar seekBar = (SeekBar) formItemView.findViewById(R.id.value_slider);
+
+
+        seekBar.setProgress(this.sliderValue);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sliderValue = progress;
+                valueLabel.setText(""+progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
         return formItemView;
     }
 
@@ -93,8 +144,7 @@ public class CTFLikertQuestionBody implements StepBody {
         }
         else
         {
-            //TODO: Set actual result
-            result.setResult(this.format.getDefaultValue());
+            result.setResult(this.sliderValue);
         }
 
         return result;
