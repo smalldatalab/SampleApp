@@ -6,7 +6,7 @@ import org.researchstack.backbone.answerformat.AnswerFormat;
 import org.researchstack.backbone.answerformat.ChoiceAnswerFormat;
 import org.researchstack.backbone.model.Choice;
 import org.researchstack.backbone.step.Step;
-import org.smalldatalab.northwell.impulse.SampleResourceManager;
+import org.smalldatalab.northwell.impulse.SDL.descriptors.CTFTextVSRParametersDescriptor;
 
 import java.util.Arrays;
 import java.util.List;

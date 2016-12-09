@@ -8,3 +8,5 @@ edu.cornell.tech.foundry.DefaultStepGenerators.TimeOfDayStepGenerator
 org.smalldatalab.northwell.impulse.SDL.PAMStepGenerator
 org.smalldatalab.northwell.impulse.SDL.PAMMultipleStepGenerator
 org.smalldatalab.northwell.impulse.SDL.CTFTextVSRStepGenerator
+org.smalldatalab.northwell.impulse.SDL.CTFLikertFormStepGenerator
+org.smalldatalab.northwell.impulse.SDL.CTFSemanticDifferentialFormStepGenerator

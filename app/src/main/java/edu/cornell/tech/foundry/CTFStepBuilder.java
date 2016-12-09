@@ -34,23 +34,6 @@ public class CTFStepBuilder {
         this.stepBuilderHelper = new CTFStepBuilderHelper(context, resourceManager);
     }
 
-
-//    public static CTFStepBuilder getInstance()
-//    {
-//        if(instance == null)
-//        {
-//            throw new RuntimeException(
-//                    "CTFStepBuilder instance is null.");
-//        }
-//
-//        return instance;
-//    }
-//
-//    public static void init(CTFStepBuilder instance)
-//    {
-//        CTFStepBuilder.instance = instance;
-//    }
-
     @Nullable
     private
     List<Step> stepsForElement(JsonElement element) {
