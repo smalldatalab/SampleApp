@@ -10,4 +10,6 @@
     <color name="tab_text_color">#66FFFFFF</color>
     <color name="invalidColor">#2980b9</color>
 
+    <color name="validColor">#2ecc71</color>
+
 </resources>

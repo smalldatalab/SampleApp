@@ -1,4 +1,3 @@
-edu.cornell.tech.foundry.DefaultStepGenerators.CTFDefaultStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.InstructionStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.TextFieldStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.SingleChoiceStepGenerator
@@ -10,3 +9,5 @@ org.smalldatalab.northwell.impulse.SDL.PAMMultipleStepGenerator
 org.smalldatalab.northwell.impulse.SDL.CTFTextVSRStepGenerator
 org.smalldatalab.northwell.impulse.SDL.CTFLikertFormStepGenerator
 org.smalldatalab.northwell.impulse.SDL.CTFSemanticDifferentialFormStepGenerator
+org.smalldatalab.northwell.impulse.RSExtensions.GoNoGo.CTFGoNoGoStepGenerator
+edu.cornell.tech.foundry.DefaultStepGenerators.CTFDefaultStepGenerator

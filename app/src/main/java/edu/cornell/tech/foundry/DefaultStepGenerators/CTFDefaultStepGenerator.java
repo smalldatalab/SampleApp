@@ -25,7 +25,6 @@ public class CTFDefaultStepGenerator implements CTFStepGenerator {
     public CTFDefaultStepGenerator()
     {
         this.supportedTypes = Arrays.asList(
-                "CTFGoNoGoActiveStep"
         );
     }
 

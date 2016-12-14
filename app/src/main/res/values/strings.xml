@@ -20,4 +20,6 @@
     <string name="overlay_image_path">images</string>
     <string name="overlay_image_ext">png</string>
     <string name="impulse_external_id">External ID</string>
+
+    <string name="plus">Plus</string>
 </resources>

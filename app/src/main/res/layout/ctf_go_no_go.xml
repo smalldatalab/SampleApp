@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/square_task_main_layout">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="175dp"
+            android:layout_height="100dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:id="@+id/horizontal_game_view"
+            android:alpha="0.0"
+            android:layout_centerInParent="true"
+            android:background="@drawable/valid_color_background"/>
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="175dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:id="@+id/vertical_game_view"
+            android:alpha="0.0"
+            android:layout_centerInParent="true"
+            android:background="@drawable/valid_color_background"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:id="@+id/plus_image"
+            android:alpha="0.0"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/plus"
+            android:background="@drawable/plus_sign" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/feedback_label"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:alpha="0.0"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical|center_horizontal"/>
+</RelativeLayout>
