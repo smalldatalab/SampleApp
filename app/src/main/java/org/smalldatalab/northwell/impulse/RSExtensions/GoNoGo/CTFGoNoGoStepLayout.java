@@ -70,6 +70,7 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
     private RelativeLayout mainLayout;
     private TextView feedbackLabel;
 
+
     private long tapTime;
 
     private boolean canceled;
@@ -143,6 +144,12 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
 
         this.setViewState(CTFGoNoGoViewState.BLANK);
 
+        this.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedSquare();
+            }
+        });
 
 
 
@@ -232,21 +239,30 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
         this.trialResults = null;
         CTFGoNoGoTrialResult[] results = new CTFGoNoGoTrialResult[this.trials.length];
 
-        new Handler().postDelayed( new Runnable() {
-            @Override
-            public void run() {
+//        new Handler().postDelayed( new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                self.performTrials(0, self.trials, results, new PerformTrialsCompletion() {
+//                    public void completion(CTFGoNoGoTrialResult[] results) {
+//                        if (!self.canceled) {
+//                            self.trialResults = results;
+//                            self.onNextClicked();
+//                        }
+//                    }
+//                });
+//
+//            }
+//        }, 1000);
 
-                self.performTrials(0, self.trials, results, new PerformTrialsCompletion() {
-                    public void completion(CTFGoNoGoTrialResult[] results) {
-                        if (!self.canceled) {
-                            self.trialResults = results;
-                            self.onNextClicked();
-                        }
-                    }
-                });
-
+        self.performTrials(0, self.trials, results, new PerformTrialsCompletion() {
+            public void completion(CTFGoNoGoTrialResult[] results) {
+                if (!self.canceled) {
+                    self.trialResults = results;
+                    self.onNextClicked();
+                }
             }
-        }, 1000);
+        });
 
 //        self.performTrials(0, self.trials, results, new PerformTrialsCompletion() {
 //            public void completion(CTFGoNoGoTrialResult[] results) {
@@ -287,8 +303,143 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
     }
 
     private void doTrial(CTFGoNoGoTrial trial, DoTrialCompletion completion) {
-        CTFGoNoGoTrialResult result = new CTFGoNoGoTrialResult(trial, 0, true);
-        completion.completion(result);
+
+        CTFGoNoGoStepLayout self = this;
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //1) set view state to blank
+        self.setViewState(CTFGoNoGoViewState.BLANK);
+        new Handler().postDelayed( new Runnable() {
+            @Override
+            public void run() {
+
+
+                //2) set view state to cross
+                self.setViewState(CTFGoNoGoViewState.CROSS);
+
+
+                new Handler().postDelayed( new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        //1) set view state to blank
+                        self.setViewState(CTFGoNoGoViewState.BLANK);
+
+
+                        new Handler().postDelayed( new Runnable() {
+                            @Override
+                            public void run() {
+
+
+                                //3 set cue
+                                if (trial.getCue() == CTFGoNoGoTrial.CTFGoNoGoCueType.GO) {
+                                    self.setViewState(CTFGoNoGoViewState.GO_CUE);
+                                }
+                                else {
+                                    self.setViewState(CTFGoNoGoViewState.NO_GO_CUE);
+                                }
+
+
+                                new Handler().postDelayed( new Runnable() {
+                                    @Override
+                                    public void run() {
+
+
+                                        //4 set target, start counter
+                                        if (trial.getCue() == CTFGoNoGoTrial.CTFGoNoGoCueType.GO) {
+                                            if (trial.getTarget() == CTFGoNoGoTrial.CTFGoNoGoTargetType.GO) {
+                                                self.setViewState(CTFGoNoGoViewState.GO_CUE_GO_TARGET);
+                                            }
+                                            else {
+                                                self.setViewState(CTFGoNoGoViewState.GO_CUE_NO_GO_TARGET);
+                                            }
+                                        }
+                                        else {
+                                            if (trial.getTarget() == CTFGoNoGoTrial.CTFGoNoGoTargetType.GO) {
+                                                self.setViewState(CTFGoNoGoViewState.NO_GO_CUE_GO_TARGET);
+                                            }
+                                            else {
+                                                self.setViewState(CTFGoNoGoViewState.NO_GO_CUE_NO_GO_TARGET);
+                                            }
+                                        }
+
+                                        long startTime = SystemClock.elapsedRealtime();
+                                        self.tapTime = 0;
+
+                                        new Handler().postDelayed( new Runnable() {
+                                            @Override
+                                            public void run() {
+
+
+                                                //5 delay until trial over, process results, call completion handler
+                                                boolean tapped = self.tapTime != 0;
+                                                long responseTime = tapped ? self.tapTime - startTime : trial.getFillTime();
+
+
+                                                self.setViewState(CTFGoNoGoViewState.BLANK);
+
+
+                                                if ( tapped ) {
+                                                    if(trial.getTarget() == CTFGoNoGoTrial.CTFGoNoGoTargetType.GO) {
+                                                        feedbackLabel.setText("Correct! "+responseTime+" ms");
+                                                        feedbackLabel.setTextColor(ContextCompat.getColor(getContext(), R.color.validColor));
+                                                    }
+                                                    else {
+                                                        feedbackLabel.setText("Incorrect!");
+                                                        feedbackLabel.setTextColor(ContextCompat.getColor(getContext(), R.color.invalidColor));
+                                                    }
+
+                                                    feedbackLabel.animate().alpha(1.f);
+
+                                                    new Handler().postDelayed(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            feedbackLabel.animate().setDuration(100).alpha(0.f);
+                                                        }
+                                                    }, 600);
+                                                }
+
+
+
+
+                                                new Handler().postDelayed( new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+
+                                                        CTFGoNoGoTrialResult result = new CTFGoNoGoTrialResult(trial, responseTime, tapped);
+                                                        completion.completion(result);
+
+
+                                                    }
+                                                }, trial.getWaitTime());
+
+                                            }
+                                        }, trial.getFillTime());
+
+                                    }
+                                }, trial.getCueTime());
+
+                            }
+                        }, trial.getBlankTime());
+
+                    }
+                }, trial.getCrossTime());
+
+            }
+        }, trial.getWaitTime());
 
     }
 
@@ -404,7 +555,7 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
     }
 
     private void tappedSquare() {
-        if (this.tapTime == -1) {
+        if (this.tapTime == 0) {
             this.tapTime = SystemClock.elapsedRealtime();
         }
     }
