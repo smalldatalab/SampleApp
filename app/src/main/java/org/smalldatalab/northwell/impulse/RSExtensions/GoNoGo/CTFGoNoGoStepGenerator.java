@@ -22,42 +22,6 @@ public class CTFGoNoGoStepGenerator extends CTFBaseStepGenerator {
                 "CTFGoNoGoActiveStep"
         );
     }
-//
-//    protected QuestionStep[] generateFormItems(List<CTFSemanticDifferentialScaleFormItemDescriptor> items)
-//    {
-//        QuestionStep[] steps = new QuestionStep[items.size()];
-//
-//        for(int i = 0; i < items.size(); i++)
-//        {
-//            CTFSemanticDifferentialScaleFormItemDescriptor descriptor = items.get(i);
-//
-//            int[] gradientColors = null;
-//            if (descriptor.range.gradientColors != null && descriptor.range.gradientColors.length > 0) {
-//                gradientColors = new int[    descriptor.range.gradientColors.length];
-//                for (int j = 0; j < descriptor.range.gradientColors.length; j++) {
-//                    gradientColors[j] = Color.parseColor(descriptor.range.gradientColors[j]);
-//                }
-//            }
-//
-//            CTFSemanticDifferentialAnswerFormat answerFormat = new CTFSemanticDifferentialAnswerFormat(
-//                    descriptor.range.max,
-//                    descriptor.range.min,
-//                    descriptor.range.defaultValue,
-//                    descriptor.range.step,
-//                    descriptor.range.maxValueText,
-//                    descriptor.range.minValueText,
-//                    descriptor.range.trackHeight,
-//                    gradientColors
-//            );
-//
-//            steps[i] = new CTFSemanticDifferentialScaleQuestionStep(
-//                    descriptor.identifier,
-//                    descriptor.text,
-//                    answerFormat
-//            );
-//        }
-//        return steps;
-//    }
 
     @Override
     public Step generateStep(CTFStepBuilderHelper helper, String type, JsonObject jsonObject) {

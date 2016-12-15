@@ -1,40 +1,23 @@
 package org.smalldatalab.northwell.impulse.RSExtensions.GoNoGo;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import android.support.annotation.StringRes;
-import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.researchstack.backbone.answerformat.ChoiceAnswerFormat;
-import org.researchstack.backbone.model.Choice;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.ui.callbacks.StepCallbacks;
 import org.researchstack.backbone.ui.step.layout.StepLayout;
-import org.researchstack.backbone.utils.TextUtils;
-import org.researchstack.backbone.utils.ThemeUtils;
 import org.smalldatalab.northwell.impulse.R;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
 import java.util.Random;
-
-import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.ChoiceStepItemDescriptor;
-import edu.cornell.tech.foundry.sdl_rsx.choice.RSXTextChoiceWithColor;
-import edu.cornell.tech.foundry.sdl_rsx.step.RSXSingleImageClassificationSurveyStep;
 
 import android.support.v4.content.ContextCompat;
 
@@ -151,84 +134,6 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
             }
         });
 
-
-
-
-
-
-//        ImageView imageView = (ImageView) findViewById(edu.cornell.tech.foundry.sdl_rsx.R.id.item_image_view);
-//        TextView itemDescriptionTextView = (TextView) findViewById(edu.cornell.tech.foundry.sdl_rsx.R.id.item_description_text_view);
-//        TextView questionTextView = (TextView) findViewById(edu.cornell.tech.foundry.sdl_rsx.R.id.question_text_view);
-//
-//        Button skipButton = (Button) findViewById(edu.cornell.tech.foundry.sdl_rsx.R.id.skip_button);
-//        skipButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                onSkipClicked();
-//            }
-//        });
-//
-//        if(step != null) {
-//            if (!TextUtils.isEmpty(step.getTitle()) && itemDescriptionTextView!=null) {
-//                itemDescriptionTextView.setText(step.getTitle());
-//            }
-//
-//            if (!TextUtils.isEmpty(step.getText())) {
-//                questionTextView.setText(step.getText());
-//            }
-//
-//            if (step.getImage() != null) {
-//                try {
-//                    InputStream inputStream = getContext().getAssets().open(step.getImage());
-//                    Drawable d = Drawable.createFromStream(inputStream, null);
-//                    imageView.setImageDrawable(d);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//
-//            LinearLayout buttonLayout = (LinearLayout) findViewById(edu.cornell.tech.foundry.sdl_rsx.R.id.button_container_view);
-//            buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-//
-//            //remove all previous buttons
-//            buttonLayout.removeAllViews();
-//
-//            ChoiceAnswerFormat format = (ChoiceAnswerFormat) ((RSXSingleImageClassificationSurveyStep)step).getAnswerFormat();
-//            final Choice<?>[] choices = format.getChoices();
-//
-//            for(int i=0; i<choices.length; i++) {
-//                RSXTextChoiceWithColor choice = (RSXTextChoiceWithColor) choices[i];
-//                Button button = new AppCompatButton(getContext());
-//                button.setText(choice.getText());
-//                button.setId(i);
-//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-//                        0,
-//                        LinearLayout.LayoutParams.WRAP_CONTENT,
-//                        1.0f);
-//
-//                button.setLayoutParams(layoutParams);
-//
-//                button.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-//                if(choice.getColor() != 0) {
-//                    button.setTextColor(choice.getColor());
-//                }
-//                else {
-//                    button.setTextColor(getResources().getColor(ThemeUtils.getAccentColor(getContext())));
-//                }
-//
-//                button.setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View v) {
-//                        // Perform action on click
-//                        int i = v.getId();
-//                        Choice<?> choice = choices[i];
-//                        currentSelected = choice.getValue();
-//                        onNextClicked();
-//                    }
-//                });
-//
-//                buttonLayout.addView(button, i);
-//            }
-//        }
     }
 
     private void startTrials() {
@@ -239,21 +144,6 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
         this.trialResults = null;
         CTFGoNoGoTrialResult[] results = new CTFGoNoGoTrialResult[this.trials.length];
 
-//        new Handler().postDelayed( new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                self.performTrials(0, self.trials, results, new PerformTrialsCompletion() {
-//                    public void completion(CTFGoNoGoTrialResult[] results) {
-//                        if (!self.canceled) {
-//                            self.trialResults = results;
-//                            self.onNextClicked();
-//                        }
-//                    }
-//                });
-//
-//            }
-//        }, 1000);
 
         self.performTrials(0, self.trials, results, new PerformTrialsCompletion() {
             public void completion(CTFGoNoGoTrialResult[] results) {
@@ -264,14 +154,6 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
             }
         });
 
-//        self.performTrials(0, self.trials, results, new PerformTrialsCompletion() {
-//            public void completion(CTFGoNoGoTrialResult[] results) {
-//                if (!self.canceled) {
-//                    self.trialResults = results;
-//                    self.onNextClicked();
-//                }
-//            }
-//        });
     }
 
     private void performTrials(int index, CTFGoNoGoTrial[] trials, CTFGoNoGoTrialResult[] results, PerformTrialsCompletion completion) {
@@ -306,42 +188,25 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
 
         CTFGoNoGoStepLayout self = this;
 
-
-
-
-
-
-
-
-
-
-
-
-
         //1) set view state to blank
         self.setViewState(CTFGoNoGoViewState.BLANK);
         new Handler().postDelayed( new Runnable() {
             @Override
             public void run() {
 
-
                 //2) set view state to cross
                 self.setViewState(CTFGoNoGoViewState.CROSS);
-
 
                 new Handler().postDelayed( new Runnable() {
                     @Override
                     public void run() {
 
-
                         //1) set view state to blank
                         self.setViewState(CTFGoNoGoViewState.BLANK);
-
 
                         new Handler().postDelayed( new Runnable() {
                             @Override
                             public void run() {
-
 
                                 //3 set cue
                                 if (trial.getCue() == CTFGoNoGoTrial.CTFGoNoGoCueType.GO) {
@@ -350,7 +215,6 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
                                 else {
                                     self.setViewState(CTFGoNoGoViewState.NO_GO_CUE);
                                 }
-
 
                                 new Handler().postDelayed( new Runnable() {
                                     @Override
@@ -410,9 +274,6 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
                                                         }
                                                     }, 600);
                                                 }
-
-
-
 
                                                 new Handler().postDelayed( new Runnable() {
                                                     @Override

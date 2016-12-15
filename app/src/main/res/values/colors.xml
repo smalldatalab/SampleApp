@@ -12,4 +12,7 @@
 
     <color name="validColor">#2ecc71</color>
 
+    <color name="darkBlue">#34495E</color>
+    <color name="whiteColor">#ffffff</color>
+
 </resources>

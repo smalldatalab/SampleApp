@@ -7,8 +7,6 @@ import org.researchstack.backbone.result.Result;
  */
 public class CTFGoNoGoResult extends Result {
 
-
-
     private CTFGoNoGoTrialResult[] trialResults;
 
     public CTFGoNoGoTrialResult[] getTrialResults() {

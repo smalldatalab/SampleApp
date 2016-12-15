@@ -22,4 +22,7 @@
     <string name="impulse_external_id">External ID</string>
 
     <string name="plus">Plus</string>
+
+    <string name="total_earnings_default_text">Balloon 1 out of 15.\nTotal Earnings: $0.00</string>
+    <string name="potential_gain_default_text">Potential Gain: \n$0.00</string>
 </resources>
