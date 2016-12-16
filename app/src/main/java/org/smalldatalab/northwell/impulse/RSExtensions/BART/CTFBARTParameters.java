@@ -1,9 +1,11 @@
 package org.smalldatalab.northwell.impulse.RSExtensions.BART;
 
+import java.io.Serializable;
+
 /**
  * Created by jameskizer on 12/14/16.
  */
-public class CTFBARTParameters {
+public class CTFBARTParameters implements Serializable{
 
     public int getNumberOfTrials() {
         return numberOfTrials;

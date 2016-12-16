@@ -16,6 +16,7 @@ import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.ui.callbacks.StepCallbacks;
 import org.researchstack.backbone.ui.step.layout.StepLayout;
 import org.smalldatalab.northwell.impulse.R;
+import org.smalldatalab.northwell.impulse.RSExtensions.helpers.CTFHelpers;
 
 import java.util.Random;
 
@@ -110,7 +111,7 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
         this.initStepLayout(step);
     }
 
-    public void initStepLayout(CTFGoNoGoStep step) {
+    private void initStepLayout(CTFGoNoGoStep step) {
 
         // Init root
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -421,20 +422,6 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
         }
     }
 
-    //p1 = bias, p2 = (1.0 - bias)
-    private <T> T coinFlip(T obj1, T obj2, Random random, double bias) {
-
-        double realBias = Math.max( Math.min(bias, 1.0), 0.0 );
-        double flip = random.nextDouble();
-        if (flip < realBias) {
-            return obj1;
-        }
-        else {
-            return obj2;
-        }
-
-    }
-
     private CTFGoNoGoTrial[] generateTrials(CTFGoNoGoStepParameters params) {
 
         CTFGoNoGoTrial[] trials = new CTFGoNoGoTrial[params.getNumberOfTrials()];
@@ -444,18 +431,16 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
         for(int i = 0; i < params.getNumberOfTrials(); i++) {
             int cueTime = cueTimes[rand.nextInt(cueTimes.length)];
 
-            CTFGoNoGoTrial.CTFGoNoGoCueType cueType = this.coinFlip(
+            CTFGoNoGoTrial.CTFGoNoGoCueType cueType = CTFHelpers.getInstance().coinFlip(
                     CTFGoNoGoTrial.CTFGoNoGoCueType.GO,
                     CTFGoNoGoTrial.CTFGoNoGoCueType.NOGO,
-                    rand,
                     0.5);
 
             double goCueGoTargetProbability = params.getGoCueTargetProb() != 0.0 ? params.getGoCueTargetProb() : 0.7;
             double noGoCueGoTargetProbability = 1.0 - (params.getNoGoCueTargetProb() != 0 ? params.getNoGoCueTargetProb() : 0.7);
-            CTFGoNoGoTrial.CTFGoNoGoTargetType targetType = this.coinFlip(
+            CTFGoNoGoTrial.CTFGoNoGoTargetType targetType = CTFHelpers.getInstance().coinFlip(
                     CTFGoNoGoTrial.CTFGoNoGoTargetType.GO,
                     CTFGoNoGoTrial.CTFGoNoGoTargetType.NOGO,
-                    rand,
                     (cueType == CTFGoNoGoTrial.CTFGoNoGoCueType.GO) ? goCueGoTargetProbability : noGoCueGoTargetProbability
             );
 
