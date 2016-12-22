@@ -1,6 +1,7 @@
 package edu.cornell.tech.foundry;
 
 import android.content.Context;
+import android.renderscript.Element;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -18,7 +19,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.cornell.tech.foundry.CTFElementGeneratorServiceProvider.CTFElementGeneratorService;
 import edu.cornell.tech.foundry.CTFStepGeneratorServiceProvider.CTFStepGeneratorService;
+import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.ElementDescriptor;
 
 /**
  * Created by jameskizer on 12/6/16.
@@ -74,29 +77,32 @@ public class CTFStepBuilder {
     private
     List<Step> generateSteps(JsonObject element) {
 
-        String type = element.get("type").getAsString();
+        ElementDescriptor elementDescriptor = this.stepBuilderHelper.getGson().fromJson(element, ElementDescriptor.class);
+        String type = elementDescriptor.type;
+
         if(StringUtils.isEmpty(type)) {
             return null;
         }
 
-        switch(type)
-        {
-            case "elementList":
-                return this.generateSteps(element.get("elements").getAsJsonArray());
-            case "elementFile":
-                JsonElement jsonElement = null;
-                try {
-                    String elementFilename = element.get("elementFileName").getAsString();
-                    jsonElement = this.stepBuilderHelper.getJsonElementForFilename(elementFilename);
-                }
-                catch(Exception e) {
-                    Log.w(this.TAG, "malformed elementFile: " + element.getAsString(), e);
-                    return null;
-                }
-                return this.stepsForElement(jsonElement);
-            default:
-                Step step = this.createStepForObject(type, element);
+        if(CTFElementGeneratorService.getInstance().supportsType(type)) {
+
+            JsonArray elements = CTFElementGeneratorService.getInstance().generateElements(this.stepBuilderHelper, type, element);
+            if (elements != null) {
+                return this.generateSteps(elements);
+            }
+            else {
+                return null;
+            }
+
+        }
+        else {
+            Step step = this.createStepForObject(type, element);
+            if (step != null) {
                 return Arrays.asList(step);
+            }
+            else {
+                return null;
+            }
         }
     }
 
@@ -108,18 +114,30 @@ public class CTFStepBuilder {
 
         Iterator<JsonElement> elementIter = arrayOfElements.iterator();
         while (elementIter.hasNext()){
-            JsonObject element = elementIter.next().getAsJsonObject();
-            List<Step> addlStepList = this.generateSteps(element);
-            if (addlStepList != null) {
-                stepList.addAll(addlStepList);
+
+            JsonElement element = elementIter.next();
+
+            if (element.isJsonObject()) {
+                JsonObject jsonObject = element.getAsJsonObject();
+                List<Step> addlStepList = this.generateSteps(jsonObject);
+                if (addlStepList != null) {
+                    stepList.addAll(addlStepList);
+                }
+            }
+            else if (element.isJsonArray()) {
+                JsonArray jsonArray = element.getAsJsonArray();
+                List<Step> addlStepList = this.generateSteps(jsonArray);
+                if (addlStepList != null) {
+                    stepList.addAll(addlStepList);
+                }
+            }
+            else {
+                assert(false);
             }
         }
 
         return stepList;
     }
-
-
-
 
     @Nullable
     protected

@@ -7,7 +7,7 @@ public class ElementDescriptor {
 
     public String identifier;
     public String type;
-    ElementDescriptor() {
+    public ElementDescriptor() {
 
     }
 
