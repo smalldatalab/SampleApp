@@ -64,4 +64,23 @@ public class CTFHelpers {
         return shuffledArray;
     }
 
+    public static JsonElement randomElement(JsonArray jsonArray) {
+        int index = rnd.nextInt(jsonArray.size());
+        return jsonArray.get(index);
+    }
+
+    static public <T> T coinFlip(T obj1, T obj2, double bias) {
+
+        double realBias = Math.max( Math.min(bias, 1.0), 0.0 );
+        double flip = rnd.nextDouble();
+        if (flip < realBias) {
+            return obj1;
+        }
+        else {
+            return obj2;
+        }
+
+    }
+
+
 }

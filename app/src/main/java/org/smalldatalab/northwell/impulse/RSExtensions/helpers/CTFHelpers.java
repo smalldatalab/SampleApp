@@ -23,16 +23,5 @@ public class CTFHelpers {
 
 
     //p1 = bias, p2 = (1.0 - bias)
-    public <T> T coinFlip(T obj1, T obj2, double bias) {
 
-        double realBias = Math.max( Math.min(bias, 1.0), 0.0 );
-        double flip = random.nextDouble();
-        if (flip < realBias) {
-            return obj1;
-        }
-        else {
-            return obj2;
-        }
-
-    }
 }

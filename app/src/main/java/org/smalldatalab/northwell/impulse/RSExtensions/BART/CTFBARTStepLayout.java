@@ -18,7 +18,7 @@ import org.researchstack.backbone.ui.callbacks.StepCallbacks;
 import org.researchstack.backbone.ui.step.layout.StepLayout;
 import org.researchstack.backbone.ui.views.SubmitBar;
 import org.smalldatalab.northwell.impulse.R;
-import org.smalldatalab.northwell.impulse.RSExtensions.helpers.CTFHelpers;
+import org.smalldatalab.northwell.impulse.SDL.CTFHelpers;
 
 import tyrantgit.explosionfield.ExplosionField;
 
@@ -245,7 +245,7 @@ public class CTFBARTStepLayout extends FrameLayout implements StepLayout {
                 1.0 / (double)((trial.getMaxPayingPumps() + 2) - pumpCount) :
                 1.0 / 2.0;
 
-        boolean popped = CTFHelpers.getInstance().coinFlip(true, false, popProb);
+        boolean popped = CTFHelpers.coinFlip(true, false, popProb);
 
         if (popped) {
             //disable buttons

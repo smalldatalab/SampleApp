@@ -1,2 +1,3 @@
 edu.cornell.tech.foundry.Elements.CTFElementListGenerator
 edu.cornell.tech.foundry.Elements.CTFElementFileGenerator
+edu.cornell.tech.foundry.Elements.CTFElementSelectorGenerator

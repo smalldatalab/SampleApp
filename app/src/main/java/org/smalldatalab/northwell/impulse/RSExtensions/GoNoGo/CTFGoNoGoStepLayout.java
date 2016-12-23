@@ -16,7 +16,7 @@ import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.ui.callbacks.StepCallbacks;
 import org.researchstack.backbone.ui.step.layout.StepLayout;
 import org.smalldatalab.northwell.impulse.R;
-import org.smalldatalab.northwell.impulse.RSExtensions.helpers.CTFHelpers;
+import org.smalldatalab.northwell.impulse.SDL.CTFHelpers;
 
 import java.util.Random;
 
@@ -431,14 +431,14 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
         for(int i = 0; i < params.getNumberOfTrials(); i++) {
             int cueTime = cueTimes[rand.nextInt(cueTimes.length)];
 
-            CTFGoNoGoTrial.CTFGoNoGoCueType cueType = CTFHelpers.getInstance().coinFlip(
+            CTFGoNoGoTrial.CTFGoNoGoCueType cueType = CTFHelpers.coinFlip(
                     CTFGoNoGoTrial.CTFGoNoGoCueType.GO,
                     CTFGoNoGoTrial.CTFGoNoGoCueType.NOGO,
                     0.5);
 
             double goCueGoTargetProbability = params.getGoCueTargetProb() != 0.0 ? params.getGoCueTargetProb() : 0.7;
             double noGoCueGoTargetProbability = 1.0 - (params.getNoGoCueTargetProb() != 0 ? params.getNoGoCueTargetProb() : 0.7);
-            CTFGoNoGoTrial.CTFGoNoGoTargetType targetType = CTFHelpers.getInstance().coinFlip(
+            CTFGoNoGoTrial.CTFGoNoGoTargetType targetType = CTFHelpers.coinFlip(
                     CTFGoNoGoTrial.CTFGoNoGoTargetType.GO,
                     CTFGoNoGoTrial.CTFGoNoGoTargetType.NOGO,
                     (cueType == CTFGoNoGoTrial.CTFGoNoGoCueType.GO) ? goCueGoTargetProbability : noGoCueGoTargetProbability
