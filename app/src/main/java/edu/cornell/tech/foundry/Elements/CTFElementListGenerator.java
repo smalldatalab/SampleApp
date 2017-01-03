@@ -30,7 +30,7 @@ public class CTFElementListGenerator extends CTFBaseElementGenerator {
         CTFElementListDescriptor elementListDescriptor = helper.getGson().fromJson(jsonObject, CTFElementListDescriptor.class);
 
         JsonArray elements = elementListDescriptor.elements;
-        if (elementListDescriptor.shuffled) {
+        if (elementListDescriptor.shuffleElements) {
             elements = CTFHelpers.shuffled(elements);
         }
 

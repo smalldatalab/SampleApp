@@ -11,7 +11,7 @@ public class CTFElementListDescriptor extends ElementDescriptor {
 
 
     public JsonArray elements;
-    public boolean shuffled;
+    public boolean shuffleElements;
     CTFElementListDescriptor() {
 
     }

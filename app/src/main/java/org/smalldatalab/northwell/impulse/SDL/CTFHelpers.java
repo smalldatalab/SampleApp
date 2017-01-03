@@ -57,7 +57,7 @@ public class CTFHelpers {
             int index = rnd.nextInt(i + 1);
             // Simple swap
             JsonElement a = shuffledArray.get(index);
-            shuffledArray.set(index, shuffledArray.get(index));
+            shuffledArray.set(index, shuffledArray.get(i));
             shuffledArray.set(i, a);
         }
 
