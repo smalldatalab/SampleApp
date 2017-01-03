@@ -11,4 +11,5 @@ org.smalldatalab.northwell.impulse.SDL.CTFLikertFormStepGenerator
 org.smalldatalab.northwell.impulse.SDL.CTFSemanticDifferentialFormStepGenerator
 org.smalldatalab.northwell.impulse.RSExtensions.GoNoGo.CTFGoNoGoStepGenerator
 org.smalldatalab.northwell.impulse.RSExtensions.BART.CTFBARTStepGenerator
+org.smalldatalab.northwell.impulse.RSExtensions.DelayDiscounting.CTFDelayDiscountingStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.CTFDefaultStepGenerator

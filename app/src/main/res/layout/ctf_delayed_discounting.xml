@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_weight="1.0"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/prompt_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/dd_prompt_default_text"
+            android:textSize="18dp"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="40dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_weight="1.0"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:layout_width="0dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:layout_height="0dp">
+
+                <Button
+                    android:id="@+id/now_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".40"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:text="@string/dd_now_button_default_text"
+                    android:backgroundTint="@color/invalidColor"
+                    android:textColor="#ffffff"
+                    android:layout_margin="30dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:layout_height="0dp">
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:layout_width="0dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:layout_height="0dp">
+
+                <Button
+                    android:id="@+id/later_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.0"
+                    android:text="@string/dd_later_button_default_text"
+                    android:backgroundTint="@color/invalidColor"
+                    android:textColor="#ffffff"
+                    android:layout_margin="30dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_weight="1.0"
+                android:layout_height="0dp">
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <org.researchstack.backbone.ui.views.SubmitBar
+        android:id="@+id/rsb_submit_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
+
+</LinearLayout>

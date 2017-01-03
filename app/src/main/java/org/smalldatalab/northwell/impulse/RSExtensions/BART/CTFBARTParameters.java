@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by jameskizer on 12/14/16.
  */
-public class CTFBARTParameters implements Serializable{
+public class CTFBARTParameters implements Serializable {
 
     public int getNumberOfTrials() {
         return numberOfTrials;
