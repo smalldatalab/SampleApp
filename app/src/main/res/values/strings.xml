@@ -30,4 +30,6 @@
     <string name="dd_prompt_default_text">Please choose which amounts of money you would like either right NOW or in ONE MONTH.</string>
     <string name="dd_now_button_default_text">$50.00\nNow</string>
     <string name="dd_later_button_default_text">$100.00\nNow</string>
+
+    <string name="ctf_state_helper_path">/state_helper</string>
 </resources>

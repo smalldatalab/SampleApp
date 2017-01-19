@@ -8,8 +8,9 @@ import java.util.List;
 public class ChoiceStepDescriptor extends QuestionStepDescriptor {
 
     public List<ChoiceStepItemDescriptor> items;
+    public boolean shuffleItems = false;
 
-    ChoiceStepDescriptor() {
+    public ChoiceStepDescriptor() {
 
     }
 }

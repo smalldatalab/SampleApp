@@ -77,6 +77,7 @@ public class SampleResearchStack extends ResearchStack
     @Override
     protected TaskProvider createTaskProviderImplementation(Context context)
     {
+
         return new SampleTaskProvider(context);
     }
 

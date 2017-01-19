@@ -2,11 +2,13 @@ package edu.cornell.tech.foundry.DefaultStepGenerators;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.researchstack.backbone.answerformat.AnswerFormat;
 import org.researchstack.backbone.answerformat.ChoiceAnswerFormat;
 import org.researchstack.backbone.model.Choice;
+import org.smalldatalab.northwell.impulse.SDL.CTFHelpers;
 
 import java.util.List;
 
@@ -21,13 +23,15 @@ public abstract class ChoiceStepGenerator extends QuestionStepGenerator {
 
     protected abstract boolean allowsMultiple();
 
-    protected Choice[] generateChoices(List<ChoiceStepItemDescriptor> items)
+    protected Choice[] generateChoices(List<ChoiceStepItemDescriptor> items, boolean shuffleItems)
     {
         Choice[] choices = new Choice[items.size()];
 
-        for(int i = 0; i < items.size(); i++)
+        List<ChoiceStepItemDescriptor> choiceItems = shuffleItems ? CTFHelpers.shuffled(items) : items;
+
+        for(int i = 0; i < choiceItems.size(); i++)
         {
-            ChoiceStepItemDescriptor choice = items.get(i);
+            ChoiceStepItemDescriptor choice = choiceItems.get(i);
             if(choice.value instanceof String)
             {
                 choices[i] = new Choice<>(choice.prompt, (String) choice.value);
@@ -54,7 +58,7 @@ public abstract class ChoiceStepGenerator extends QuestionStepGenerator {
                 ? AnswerFormat.ChoiceAnswerStyle.MultipleChoice
                 : AnswerFormat.ChoiceAnswerStyle.SingleChoice;
 
-        ChoiceAnswerFormat answerFormat = new ChoiceAnswerFormat(answerStyle, this.generateChoices(choiceStepDescriptor.items));
+        ChoiceAnswerFormat answerFormat = new ChoiceAnswerFormat(answerStyle, this.generateChoices(choiceStepDescriptor.items, choiceStepDescriptor.shuffleItems));
 
         return answerFormat;
 

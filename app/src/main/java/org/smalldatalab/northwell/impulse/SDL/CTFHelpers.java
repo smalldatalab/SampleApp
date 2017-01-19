@@ -39,9 +39,9 @@ public class CTFHelpers {
         {
             int index = rnd.nextInt(i + 1);
             // Simple swap
-            T a = ar.get(index);
-            ar.set(index, ar.get(index));
-            ar.set(i, a);
+            T a = ar.get(i);
+            ar.set(i, ar.get(index));
+            ar.set(index, a);
         }
 
         return ar;

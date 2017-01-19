@@ -3,13 +3,16 @@ package edu.cornell.tech.foundry;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.researchstack.backbone.StorageAccess;
 import org.researchstack.skin.ResourceManager;
+import org.smalldatalab.northwell.impulse.R;
 import org.smalldatalab.northwell.impulse.SampleResourceManager;
 
 import java.io.InputStream;
@@ -22,12 +25,13 @@ import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.CustomStepDesc
 /**
  * Created by jameskizer on 12/8/16.
  */
-public class CTFStepBuilderHelper {
+public class CTFStepBuilderHelper implements CTFStateHelper {
 
     private Context context;
     private ResourceManager resourceManager;
     private Gson gson;
     private JsonParser jsonParser;
+    private String pathName;
 
     CTFStepBuilderHelper(Context context, ResourceManager resourceManager) {
         super();
@@ -35,6 +39,7 @@ public class CTFStepBuilderHelper {
         this.resourceManager = resourceManager;
         this.gson = new Gson();
         this.jsonParser = new JsonParser();
+        this.pathName = context.getString(R.string.ctf_state_helper_path);
     }
 
     public Context getContext() {
@@ -48,7 +53,6 @@ public class CTFStepBuilderHelper {
     public Gson getGson() {
         return this.gson;
     }
-
 
     //utilities
     @Nullable
@@ -89,4 +93,39 @@ public class CTFStepBuilderHelper {
         }
         return stepDescriptor;
     }
+
+    public CTFStateHelper getStateHelper() {
+        return this;
+    }
+
+    //state helper methods
+    public String valueInState(String key) {
+        StringBuilder pathBuilder = new StringBuilder(this.pathName);
+        pathBuilder.append('/');
+        pathBuilder.append(key);
+
+        return new String(StorageAccess.getInstance().getFileAccess().readData(context, pathBuilder.toString()));
+    }
+
+    public void setValueInState(String key, String value) {
+
+        StringBuilder pathBuilder = new StringBuilder(this.pathName);
+        pathBuilder.append('/');
+        pathBuilder.append(key);
+
+        StorageAccess
+                .getInstance()
+                .getFileAccess()
+                .writeData(
+                        this.getContext(),
+                        pathBuilder.toString(),
+                        value.getBytes()
+        );
+    }
+
+//    StorageAccess.getInstance()
+//            .getFileAccess()
+//    .writeData(context, userSessionPath, userSessionJson.getBytes());
+//
+
 }
