@@ -9,6 +9,9 @@ import org.researchstack.skin.model.SchedulesAndTasksModel;
 import org.researchstack.skin.model.SectionModel;
 import org.researchstack.skin.model.StudyOverviewModel;
 import org.researchstack.skin.model.TaskModel;
+import org.smalldatalab.northwell.impulse.studyManagement.CTFSchedule;
+
+import java.util.List;
 
 public class SampleResourceManager extends ResourceManager
 {
@@ -77,6 +80,14 @@ public class SampleResourceManager extends ResourceManager
                 BASE_PATH_JSON,
                 "tasks_and_schedules",
                 SchedulesAndTasksModel.class);
+    }
+
+    public Resource getSchedule()
+    {
+        return new Resource(Resource.TYPE_JSON,
+                BASE_PATH_JSON,
+                "tasks_and_schedules",
+                CTFSchedule.class);
     }
 
     @Override

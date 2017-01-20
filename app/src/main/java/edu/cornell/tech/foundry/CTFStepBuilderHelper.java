@@ -25,21 +25,21 @@ import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.CustomStepDesc
 /**
  * Created by jameskizer on 12/8/16.
  */
-public class CTFStepBuilderHelper implements CTFStateHelper {
+public class CTFStepBuilderHelper {
 
     private Context context;
     private ResourceManager resourceManager;
     private Gson gson;
     private JsonParser jsonParser;
-    private String pathName;
+    private CTFStateHelper stateHelper;
 
-    CTFStepBuilderHelper(Context context, ResourceManager resourceManager) {
+    CTFStepBuilderHelper(Context context, ResourceManager resourceManager, CTFStateHelper stateHelper) {
         super();
         this.context = context;
         this.resourceManager = resourceManager;
         this.gson = new Gson();
         this.jsonParser = new JsonParser();
-        this.pathName = context.getString(R.string.ctf_state_helper_path);
+        this.stateHelper = stateHelper;
     }
 
     public Context getContext() {
@@ -95,37 +95,7 @@ public class CTFStepBuilderHelper implements CTFStateHelper {
     }
 
     public CTFStateHelper getStateHelper() {
-        return this;
+        return this.stateHelper;
     }
-
-    //state helper methods
-    public String valueInState(String key) {
-        StringBuilder pathBuilder = new StringBuilder(this.pathName);
-        pathBuilder.append('/');
-        pathBuilder.append(key);
-
-        return new String(StorageAccess.getInstance().getFileAccess().readData(context, pathBuilder.toString()));
-    }
-
-    public void setValueInState(String key, String value) {
-
-        StringBuilder pathBuilder = new StringBuilder(this.pathName);
-        pathBuilder.append('/');
-        pathBuilder.append(key);
-
-        StorageAccess
-                .getInstance()
-                .getFileAccess()
-                .writeData(
-                        this.getContext(),
-                        pathBuilder.toString(),
-                        value.getBytes()
-        );
-    }
-
-//    StorageAccess.getInstance()
-//            .getFileAccess()
-//    .writeData(context, userSessionPath, userSessionJson.getBytes());
-//
 
 }

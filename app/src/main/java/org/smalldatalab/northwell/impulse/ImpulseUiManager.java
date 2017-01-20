@@ -10,7 +10,7 @@ import org.researchstack.skin.ActionItem;
 import org.researchstack.skin.UiManager;
 import org.researchstack.skin.task.OnboardingTask;
 import org.researchstack.skin.ui.LearnActivity;
-import org.researchstack.skin.ui.fragment.ActivitiesFragment;
+import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduledActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,15 @@ public class ImpulseUiManager extends UiManager
         List<ActionItem> navItems = new ArrayList<>();
 
         navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_activities)
-                .setTitle(R.string.rss_activities)
+                .setTitle(R.string.ctf_scheduled_activities)
                 .setIcon(R.drawable.rss_ic_tab_activities)
-                .setClass(ActivitiesFragment.class)
+                .setClass(ImpulsivityScheduledActivitiesFragment.class)
+                .build());
+
+        navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_activities)
+                .setTitle(R.string.ctf_trial_activities)
+                .setIcon(R.drawable.rss_ic_tab_activities)
+                .setClass(ImpulsivityTrialActivitiesFragment.class)
                 .build());
 
 //        navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_dashboard)

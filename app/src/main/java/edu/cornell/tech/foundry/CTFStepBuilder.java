@@ -33,8 +33,8 @@ public class CTFStepBuilder {
     private CTFStepBuilderHelper stepBuilderHelper;
     private Context context;
 
-    public CTFStepBuilder(Context context, ResourceManager resourceManager) {
-        this.stepBuilderHelper = new CTFStepBuilderHelper(context, resourceManager);
+    public CTFStepBuilder(Context context, ResourceManager resourceManager, CTFStateHelper stateHelper) {
+        this.stepBuilderHelper = new CTFStepBuilderHelper(context, resourceManager, stateHelper);
     }
 
     @Nullable
@@ -144,6 +144,11 @@ public class CTFStepBuilder {
     Step createStepForObject(String type, JsonObject jsonObject) {
         CTFStepGeneratorService stepGenerator = CTFStepGeneratorService.getInstance();
         return stepGenerator.generateStep(this.stepBuilderHelper, type, jsonObject);
+    }
+
+
+    public CTFStepBuilderHelper getStepBuilderHelper() {
+        return stepBuilderHelper;
     }
 
 }

@@ -25,7 +25,6 @@ import org.researchstack.skin.notification.SimpleNotificationConfig;
 
 public class SampleResearchStack extends ResearchStack
 {
-
     @Override
     protected AppDatabase createAppDatabaseImplementation(Context context)
     {
@@ -40,7 +39,8 @@ public class SampleResearchStack extends ResearchStack
     @Override
     protected FileAccess createFileAccessImplementation(Context context)
     {
-        return new SimpleFileAccess();
+        String pathName = context.getString(R.string.ctf_state_helper_path);
+        return new ImpulsivityAppStateManager(pathName);
     }
 
     @Override
