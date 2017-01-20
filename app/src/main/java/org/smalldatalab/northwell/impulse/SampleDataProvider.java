@@ -1,6 +1,7 @@
 package org.smalldatalab.northwell.impulse;
 import android.content.Context;
 import android.content.res.Resources;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -141,6 +142,7 @@ public class SampleDataProvider extends BridgeDataProvider
 
             CTFActivity activity = scheduleItem.activities.get(0);
             CTFScheduledActivity scheduledActivity = new CTFScheduledActivity(
+                    scheduleItem.scheduleIdentifier,
                     scheduleItem.scheduleGUID,
                     scheduleItem.scheduleTitle,
                     activity.taskCompletionTime,
@@ -152,6 +154,29 @@ public class SampleDataProvider extends BridgeDataProvider
 
         }
         return null;
+    }
+
+    private boolean shouldShowScheduledActivity(Context context, CTFScheduledActivity scheduledActivity) {
+
+        switch(scheduledActivity.getIdentifier()) {
+
+            case "baseline":
+            case "reenrollment":
+                return ImpulsivityAppStateManager.getInstance().shouldShowBaselineSurvey(context);
+
+            case "21-day-assessment":
+                return ImpulsivityAppStateManager.getInstance().shouldShow21DaySurvey(context);
+
+            case "am_survey":
+                return ImpulsivityAppStateManager.getInstance().shouldMorningSurvey(context);
+
+            case "pm_survey":
+                return ImpulsivityAppStateManager.getInstance().shouldEveningSurvey(context);
+
+            default:
+                return false;
+        }
+
     }
 
     public List<CTFScheduledActivity> loadScheduledActivities(Context context) {
@@ -167,7 +192,7 @@ public class SampleDataProvider extends BridgeDataProvider
 
                     CTFScheduledActivity scheduledActivity = this.scheduledActivityForScheduleItem(scheduleItem);
 
-                    if (scheduledActivity != null) {
+                    if (scheduledActivity != null && this.shouldShowScheduledActivity(context, scheduledActivity)) {
                         scheduledActivities.add(scheduledActivity);
 
                         this.scheduleActivitiesMap.put(scheduledActivity.getActivity().taskID, scheduledActivity.getGuid());
@@ -253,7 +278,7 @@ public class SampleDataProvider extends BridgeDataProvider
         CTFScheduledActivity scheduledActivity = this.scheduledActivityForTaskResult(context, taskResult);
 
 
-        this.handleActivityResult(taskResult, scheduledActivity);
+        this.handleActivityResult(context, taskResult, scheduledActivity);
 
 //        super.uploadTaskResult(context, taskResult);
 
@@ -281,7 +306,7 @@ public class SampleDataProvider extends BridgeDataProvider
 
     }
 
-    private void handleActivityResult(TaskResult taskResult, CTFScheduledActivity scheduledActivity) {
+    private void handleActivityResult(Context context, TaskResult taskResult, CTFScheduledActivity scheduledActivity) {
 
         if (scheduledActivity.isTrial()) {
 
@@ -291,10 +316,12 @@ public class SampleDataProvider extends BridgeDataProvider
 
         switch(taskResult.getIdentifier()) {
             case "Reenrollment":
+                this.handleReenrollment(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 
             case "Baseline":
+                this.handleBaseline(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 
@@ -318,7 +345,15 @@ public class SampleDataProvider extends BridgeDataProvider
 
     }
 
-    private void handleReenrollment() {
+    private void handleBaseline(Context context, TaskResult taskResult) {
+
+        ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
+
+    }
+
+    private void handleReenrollment(Context context, TaskResult taskResult) {
+
+        ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
 
     }
 

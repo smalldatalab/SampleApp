@@ -5,18 +5,27 @@ package org.smalldatalab.northwell.impulse.studyManagement;
  */
 public class CTFScheduledActivity {
 
+    private String identifier;
     private String guid;
     private String title;
     private String timeEstimate;
     private CTFActivity activity;
     private boolean trial;
 
-    public CTFScheduledActivity(String guid, String title, String timeEstimate, boolean trial, CTFActivity activity) {
+
+
+    public CTFScheduledActivity(String identifier, String guid, String title, String timeEstimate, boolean trial, CTFActivity activity) {
+        this.identifier = identifier;
+
         this.guid = guid;
         this.title = title;
         this.timeEstimate = timeEstimate;
         this.trial = trial;
         this.activity = activity;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 
     public CTFActivity getActivity() {
