@@ -1,7 +1,6 @@
 edu.cornell.tech.foundry.DefaultStepGenerators.InstructionStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.TextFieldStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.SingleChoiceStepGenerator
-edu.cornell.tech.foundry.DefaultStepGenerators.MultipleChoiceStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.IntegerStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.TimeOfDayStepGenerator
 org.smalldatalab.northwell.impulse.SDL.PAMStepGenerator
@@ -12,4 +11,5 @@ org.smalldatalab.northwell.impulse.SDL.CTFSemanticDifferentialFormStepGenerator
 org.smalldatalab.northwell.impulse.RSExtensions.GoNoGo.CTFGoNoGoStepGenerator
 org.smalldatalab.northwell.impulse.RSExtensions.BART.CTFBARTStepGenerator
 org.smalldatalab.northwell.impulse.RSExtensions.DelayDiscounting.CTFDelayDiscountingStepGenerator
+org.smalldatalab.northwell.impulse.SDL.CTFExtendedMultipleChoiceStepGenerator
 edu.cornell.tech.foundry.DefaultStepGenerators.CTFDefaultStepGenerator

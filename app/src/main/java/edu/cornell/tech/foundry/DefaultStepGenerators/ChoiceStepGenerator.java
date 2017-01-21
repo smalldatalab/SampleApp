@@ -10,6 +10,7 @@ import org.researchstack.backbone.answerformat.ChoiceAnswerFormat;
 import org.researchstack.backbone.model.Choice;
 import org.smalldatalab.northwell.impulse.SDL.CTFHelpers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.cornell.tech.foundry.CTFStepBuilderHelper;
@@ -21,7 +22,22 @@ import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.ChoiceStepItem
  */
 public abstract class ChoiceStepGenerator extends QuestionStepGenerator {
 
+    public interface ChoiceFilter {
+        boolean filter(ChoiceStepItemDescriptor itemDescriptor);
+    }
+
     protected abstract boolean allowsMultiple();
+
+    //default filter lets everything pass
+    public ChoiceFilter generateFilter(CTFStepBuilderHelper helper, String type, JsonObject jsonObject) {
+        return new ChoiceFilter() {
+            @Override
+            public boolean filter(ChoiceStepItemDescriptor itemDescriptor) {
+                return true;
+            }
+        };
+
+    }
 
     protected Choice[] generateChoices(List<ChoiceStepItemDescriptor> items, boolean shuffleItems)
     {
@@ -58,7 +74,16 @@ public abstract class ChoiceStepGenerator extends QuestionStepGenerator {
                 ? AnswerFormat.ChoiceAnswerStyle.MultipleChoice
                 : AnswerFormat.ChoiceAnswerStyle.SingleChoice;
 
-        ChoiceAnswerFormat answerFormat = new ChoiceAnswerFormat(answerStyle, this.generateChoices(choiceStepDescriptor.items, choiceStepDescriptor.shuffleItems));
+        ChoiceFilter choiceFilter = this.generateFilter(helper, type, jsonObject);
+        List<ChoiceStepItemDescriptor> filteredItems = new ArrayList<>();
+
+        for (ChoiceStepItemDescriptor item : choiceStepDescriptor.items) {
+            if (choiceFilter.filter(item)) {
+                filteredItems.add(item);
+            }
+        }
+
+        ChoiceAnswerFormat answerFormat = new ChoiceAnswerFormat(answerStyle, this.generateChoices(filteredItems, choiceStepDescriptor.shuffleItems));
 
         return answerFormat;
 
