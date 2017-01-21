@@ -38,6 +38,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -171,10 +173,10 @@ public class SampleDataProvider extends BridgeDataProvider
                 return ImpulsivityAppStateManager.getInstance().shouldShow21DaySurvey(context);
 
             case "am_survey":
-                return ImpulsivityAppStateManager.getInstance().shouldMorningSurvey(context);
+                return ImpulsivityAppStateManager.getInstance().shouldShowMorningSurvey(context);
 
             case "pm_survey":
-                return ImpulsivityAppStateManager.getInstance().shouldEveningSurvey(context);
+                return ImpulsivityAppStateManager.getInstance().shouldShowEveningSurvey(context);
 
             default:
                 return false;
@@ -329,14 +331,17 @@ public class SampleDataProvider extends BridgeDataProvider
                 break;
 
             case "21Day":
+                this.handle21Day(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 
             case "am_survey":
+                this.handleMorningSurvey(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 
             case "pm_survey":
+                this.handleEveningSurvey(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 
@@ -352,12 +357,60 @@ public class SampleDataProvider extends BridgeDataProvider
 
         ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
 
-        //extract morning and evening survey times
-
+        this.handleMorningAndEveningSurveyTimes(context, taskResult);
 
         //handle baseline behaviors
         this.handleBaselineBehaviorResults(context, taskResult);
     }
+
+    private void handleReenrollment(Context context, TaskResult taskResult) {
+
+        //get baseline completed date
+        StepResult baselineCompletedTime = taskResult.getStepResult("baseline_completed_date_picker");
+        if (baselineCompletedTime != null) {
+            long baselineTimeInMS = (long) baselineCompletedTime.getResult();
+            Calendar baselineCalendar = Calendar.getInstance();
+            baselineCalendar.setTimeInMillis(baselineTimeInMS);
+
+            Date baselineCompletedDate = baselineCalendar.getTime();
+            ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, baselineCompletedDate);
+        }
+
+        this.handleMorningAndEveningSurveyTimes(context, taskResult);
+
+        //handle baseline behaviors
+        this.handleBaselineBehaviorResults(context, taskResult);
+    }
+
+    private void handleMorningAndEveningSurveyTimes(Context context, TaskResult taskResult) {
+
+        //extract morning and evening survey times
+        StepResult morningSurveyTime = taskResult.getStepResult("morning_notification_time_picker");
+        if (morningSurveyTime != null) {
+            long morningTimeInMS = (long) morningSurveyTime.getResult();
+            Calendar morningCalendar = Calendar.getInstance();
+            morningCalendar.setTimeInMillis(morningTimeInMS);
+
+            ImpulsivityAppStateManager.getInstance().setMorningSurveyTime(
+                    context,
+                    morningCalendar.get(Calendar.HOUR_OF_DAY),
+                    morningCalendar.get(Calendar.MINUTE));
+        }
+
+        StepResult eveningSurveyTime = taskResult.getStepResult("evening_notification_time_picker");
+        if (eveningSurveyTime != null) {
+            long eveningTimeInMS = (long) eveningSurveyTime.getResult();
+            Calendar eveningCalendar = Calendar.getInstance();
+            eveningCalendar.setTimeInMillis(eveningTimeInMS);
+
+            ImpulsivityAppStateManager.getInstance().setEveningSurveyTime(
+                    context,
+                    eveningCalendar.get(Calendar.HOUR_OF_DAY),
+                    eveningCalendar.get(Calendar.MINUTE));
+        }
+
+    }
+
 
     private void handleBaselineBehaviorResults(Context context, TaskResult taskResult) {
 
@@ -373,17 +426,25 @@ public class SampleDataProvider extends BridgeDataProvider
     }
 
 
+    private void handleMorningSurvey(Context context, TaskResult taskResult) {
 
-    private void handleReenrollment(Context context, TaskResult taskResult) {
+        ImpulsivityAppStateManager.getInstance().markMorningSurveyCompleted(context, taskResult.getEndDate());
 
-        ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
-
-        //extract morning and evening survey times
-
-
-        //handle baseline behaviors
-        this.handleBaselineBehaviorResults(context, taskResult);
     }
+
+    private void handleEveningSurvey(Context context, TaskResult taskResult) {
+
+        ImpulsivityAppStateManager.getInstance().markEveningSurveyCompleted(context, taskResult.getEndDate());
+
+    }
+
+    private void handle21Day(Context context, TaskResult taskResult) {
+
+        ImpulsivityAppStateManager.getInstance().mark21DaySurveyCompleted(context, taskResult.getEndDate());
+
+    }
+
+
 
 
 }
