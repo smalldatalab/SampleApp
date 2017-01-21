@@ -13,12 +13,15 @@ import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.researchstack.backbone.ResourcePathManager;
+import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.InstructionStep;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 import edu.cornell.tech.foundry.CTFStepBuilder;
+
+import org.researchstack.backbone.utils.TextUtils;
 import org.smalldatalab.northwell.impulse.SDL.TaskFactory;
 import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
 import org.researchstack.skin.ResourceManager;
@@ -349,12 +352,37 @@ public class SampleDataProvider extends BridgeDataProvider
 
         ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
 
+        //extract morning and evening survey times
+
+
+        //handle baseline behaviors
+        this.handleBaselineBehaviorResults(context, taskResult);
     }
+
+    private void handleBaselineBehaviorResults(Context context, TaskResult taskResult) {
+
+        StepResult behaviorResult = taskResult.getStepResult("baseline_behaviors_4");
+        Object[] behaviorsArray = (Object[])behaviorResult.getResult();
+        String[] behaviorStrings = new String[behaviorsArray.length];
+        for (int i=0; i<behaviorsArray.length; i++) {
+            behaviorStrings[i] = (String)behaviorsArray[i];
+        }
+
+        ImpulsivityAppStateManager.getInstance().saveBaselineBehaviors(context, behaviorStrings);
+
+    }
+
+
 
     private void handleReenrollment(Context context, TaskResult taskResult) {
 
         ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
 
+        //extract morning and evening survey times
+
+
+        //handle baseline behaviors
+        this.handleBaselineBehaviorResults(context, taskResult);
     }
 
 

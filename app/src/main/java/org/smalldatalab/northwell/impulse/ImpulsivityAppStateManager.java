@@ -87,53 +87,58 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
         this.setValueInState(context, DAY_21_SURVEY_COMPLETED, dateString.getBytes());
     }
 
-    public void markTrialActivityCompleted(Context context, String guid, boolean completed) {
-
-        try {
-            ArrayList<String> completedActivities = this.completedTrialActivities(context);
-
-            if (completed) {
-                completedActivities.add(guid);
-            }
-            else {
-                completedActivities.remove(guid);
-            }
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(outputStream);
-
-            oos.writeObject(completedActivities);
-            oos.close();
-
-            this.setValueInState(context, COMPLETED_TRIAL_ACTIVITIES, outputStream.toByteArray());
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void saveBaselineBehaviors(Context context, String[] behaviors) {
+        String joinedBehaviors = android.text.TextUtils.join(",", behaviors);
+        this.setValueInState(context, BASELINE_BEHAVIOR_RESULTS, joinedBehaviors.getBytes());
     }
 
-    private ArrayList<String> completedTrialActivities(Context context) throws IOException, ClassNotFoundException {
-
-        byte[] listByteArray = this.valueInState(context, COMPLETED_TRIAL_ACTIVITIES);
-        if (listByteArray == null) {
-            return new ArrayList<String>();
-        }
-        else {
-
-            try {
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(listByteArray);
-                ObjectInputStream ois = new ObjectInputStream(inputStream);
-
-                @SuppressWarnings("unchecked")
-                ArrayList<String> completedActivites = (ArrayList<String>)ois.readObject();
-
-                return completedActivites;
-            } catch (IOException | ClassNotFoundException e) {
-                throw e;
-            }
-        }
-
-    }
+//    public void markTrialActivityCompleted(Context context, String guid, boolean completed) {
+//
+//        try {
+//            ArrayList<String> completedActivities = this.completedTrialActivities(context);
+//
+//            if (completed) {
+//                completedActivities.add(guid);
+//            }
+//            else {
+//                completedActivities.remove(guid);
+//            }
+//
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+//
+//            oos.writeObject(completedActivities);
+//            oos.close();
+//
+//            this.setValueInState(context, COMPLETED_TRIAL_ACTIVITIES, outputStream.toByteArray());
+//
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private ArrayList<String> completedTrialActivities(Context context) throws IOException, ClassNotFoundException {
+//
+//        byte[] listByteArray = this.valueInState(context, COMPLETED_TRIAL_ACTIVITIES);
+//        if (listByteArray == null) {
+//            return new ArrayList<String>();
+//        }
+//        else {
+//
+//            try {
+//                ByteArrayInputStream inputStream = new ByteArrayInputStream(listByteArray);
+//                ObjectInputStream ois = new ObjectInputStream(inputStream);
+//
+//                @SuppressWarnings("unchecked")
+//                ArrayList<String> completedActivites = (ArrayList<String>)ois.readObject();
+//
+//                return completedActivites;
+//            } catch (IOException | ClassNotFoundException e) {
+//                throw e;
+//            }
+//        }
+//
+//    }
 
 
     //presentational logic
@@ -144,7 +149,8 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
     }
 
     public boolean shouldShowBaselineSurvey(Context context) {
-        return !this.isBaselineCompleted(context);
+//        return !this.isBaselineCompleted(context);
+        return true;
     }
 
     public boolean shouldMorningSurvey(Context context) {
