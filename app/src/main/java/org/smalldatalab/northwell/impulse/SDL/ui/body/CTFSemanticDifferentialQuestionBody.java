@@ -1,6 +1,7 @@
 package org.smalldatalab.northwell.impulse.SDL.ui.body;
 
 import android.content.res.Resources;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,6 @@ public class CTFSemanticDifferentialQuestionBody implements StepBody {
         // SeekBar
         SeekBar seekBar = (SeekBar) formItemView.findViewById(R.id.value_slider);
 
-
         seekBar.setProgress(this.sliderValue);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -116,6 +116,16 @@ public class CTFSemanticDifferentialQuestionBody implements StepBody {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
+        //insert view behind seek bar
+        View sliderGradient = (View) formItemView.findViewById(R.id.slider_gradient);
+        int trackHeight = this.format.trackHeight() * 3;
+        sliderGradient.getLayoutParams().height = trackHeight;
+
+        GradientDrawable backgroundGradient = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, this.format.getGradientColors());
+        backgroundGradient.setCornerRadius(trackHeight/2);
+        sliderGradient.setBackground(backgroundGradient);
+        sliderGradient.requestLayout();
 
         return formItemView;
     }
