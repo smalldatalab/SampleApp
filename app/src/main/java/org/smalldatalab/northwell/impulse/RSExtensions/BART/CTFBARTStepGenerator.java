@@ -32,6 +32,8 @@ public class CTFBARTStepGenerator  extends CTFBaseStepGenerator {
         CTFBARTParameters parameters = helper.getGson().fromJson(stepDescriptor.parameters, CTFBARTParameters.class);
 
         CTFBARTStep step = new CTFBARTStep(stepDescriptor.identifier, parameters);
+        step.setOptional(stepDescriptor.optional);
+
         return step;
     }
 }

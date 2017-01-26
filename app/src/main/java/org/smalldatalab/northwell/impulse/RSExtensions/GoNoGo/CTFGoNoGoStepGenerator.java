@@ -49,6 +49,8 @@ public class CTFGoNoGoStepGenerator extends CTFBaseStepGenerator {
         );
 
         CTFGoNoGoStep step = new CTFGoNoGoStep(stepDescriptor.identifier, parameters);
+        step.setOptional(stepDescriptor.optional);
+
         return step;
     }
 }

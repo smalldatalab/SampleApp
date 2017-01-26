@@ -31,6 +31,8 @@ public class CTFDelayDiscountingStepGenerator extends CTFBaseStepGenerator {
         CTFDelayDiscountingStepParameters parameters = helper.getGson().fromJson(stepDescriptor.parameters, CTFDelayDiscountingStepParameters.class);
 
         CTFDelayDiscountingStep step = new CTFDelayDiscountingStep(stepDescriptor.identifier, parameters);
+        step.setOptional(stepDescriptor.optional);
+
         return step;
     }
 }

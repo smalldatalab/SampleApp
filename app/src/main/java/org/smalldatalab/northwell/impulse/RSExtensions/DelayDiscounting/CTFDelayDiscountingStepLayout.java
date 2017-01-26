@@ -240,8 +240,13 @@ public class CTFDelayDiscountingStepLayout extends FrameLayout implements StepLa
 
         SubmitBar submitBar = (SubmitBar) findViewById(org.researchstack.backbone.R.id.rsb_submit_bar);
         submitBar.getPositiveActionView().setVisibility(View.GONE);
-        submitBar.setNegativeTitle(org.researchstack.backbone.R.string.rsb_step_skip);
-        submitBar.setNegativeAction(v -> onSkipClicked());
+        if (step.isOptional()) {
+            submitBar.setNegativeTitle(org.researchstack.backbone.R.string.rsb_step_skip);
+            submitBar.setNegativeAction(v -> onSkipClicked());
+        }
+        else {
+            submitBar.getNegativeActionView().setVisibility(View.GONE);
+        }
 
         CTFDelayDiscountingStepParameters params = step.getStepParams();
 

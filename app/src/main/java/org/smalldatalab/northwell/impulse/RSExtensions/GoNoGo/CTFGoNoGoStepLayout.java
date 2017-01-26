@@ -15,6 +15,7 @@ import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.ui.callbacks.StepCallbacks;
 import org.researchstack.backbone.ui.step.layout.StepLayout;
+import org.researchstack.backbone.ui.views.SubmitBar;
 import org.smalldatalab.northwell.impulse.R;
 import org.smalldatalab.northwell.impulse.SDL.CTFHelpers;
 
@@ -116,6 +117,16 @@ public class CTFGoNoGoStepLayout extends FrameLayout implements StepLayout {
         // Init root
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.ctf_go_no_go, this, true);
+
+        SubmitBar submitBar = (SubmitBar) findViewById(org.researchstack.backbone.R.id.rsb_submit_bar);
+        submitBar.getPositiveActionView().setVisibility(View.GONE);
+        if (step.isOptional()) {
+            submitBar.setNegativeTitle(org.researchstack.backbone.R.string.rsb_step_skip);
+            submitBar.setNegativeAction(v -> onSkipClicked());
+        }
+        else {
+            submitBar.getNegativeActionView().setVisibility(View.GONE);
+        }
 
         this.horizontalView = findViewById(R.id.horizontal_game_view);
         this.verticalView = findViewById(R.id.vertical_game_view);

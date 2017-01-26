@@ -135,8 +135,13 @@ public class CTFBARTStepLayout extends FrameLayout implements StepLayout {
 
         SubmitBar submitBar = (SubmitBar) findViewById(org.researchstack.backbone.R.id.rsb_submit_bar);
         submitBar.getPositiveActionView().setVisibility(View.GONE);
-        submitBar.setNegativeTitle(org.researchstack.backbone.R.string.rsb_step_skip);
-        submitBar.setNegativeAction(v -> onSkipClicked());
+        if (step.isOptional()) {
+            submitBar.setNegativeTitle(org.researchstack.backbone.R.string.rsb_step_skip);
+            submitBar.setNegativeAction(v -> onSkipClicked());
+        }
+        else {
+            submitBar.getNegativeActionView().setVisibility(View.GONE);
+        }
 
         this.balloonImageView = (ImageView) findViewById(R.id.balloon_image_view);
         this.pumpButton = (Button) findViewById(R.id.pump_button);
