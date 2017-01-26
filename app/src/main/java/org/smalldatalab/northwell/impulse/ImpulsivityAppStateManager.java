@@ -69,6 +69,8 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
     public void markBaselineSurveyAsCompleted(Context context, Date completedDate) {
         //set date
         this.setDateInState(context, BASELINE_SURVEY_COMPLETED, completedDate);
+
+        ImpulsivityNotificationManager.set21DayNotification(context, completedDate);
     }
 
     @Nullable
@@ -79,6 +81,12 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
     public void markMorningSurveyCompleted(Context context, Date completedDate) {
         //set date
         this.setDateInState(context, LAST_MORNING_SURVEY_COMPLETED, completedDate);
+
+        int hour = this.getTimeComponent(context, MORNING_SURVEY_TIME_HOUR);
+        int minute = this.getTimeComponent(context, MORNING_SURVEY_TIME_MINUTE);
+
+        ImpulsivityNotificationManager.setMorningNotification(context, completedDate, hour, minute);
+
     }
 
     private void setDateInState(Context context, String key, Date date) {
@@ -111,6 +119,11 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
 
     public void markEveningSurveyCompleted(Context context, Date completedDate) {
         this.setDateInState(context, LAST_EVENING_SURVEY_COMPLETED, completedDate);
+
+        int hour = this.getTimeComponent(context, EVENING_SURVEY_TIME_HOUR);
+        int minute = this.getTimeComponent(context, EVENING_SURVEY_TIME_MINUTE);
+
+        ImpulsivityNotificationManager.setEveningNotification(context, completedDate, hour, minute);
     }
 
     @Nullable
@@ -120,6 +133,10 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
 
     public void mark21DaySurveyCompleted(Context context, Date completedDate) {
         this.setDateInState(context, DAY_21_SURVEY_COMPLETED, completedDate);
+
+        ImpulsivityNotificationManager.cancelMorningNotifications(context);
+        ImpulsivityNotificationManager.cancelEveningNotifications(context);
+        ImpulsivityNotificationManager.cancel21DayNotifications(context);
     }
 
     public void saveBaselineBehaviors(Context context, String[] behaviors) {
@@ -194,11 +211,19 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
     public void setMorningSurveyTime(Context context, int hour, int minute) {
         this.setTimeComponent(context, MORNING_SURVEY_TIME_HOUR, hour);
         this.setTimeComponent(context, MORNING_SURVEY_TIME_MINUTE, minute);
+
+        //set notification
+        ImpulsivityNotificationManager.setMorningNotification(context, getLastMorningSurveyCompletedDate(context), hour, minute);
+
     }
 
     public void setEveningSurveyTime(Context context, int hour, int minute) {
         this.setTimeComponent(context, EVENING_SURVEY_TIME_HOUR, hour);
         this.setTimeComponent(context, EVENING_SURVEY_TIME_MINUTE, minute);
+
+        //set notification
+        ImpulsivityNotificationManager.setEveningNotification(context, getLastMorningSurveyCompletedDate(context), hour, minute);
+
     }
 
     //presentational logic
@@ -213,8 +238,8 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
     }
 
     public boolean shouldShowBaselineSurvey(Context context) {
-//        return !this.isBaselineCompleted(context);
-        return true;
+        return !this.isBaselineCompleted(context);
+//        return true;
     }
 
     public Calendar todaysMorningSurvey(Context context) {

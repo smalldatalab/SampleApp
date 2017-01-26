@@ -35,4 +35,8 @@
     <string name="dd_later_button_default_text">$100.00\nNow</string>
 
     <string name="ctf_state_helper_path">/state_helper</string>
+
+    <string name="morning_notification_text">Hey, it\'s time to take your morning survey!</string>
+    <string name="evening_notification_text">Hey, it\'s time to take your evening survey!</string>
+    <string name="day_21_notification_text">Hey, it\'s time to take your 21 day survey!</string>
 </resources>

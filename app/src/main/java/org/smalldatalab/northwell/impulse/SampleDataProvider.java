@@ -13,6 +13,7 @@ import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.researchstack.backbone.ResourcePathManager;
+import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.InstructionStep;
@@ -99,6 +100,25 @@ public class SampleDataProvider extends BridgeDataProvider
     {
         return BuildConfig.STUDY_NAME + "/" + BuildConfig.VERSION_CODE;
     }
+
+//    //account stuff
+//    @Override
+//    public boolean isSignedIn(Context context)
+//    {
+//        return true;
+//    }
+//
+//    /**
+//     * @param context
+//     * @return true if we are consented
+//     */
+//    @Override
+//    public boolean isConsented(Context context)
+//    {
+//        return true;
+//    }
+
+
 
     protected boolean validateSchedule(CTFSchedule schedule) {
 

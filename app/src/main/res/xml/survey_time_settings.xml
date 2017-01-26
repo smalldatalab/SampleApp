@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <org.researchstack.skin.ui.preference.TextColorPreference
+        android:key="MORNING_SURVEY_TIME"
+        android:title="Set Morning Survey Time"
+        android:order="0"/>
+    <org.researchstack.skin.ui.preference.TextColorPreference
+        android:key="EVENING_SURVEY_TIME"
+        android:title="Set Evening Survey Time"
+        android:order="0"/>
+</div>
+

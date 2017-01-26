@@ -88,11 +88,47 @@
             android:name="org.smalldatalab.northwell.impulse.NotificationPermissionActivity"
             android:label="@string/sample_notification_example"/>
 
+        <!--<receiver-->
+            <!--android:name="org.researchstack.skin.notification.TaskNotificationReceiver"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="false"-->
+        <!--/>-->
+
         <receiver
-            android:name="org.researchstack.skin.notification.TaskNotificationReceiver"
+            android:name="org.smalldatalab.northwell.impulse.ImpulsivityMorningNotificationReceiver"
             android:enabled="true"
             android:exported="false"
-        />
+            />
+
+        <receiver
+            android:name="org.smalldatalab.northwell.impulse.Impulsivity2ndMorningNotificationReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
+
+        <receiver
+            android:name="org.smalldatalab.northwell.impulse.ImpulsivityEveningNotificationReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
+
+        <receiver
+            android:name="org.smalldatalab.northwell.impulse.Impulsivity2ndEveningNotificationReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
+
+        <receiver
+            android:name="org.smalldatalab.northwell.impulse.Impulsivity21DayNotificationReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
+
+        <receiver
+            android:name="org.smalldatalab.northwell.impulse.Impulsivity2nd21DayNotificationReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
 
         <receiver
             android:name="org.researchstack.skin.notification.DeviceBootReceiver"
