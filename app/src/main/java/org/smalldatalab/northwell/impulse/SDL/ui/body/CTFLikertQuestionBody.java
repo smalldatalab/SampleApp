@@ -53,8 +53,8 @@ public class CTFLikertQuestionBody implements StepBody {
         Resources res = parent.getResources();
         LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.leftMargin = res.getDimensionPixelSize(org.researchstack.backbone.R.dimen.rsb_margin_left);
-        layoutParams.rightMargin = res.getDimensionPixelSize(org.researchstack.backbone.R.dimen.rsb_margin_right);
+        layoutParams.leftMargin = res.getDimensionPixelSize(R.dimen.slider_margin_left);
+        layoutParams.rightMargin = res.getDimensionPixelSize(R.dimen.slider_margin_left);
         view.setLayoutParams(layoutParams);
 
         return view;
