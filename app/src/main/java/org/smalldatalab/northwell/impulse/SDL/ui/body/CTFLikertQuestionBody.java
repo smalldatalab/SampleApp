@@ -51,11 +51,7 @@ public class CTFLikertQuestionBody implements StepBody {
         View view = getViewForType(viewType, inflater, parent);
 
         Resources res = parent.getResources();
-        LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.leftMargin = res.getDimensionPixelSize(R.dimen.slider_margin_left);
-        layoutParams.rightMargin = res.getDimensionPixelSize(R.dimen.slider_margin_left);
-        view.setLayoutParams(layoutParams);
+        view.setPadding(res.getDimensionPixelSize(R.dimen.slider_margin_left), 0, res.getDimensionPixelSize(R.dimen.slider_margin_right), 0);
 
         return view;
     }
@@ -84,6 +80,7 @@ public class CTFLikertQuestionBody implements StepBody {
     private View initViewCompact(LayoutInflater inflater, ViewGroup parent)
     {
         View formItemView = inflater.inflate(R.layout.ctf_likert_form_item, parent, false);
+        formItemView.setBackgroundColor(this.format.getBackgroundColor());
 
         //set previous or default value
         Integer integerResult = result.getResult();

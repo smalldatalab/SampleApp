@@ -20,8 +20,10 @@ public class CTFLikertScaleAnswerFormat extends CTFScaleAnswerFormat {
             int step,
             String maximumValueDescription,
             String midValueDescription,
-            String minimumValueDescription) {
-        super(max, min, defaultValue, step, maximumValueDescription, minimumValueDescription);
+            String minimumValueDescription,
+            int backgroundColor
+    ) {
+        super(max, min, defaultValue, step, maximumValueDescription, minimumValueDescription, backgroundColor);
         this.midValueDescription = midValueDescription;
     }
 }

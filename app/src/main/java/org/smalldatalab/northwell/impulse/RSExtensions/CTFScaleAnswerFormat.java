@@ -31,12 +31,17 @@ public class CTFScaleAnswerFormat extends AnswerFormat {
         return maximumValueDescription;
     }
 
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
     private int maximum;
     private int minimum;
     private int step;
     private int defaultValue;
     private String minimumValueDescription;
     private String maximumValueDescription;
+    private int backgroundColor;
 
     public CTFScaleAnswerFormat(
             int max,
@@ -44,7 +49,8 @@ public class CTFScaleAnswerFormat extends AnswerFormat {
             int defaultValue,
             int step,
             String maximumValueDescription,
-            String minimumValueDescription) {
+            String minimumValueDescription,
+            int backgroundColor) {
 
         super();
         this.maximum = max;
@@ -53,7 +59,7 @@ public class CTFScaleAnswerFormat extends AnswerFormat {
         this.defaultValue = defaultValue;
         this.maximumValueDescription = maximumValueDescription;
         this.minimumValueDescription = minimumValueDescription;
-
+        this.backgroundColor = backgroundColor;
     }
 
 

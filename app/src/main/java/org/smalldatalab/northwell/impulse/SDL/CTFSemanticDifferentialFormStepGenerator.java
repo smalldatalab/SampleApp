@@ -1,12 +1,15 @@
 package org.smalldatalab.northwell.impulse.SDL;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 
 import com.google.gson.JsonObject;
 
 import org.researchstack.backbone.step.FormStep;
 import org.researchstack.backbone.step.QuestionStep;
 import org.researchstack.backbone.step.Step;
+import org.smalldatalab.northwell.impulse.R;
 import org.smalldatalab.northwell.impulse.RSExtensions.CTFLikertScaleAnswerFormat;
 import org.smalldatalab.northwell.impulse.RSExtensions.CTFLikertScaleQuestionStep;
 import org.smalldatalab.northwell.impulse.RSExtensions.CTFSemanticDifferentialAnswerFormat;
@@ -34,9 +37,20 @@ public class CTFSemanticDifferentialFormStepGenerator extends CTFBaseStepGenerat
         );
     }
 
-    protected QuestionStep[] generateFormItems(List<CTFSemanticDifferentialScaleFormItemDescriptor> items)
+    protected QuestionStep[] generateFormItems(Context context, List<CTFSemanticDifferentialScaleFormItemDescriptor> items)
     {
         QuestionStep[] steps = new QuestionStep[items.size()];
+
+        int oddColor;
+        int evenColor;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            oddColor = context.getColor(R.color.slider_background_color_odd);
+            evenColor = context.getColor(R.color.slider_background_color_even);
+        }
+        else {
+            oddColor = context.getResources().getColor(R.color.slider_background_color_odd);
+            evenColor = context.getResources().getColor(R.color.slider_background_color_even);
+        }
 
         for(int i = 0; i < items.size(); i++)
         {
@@ -58,7 +72,8 @@ public class CTFSemanticDifferentialFormStepGenerator extends CTFBaseStepGenerat
                     descriptor.range.maxValueText,
                     descriptor.range.minValueText,
                     descriptor.range.trackHeight,
-                    gradientColors
+                    gradientColors,
+                    (i%2 == 0) ? evenColor : oddColor
             );
 
             steps[i] = new CTFSemanticDifferentialScaleQuestionStep(
@@ -83,7 +98,7 @@ public class CTFSemanticDifferentialFormStepGenerator extends CTFBaseStepGenerat
                 parameters.text
         );
 
-        step.setFormSteps(this.generateFormItems(parameters.items));
+        step.setFormSteps(this.generateFormItems(helper.getContext(), parameters.items));
 
         return step;
     }

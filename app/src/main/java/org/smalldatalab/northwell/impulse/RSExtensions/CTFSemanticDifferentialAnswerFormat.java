@@ -25,8 +25,9 @@ public class CTFSemanticDifferentialAnswerFormat extends CTFScaleAnswerFormat {
             int step,
             String maximumValueDescription,
             String minimumValueDescription,
-            int trackHeight) {
-        super(max, min, defaultValue, step, maximumValueDescription, minimumValueDescription);
+            int trackHeight,
+            int backgroundColor) {
+        super(max, min, defaultValue, step, maximumValueDescription, minimumValueDescription, backgroundColor);
         this.trackHeight = trackHeight;
         this.gradientColors = null;
     }
@@ -39,8 +40,9 @@ public class CTFSemanticDifferentialAnswerFormat extends CTFScaleAnswerFormat {
             String maximumValueDescription,
             String minimumValueDescription,
             int trackHeight,
-            int[] gradientColors) {
-        super(max, min, defaultValue, step, maximumValueDescription, minimumValueDescription);
+            int[] gradientColors,
+            int backgroundColor) {
+        super(max, min, defaultValue, step, maximumValueDescription, minimumValueDescription, backgroundColor);
         this.trackHeight = trackHeight;
         if (gradientColors != null) {
             this.gradientColors = gradientColors.clone();

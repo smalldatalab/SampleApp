@@ -1,10 +1,13 @@
 package org.smalldatalab.northwell.impulse.SDL;
 
+import android.content.Context;
+
 import com.google.gson.JsonObject;
 
 import org.researchstack.backbone.step.FormStep;
 import org.researchstack.backbone.step.QuestionStep;
 import org.researchstack.backbone.step.Step;
+import org.smalldatalab.northwell.impulse.R;
 import org.smalldatalab.northwell.impulse.RSExtensions.CTFLikertScaleAnswerFormat;
 import org.smalldatalab.northwell.impulse.RSExtensions.CTFLikertScaleQuestionStep;
 import org.smalldatalab.northwell.impulse.SDL.descriptors.CTFLikertScaleFormItemDescriptor;
@@ -30,9 +33,20 @@ public class CTFLikertFormStepGenerator extends CTFBaseStepGenerator {
         );
     }
 
-    protected QuestionStep[] generateFormItems(List<CTFLikertScaleFormItemDescriptor> items)
+    protected QuestionStep[] generateFormItems(Context context, List<CTFLikertScaleFormItemDescriptor> items)
     {
         QuestionStep[] steps = new QuestionStep[items.size()];
+
+        int oddColor;
+        int evenColor;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            oddColor = context.getColor(R.color.slider_background_color_odd);
+            evenColor = context.getColor(R.color.slider_background_color_even);
+        }
+        else {
+            oddColor = context.getResources().getColor(R.color.slider_background_color_odd);
+            evenColor = context.getResources().getColor(R.color.slider_background_color_even);
+        }
 
         for(int i = 0; i < items.size(); i++)
         {
@@ -44,7 +58,8 @@ public class CTFLikertFormStepGenerator extends CTFBaseStepGenerator {
                     descriptor.range.step,
                     descriptor.range.maxValueText,
                     descriptor.range.midValueText,
-                    descriptor.range.minValueText
+                    descriptor.range.minValueText,
+                    (i%2 == 0) ? evenColor : oddColor
             );
 
             steps[i] = new CTFLikertScaleQuestionStep(
@@ -69,7 +84,7 @@ public class CTFLikertFormStepGenerator extends CTFBaseStepGenerator {
                 parameters.text
         );
 
-        step.setFormSteps(this.generateFormItems(parameters.items));
+        step.setFormSteps(this.generateFormItems(helper.getContext(), parameters.items));
 
         return step;
     }
