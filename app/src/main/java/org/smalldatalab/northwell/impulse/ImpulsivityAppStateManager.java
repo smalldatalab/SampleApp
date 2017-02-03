@@ -222,7 +222,7 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
         this.setTimeComponent(context, EVENING_SURVEY_TIME_MINUTE, minute);
 
         //set notification
-        ImpulsivityNotificationManager.setEveningNotification(context, getLastMorningSurveyCompletedDate(context), hour, minute);
+        ImpulsivityNotificationManager.setEveningNotification(context, getLastEveningSurveyCompletedDate(context), hour, minute);
 
     }
 
@@ -357,7 +357,7 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
             return false;
         }
 
-        Date lastCompletedTime = this.getLastMorningSurveyCompletedDate(context);
+        Date lastCompletedTime = this.getLastEveningSurveyCompletedDate(context);
 
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
         if (lastCompletedTime != null &&
