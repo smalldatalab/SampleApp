@@ -121,7 +121,7 @@ public class CTFBARTStepLayout extends FrameLayout implements StepLayout {
         CTFBARTTrial[] trials = new CTFBARTTrial[params.getNumberOfTrials()];
 
         for(int i = 0; i < params.getNumberOfTrials(); i++) {
-            trials[i] = new CTFBARTTrial(i, params.getMaxPayingPumpsPerTrial(), params.getEarningsPerPump());
+            trials[i] = new CTFBARTTrial(i, params.getMaxPayingPumpsPerTrial(), params.getEarningsPerPump(), params.isCanExplodeOnFirstPump());
         }
         return trials;
 
@@ -250,7 +250,13 @@ public class CTFBARTStepLayout extends FrameLayout implements StepLayout {
                 1.0 / (double)((trial.getMaxPayingPumps() + 2) - pumpCount) :
                 1.0 / 2.0;
 
-        boolean popped = CTFHelpers.coinFlip(true, false, popProb);
+        boolean popped;
+        if (!trial.isCanExplodeOnFirstPump() && pumpCount == 0) {
+            popped = false;
+        }
+        else {
+            popped = CTFHelpers.coinFlip(true, false, popProb);
+        }
 
         if (popped) {
             //disable buttons
