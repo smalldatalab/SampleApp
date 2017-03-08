@@ -38,7 +38,7 @@ public class CTFStepBuilder {
     }
 
     @Nullable
-    private
+    public
     List<Step> stepsForElement(JsonElement element) {
         if (element.isJsonArray()) {
             JsonArray jsonArray = element.getAsJsonArray();

@@ -82,11 +82,11 @@ public class SampleResourceManager extends ResourceManager
                 SchedulesAndTasksModel.class);
     }
 
-    public Resource getSchedule()
+    public Resource loadSchedule(String filename)
     {
         return new Resource(Resource.TYPE_JSON,
-                BASE_PATH_JSON,
-                "tasks_and_schedules",
+                BASE_PATH_JSON_SURVEY,
+                filename,
                 CTFSchedule.class);
     }
 

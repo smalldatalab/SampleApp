@@ -1,49 +1,30 @@
 package org.smalldatalab.northwell.impulse;
 import android.content.Context;
-import android.content.res.Resources;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 import org.researchstack.backbone.ResourcePathManager;
-import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
-import org.researchstack.backbone.step.InstructionStep;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 import edu.cornell.tech.foundry.CTFStepBuilder;
+import rx.Observable;
 
-import org.researchstack.backbone.utils.TextUtils;
-import org.smalldatalab.northwell.impulse.SDL.TaskFactory;
+import org.researchstack.skin.DataResponse;
 import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
 import org.researchstack.skin.ResourceManager;
 import org.researchstack.skin.model.SchedulesAndTasksModel;
-import org.smalldatalab.northwell.impulse.studyManagement.CTFActivity;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFSchedule;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
-import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduledActivity;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -56,11 +37,28 @@ public class SampleDataProvider extends BridgeDataProvider
     //these map taskID -> Schedule GUID
     private HashMap<String, String> scheduleActivitiesMap;
 
+
+    private CTFSchedule activitiesSchedule;
+    private List<CTFScheduleItem>  activities;
+
+    private CTFSchedule trialActivitiesSchedule;
+    private List<CTFScheduleItem>  trialActivities;
+
+
     public SampleDataProvider()
     {
         super();
 //        CTFStepBuilder.init(new CTFStepBuilder());
         scheduleActivitiesMap = new HashMap<>();
+    }
+
+    @Override
+    public Observable<DataResponse> initialize(Context context)
+    {
+        this.activitiesSchedule = this.loadSchedule(context, context.getString(R.string.ctf_scheduled_activities_filename));
+        this.trialActivitiesSchedule = this.loadSchedule(context, context.getString(R.string.ctf_trial_activities_filename));
+
+        return super.initialize(context);
     }
 
     @Override
@@ -128,20 +126,20 @@ public class SampleDataProvider extends BridgeDataProvider
         //every scheduleItem has one task
         for (CTFScheduleItem scheduleItem: schedule.getScheduleItems()) {
 
-            if (scheduleItem.activities.size() != 1) {
-                return false;
-            }
-
-            //schedule guids are unique
-            //add returns true if the set did not contain the item already
-            if (!scheduleGUIDs.add(scheduleItem.scheduleGUID)) {
-                return false;
-            }
-
-            //tasksIDs are unique
-            if (!taskIDs.add(scheduleItem.activities.get(0).taskID)) {
-                return false;
-            }
+//            if (scheduleItem.activities.size() != 1) {
+//                return false;
+//            }
+//
+//            //schedule guids are unique
+//            //add returns true if the set did not contain the item already
+//            if (!scheduleGUIDs.add(scheduleItem.scheduleGUID)) {
+//                return false;
+//            }
+//
+//            //tasksIDs are unique
+//            if (!taskIDs.add(scheduleItem.activities.get(0).taskID)) {
+//                return false;
+//            }
 
         }
 
@@ -150,9 +148,9 @@ public class SampleDataProvider extends BridgeDataProvider
     }
 
     @Nullable
-    private CTFSchedule loadSchedule(Context context) {
+    private CTFSchedule loadSchedule(Context context, String filename) {
         SampleResourceManager resourceManager = (SampleResourceManager)ResourceManager.getInstance();
-        CTFSchedule schedule = resourceManager.getSchedule().create(context);
+        CTFSchedule schedule = resourceManager.loadSchedule(filename).create(context);
 
         if (!this.validateSchedule(schedule)) {
             return null;
@@ -161,29 +159,29 @@ public class SampleDataProvider extends BridgeDataProvider
         return schedule;
     }
 
-    @Nullable
-    private CTFScheduledActivity scheduledActivityForScheduleItem(CTFScheduleItem scheduleItem) {
-        if (scheduleItem.activities.size() > 0) {
+//    @Nullable
+//    private CTFScheduledActivity scheduledActivityForScheduleItem(CTFScheduleItem scheduleItem) {
+//        if (scheduleItem.activities.size() > 0) {
+//
+//            CTFActivity activity = scheduleItem.activities.get(0);
+//            CTFScheduledActivity scheduledActivity = new CTFScheduledActivity(
+//                    scheduleItem.scheduleIdentifier,
+//                    scheduleItem.scheduleGUID,
+//                    scheduleItem.scheduleTitle,
+//                    activity.taskCompletionTime,
+//                    scheduleItem.trialActivity,
+//                    activity
+//            );
+//
+//            return scheduledActivity;
+//
+//        }
+//        return null;
+//    }
 
-            CTFActivity activity = scheduleItem.activities.get(0);
-            CTFScheduledActivity scheduledActivity = new CTFScheduledActivity(
-                    scheduleItem.scheduleIdentifier,
-                    scheduleItem.scheduleGUID,
-                    scheduleItem.scheduleTitle,
-                    activity.taskCompletionTime,
-                    scheduleItem.trialActivity,
-                    activity
-            );
+    private boolean shouldShowScheduledActivity(Context context, CTFScheduleItem scheduleItem) {
 
-            return scheduledActivity;
-
-        }
-        return null;
-    }
-
-    private boolean shouldShowScheduledActivity(Context context, CTFScheduledActivity scheduledActivity) {
-
-        switch(scheduledActivity.getIdentifier()) {
+        switch(scheduleItem.identifier) {
 
             case "baseline":
             case "reenrollment":
@@ -204,29 +202,15 @@ public class SampleDataProvider extends BridgeDataProvider
 
     }
 
-    public List<CTFScheduledActivity> loadScheduledActivities(Context context) {
+    public List<CTFScheduleItem> loadScheduledActivities(Context context) {
 
-        CTFSchedule schedule = this.loadSchedule(context);
+        List<CTFScheduleItem> scheduledActivities = new ArrayList();
 
-        List<CTFScheduledActivity> scheduledActivities = new ArrayList();
+        for (CTFScheduleItem scheduleItem: this.activitiesSchedule.getScheduleItems()) {
 
-        if (schedule != null) {
-            for (CTFScheduleItem scheduleItem: schedule.getScheduleItems()) {
-
-                if (!scheduleItem.trialActivity) {
-
-                    CTFScheduledActivity scheduledActivity = this.scheduledActivityForScheduleItem(scheduleItem);
-
-                    if (scheduledActivity != null && this.shouldShowScheduledActivity(context, scheduledActivity)) {
-                        scheduledActivities.add(scheduledActivity);
-
-                        this.scheduleActivitiesMap.put(scheduledActivity.getActivity().taskID, scheduledActivity.getGuid());
-                    }
-
-                }
-
+            if (this.shouldShowScheduledActivity(context, scheduleItem)) {
+                scheduledActivities.add(scheduleItem);
             }
-
         }
 
         return scheduledActivities;
@@ -235,31 +219,32 @@ public class SampleDataProvider extends BridgeDataProvider
 
 
 
-    public List<CTFScheduledActivity> loadTrialActivities(Context context) {
+    public List<CTFScheduleItem> loadTrialActivities(Context context) {
+        return this.trialActivitiesSchedule.getScheduleItems();
+    }
 
-        CTFSchedule schedule = this.loadSchedule(context);
+    @Nullable
+    public Task loadTask(Context context, CTFScheduleItem item) {
+        CTFStepBuilder stepBuilder = new CTFStepBuilder(
+                context,
+                ResourceManager.getInstance(),
+                ImpulsivityAppStateManager.getInstance());
 
-        List<CTFScheduledActivity> scheduledActivities = new ArrayList();
+        List<Step> stepList = null;
 
-        if (schedule != null) {
-            for (CTFScheduleItem scheduleItem: schedule.getScheduleItems()) {
-
-                if (scheduleItem.trialActivity) {
-
-                    CTFScheduledActivity scheduledActivity = this.scheduledActivityForScheduleItem(scheduleItem);
-
-                    if (scheduledActivity != null) {
-                        scheduledActivities.add(scheduledActivity);
-
-                        this.scheduleActivitiesMap.put(scheduledActivity.getActivity().taskID, scheduledActivity.getGuid());
-                    }
-                }
-
-            }
+        try {
+            stepList = stepBuilder.stepsForElement(item.activity);
         }
-
-
-        return scheduledActivities;
+        catch(Exception e) {
+            Log.w(this.TAG, "could not create steps from task json", e);
+            return null;
+        }
+        if (stepList != null && stepList.size() > 0) {
+            return new OrderedTask(item.identifier, stepList);
+        }
+        else {
+            return null;
+        }
 
     }
 
@@ -297,47 +282,17 @@ public class SampleDataProvider extends BridgeDataProvider
         return super.loadTask(context, task);
     }
 
-    @Override
-    public void uploadTaskResult(Context context, TaskResult taskResult) {
+    public void uploadTaskResult(Context context, TaskResult taskResult, String guid) {
 
-        CTFScheduledActivity scheduledActivity = this.scheduledActivityForTaskResult(context, taskResult);
-
-
-        this.handleActivityResult(context, taskResult, scheduledActivity);
-
-//        super.uploadTaskResult(context, taskResult);
+        CTFScheduleItem item = this.activitiesSchedule.getScheduleItem(guid);
+        if (item != null) {
+            this.handleActivityResult(context, taskResult, item);
+        }
 
     }
 
-    @Nullable
-    public CTFScheduledActivity scheduledActivityForTaskResult(Context context, TaskResult taskResult) {
-        String taskID = taskResult.getIdentifier();
-        String guid = this.scheduleActivitiesMap.get(taskID);
+    private void handleActivityResult(Context context, TaskResult taskResult, CTFScheduleItem item) {
 
-        CTFSchedule schedule = this.loadSchedule(context);
-
-        if (schedule != null) {
-            for (CTFScheduleItem scheduleItem: schedule.getScheduleItems()) {
-
-                if (guid.equals(scheduleItem.scheduleGUID)) {
-                    return this.scheduledActivityForScheduleItem(scheduleItem);
-                }
-
-            }
-        }
-
-
-        return null;
-
-    }
-
-    private void handleActivityResult(Context context, TaskResult taskResult, CTFScheduledActivity scheduledActivity) {
-
-        if (scheduledActivity.isTrial()) {
-
-            return;
-
-        }
 
         switch(taskResult.getIdentifier()) {
             case "Reenrollment":

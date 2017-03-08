@@ -14,7 +14,9 @@
     <string name="grant">Grant</string>
 
     <string name="ctf_scheduled_activities">Scheduled Activities</string>
+    <string name="ctf_scheduled_activities_filename">activities</string>
     <string name="ctf_trial_activities">Trial Activities</string>
+    <string name="ctf_trial_activities_filename">trialActivities</string>
 
     <string name="yadl_image_path">images/yadl</string>
     <string name="yadl_image_ext">jpeg</string>

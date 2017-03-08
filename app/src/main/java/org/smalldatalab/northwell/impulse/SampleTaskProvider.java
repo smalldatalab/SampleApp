@@ -30,9 +30,9 @@ public class SampleTaskProvider extends TaskProvider
     public SampleTaskProvider(Context context)
     {
 //        put(TASK_ID_INITIAL, createInitialTask(context));
-        put(TASK_ID_CONSENT, ConsentTask.create(context, TASK_ID_CONSENT));
-        put(TASK_ID_SIGN_IN, new SignInTask(context));
-        put(TASK_ID_SIGN_UP, new SignUpTask(context));
+//        put(TASK_ID_CONSENT, ConsentTask.create(context, TASK_ID_CONSENT));
+//        put(TASK_ID_SIGN_IN, new SignInTask(context));
+//        put(TASK_ID_SIGN_UP, new SignUpTask(context));
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.researchstack.skin.ActionItem;
 import org.researchstack.skin.UiManager;
 import org.researchstack.skin.task.OnboardingTask;
 import org.researchstack.skin.ui.LearnActivity;
-import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduledActivity;
 
 import java.util.ArrayList;
 import java.util.List;
