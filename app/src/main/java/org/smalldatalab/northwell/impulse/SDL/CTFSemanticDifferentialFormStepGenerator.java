@@ -21,14 +21,14 @@ import org.smalldatalab.northwell.impulse.SDL.descriptors.CTFSemanticDifferentia
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cornell.tech.foundry.CTFStepBuilderHelper;
-import edu.cornell.tech.foundry.DefaultStepGenerators.CTFBaseStepGenerator;
-import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.CustomStepDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBBaseStepGenerator;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.descriptors.RSTBCustomStepDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilderHelper;
 
 /**
  * Created by jameskizer on 12/8/16.
  */
-public class CTFSemanticDifferentialFormStepGenerator extends CTFBaseStepGenerator {
+public class CTFSemanticDifferentialFormStepGenerator extends RSTBBaseStepGenerator {
     public CTFSemanticDifferentialFormStepGenerator()
     {
         super();
@@ -86,9 +86,9 @@ public class CTFSemanticDifferentialFormStepGenerator extends CTFBaseStepGenerat
     }
 
     @Override
-    public Step generateStep(CTFStepBuilderHelper helper, String type, JsonObject jsonObject) {
+    public Step generateStep(RSTBTaskBuilderHelper helper, String type, JsonObject jsonObject) {
 
-        CustomStepDescriptor stepDescriptor = helper.getCustomStepDescriptor(jsonObject);
+        RSTBCustomStepDescriptor stepDescriptor = helper.getCustomStepDescriptor(jsonObject);
 
         CTFSemanticDifferentialScaleFormParameters parameters = helper.getGson().fromJson(stepDescriptor.parameters, CTFSemanticDifferentialScaleFormParameters.class);
 

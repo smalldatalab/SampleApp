@@ -10,7 +10,8 @@ import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
-import edu.cornell.tech.foundry.CTFStepBuilder;
+
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilder;
 import rx.Observable;
 
 import org.researchstack.skin.DataResponse;
@@ -223,63 +224,60 @@ public class SampleDataProvider extends BridgeDataProvider
         return this.trialActivitiesSchedule.getScheduleItems();
     }
 
+//    @Nullable
+//    public Task loadTask(Context context, CTFScheduleItem item) {
+//        CTFStepBuilder stepBuilder = new CTFStepBuilder(
+//                context,
+//                ResourceManager.getInstance(),
+//                ImpulsivityAppStateManager.getInstance());
+//
+//        List<Step> stepList = null;
+//
+//        try {
+//            stepList = stepBuilder.stepsForElement(item.activity);
+//        }
+//        catch(Exception e) {
+//            Log.w(this.TAG, "could not create steps from task json", e);
+//            return null;
+//        }
+//        if (stepList != null && stepList.size() > 0) {
+//            return new OrderedTask(item.identifier, stepList);
+//        }
+//        else {
+//            return null;
+//        }
+//
+//    }
+
     @Nullable
-    public Task loadTask(Context context, CTFScheduleItem item) {
-        CTFStepBuilder stepBuilder = new CTFStepBuilder(
+    public Task loadTask(Context context, CTFScheduleItem scheduleItem) {
+
+        RSTBTaskBuilder taskBuilder = new RSTBTaskBuilder(
                 context,
                 ResourceManager.getInstance(),
                 ImpulsivityAppStateManager.getInstance());
 
-        List<Step> stepList = null;
+        taskBuilder.getStepBuilderHelper().setDefaultResourceType(SampleResourceManager.SURVEY);
 
+        List<Step> stepList = null;
         try {
-            stepList = stepBuilder.stepsForElement(item.activity);
+            stepList = taskBuilder.stepsForElement(scheduleItem.activity);
         }
         catch(Exception e) {
             Log.w(this.TAG, "could not create steps from task json", e);
             return null;
         }
         if (stepList != null && stepList.size() > 0) {
-            return new OrderedTask(item.identifier, stepList);
+            return new OrderedTask(scheduleItem.identifier, stepList);
         }
         else {
             return null;
         }
-
     }
 
     @Override
-    public Task loadTask(Context context, SchedulesAndTasksModel.TaskScheduleModel task)
-    {
-        if(!StringUtils.isEmpty(task.taskClassName) && task.taskClassName.equals("CTFOrderedTask"))
-        {
-            if(StringUtils.isEmpty(task.taskFileName)) {
-                return null;
-            }
-
-            System.out.print("got ordered task!!");
-
-            CTFStepBuilder stepBuilder = new CTFStepBuilder(
-                    context,
-                    ResourceManager.getInstance(),
-                    ImpulsivityAppStateManager.getInstance());
-
-            List<Step> stepList = null;
-            try {
-                stepList = stepBuilder.stepsForElementFilename(task.taskFileName);
-            }
-            catch(Exception e) {
-                Log.w(this.TAG, "could not create steps from task json", e);
-                return null;
-            }
-            if (stepList != null && stepList.size() > 0) {
-                return new OrderedTask(task.taskID, stepList);
-            }
-
-
-        }
-
-        return super.loadTask(context, task);
+    public Task loadTask(Context context, SchedulesAndTasksModel.TaskScheduleModel task) {
+        return null;
     }
 
     public void uploadTaskResult(Context context, TaskResult taskResult, String guid) {

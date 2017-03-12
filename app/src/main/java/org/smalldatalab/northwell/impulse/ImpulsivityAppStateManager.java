@@ -24,13 +24,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import edu.cornell.tech.foundry.CTFStateHelper;
-import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.IntegerStepDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBStateHelper;
 
 /**
  * Created by jameskizer on 1/20/17.
  */
-public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFStateHelper {
+public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTBStateHelper {
 
 
     static String MORNING_SURVEY_TIME_HOUR = "MorningSurveyTimeHR";

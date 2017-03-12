@@ -23,6 +23,7 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" } // for MPAndroidChard, not on jcenter yet
         maven { url "https://dl.bintray.com/edu-cornell-tech-foundry/SDLRSX" }
+        maven { url "https://dl.bintray.com/edu-cornell-tech-foundry/ResearchSuiteAppFramework" }
         mavenLocal()        // for updates to local rstack
     }
 }
