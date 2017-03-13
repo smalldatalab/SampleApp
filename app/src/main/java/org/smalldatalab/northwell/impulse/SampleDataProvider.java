@@ -11,6 +11,7 @@ import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 
+import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPResultsProcessor;
 import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilder;
 import rx.Observable;
 
@@ -18,6 +19,7 @@ import org.researchstack.skin.DataResponse;
 import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
 import org.researchstack.skin.ResourceManager;
 import org.researchstack.skin.model.SchedulesAndTasksModel;
+import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFSchedule;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 
@@ -26,8 +28,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 
 public class SampleDataProvider extends BridgeDataProvider
@@ -36,7 +41,10 @@ public class SampleDataProvider extends BridgeDataProvider
     private static final String TAG = "SampleDataProvider";
 
     //these map taskID -> Schedule GUID
-    private HashMap<String, String> scheduleActivitiesMap;
+//    private HashMap<String, String> scheduleActivitiesMap;
+
+    private LinkedList<CTFActivityRun> activityRunLinkedList;
+    private Random rand;
 
 
     private CTFSchedule activitiesSchedule;
@@ -50,7 +58,53 @@ public class SampleDataProvider extends BridgeDataProvider
     {
         super();
 //        CTFStepBuilder.init(new CTFStepBuilder());
-        scheduleActivitiesMap = new HashMap<>();
+//        scheduleActivitiesMap = new HashMap<>();
+
+        activityRunLinkedList = new LinkedList<>();
+        rand = new Random();
+
+    }
+
+    @Nullable
+    private CTFActivityRun activityRunForRequestCode(Integer resultId) {
+        for (CTFActivityRun run : activityRunLinkedList) {
+            if (run.requestId.equals(resultId)) {
+                return run;
+            }
+        }
+        return null;
+    }
+
+    public CTFActivityRun activityRunForItem(CTFScheduleItem item) {
+
+        Integer requestCode = rand.nextInt(Short.MAX_VALUE);
+        while( activityRunForRequestCode(requestCode) != null) {
+            requestCode = rand.nextInt(Short.MAX_VALUE);
+        }
+
+        CTFActivityRun activityRun = new CTFActivityRun(
+                item.identifier,
+                UUID.randomUUID().toString(),
+                requestCode,
+                item.activity,
+                item.resultTransforms
+        );
+
+        this.activityRunLinkedList.add(activityRun);
+
+        return activityRun;
+    }
+
+    @Nullable
+    public CTFActivityRun popActivityRunForRequestCode(Integer requestCode) {
+        CTFActivityRun activityRun = activityRunForRequestCode(requestCode);
+        if (activityRun != null) {
+            this.activityRunLinkedList.remove(activityRun);
+            return activityRun;
+        }
+        else {
+            return null;
+        }
     }
 
     @Override
@@ -250,7 +304,7 @@ public class SampleDataProvider extends BridgeDataProvider
 //    }
 
     @Nullable
-    public Task loadTask(Context context, CTFScheduleItem scheduleItem) {
+    public Task loadTask(Context context, CTFActivityRun activityRun) {
 
         RSTBTaskBuilder taskBuilder = new RSTBTaskBuilder(
                 context,
@@ -261,14 +315,14 @@ public class SampleDataProvider extends BridgeDataProvider
 
         List<Step> stepList = null;
         try {
-            stepList = taskBuilder.stepsForElement(scheduleItem.activity);
+            stepList = taskBuilder.stepsForElement(activityRun.activity);
         }
         catch(Exception e) {
             Log.w(this.TAG, "could not create steps from task json", e);
             return null;
         }
         if (stepList != null && stepList.size() > 0) {
-            return new OrderedTask(scheduleItem.identifier, stepList);
+            return new OrderedTask(activityRun.identifier, stepList);
         }
         else {
             return null;
@@ -280,30 +334,32 @@ public class SampleDataProvider extends BridgeDataProvider
         return null;
     }
 
-    public void uploadTaskResult(Context context, TaskResult taskResult, String guid) {
+    public void completeActivity(Context context, TaskResult taskResult, CTFActivityRun activityRun) {
 
-        CTFScheduleItem item = this.activitiesSchedule.getScheduleItem(guid);
-        if (item != null) {
-            this.handleActivityResult(context, taskResult, item);
+        if (activityRun != null) {
+            this.handleActivityResult(context, taskResult);
+
+//            RSRPResultsProcessor resultsProcessor = new RSRPResultsProcessor()
+
         }
 
     }
 
-    private void handleActivityResult(Context context, TaskResult taskResult, CTFScheduleItem item) {
+    private void handleActivityResult(Context context, TaskResult taskResult) {
 
 
         switch(taskResult.getIdentifier()) {
-            case "Reenrollment":
+            case "reenrollment":
                 this.handleReenrollment(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 
-            case "Baseline":
+            case "baseline":
                 this.handleBaseline(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 
-            case "21Day":
+            case "21-day-assessment":
                 this.handle21Day(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;

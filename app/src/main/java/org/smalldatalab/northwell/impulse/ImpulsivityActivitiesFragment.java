@@ -52,9 +52,6 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
     private RecyclerView recyclerView;
     private Subscription subscription;
 
-    private LinkedList<CTFActivityRun> activityRunLinkedList;
-    private Random rand;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -67,8 +64,6 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
     {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(org.researchstack.skin.R.id.recycler_view);
-        activityRunLinkedList = new LinkedList<>();
-        rand = new Random();
     }
 
     @Override
@@ -114,22 +109,9 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
 
                     subscription = adapter.getPublishSubject().subscribe(item -> {
 
-                        Integer requestCode = rand.nextInt(Short.MAX_VALUE);
-                        while( activityRunForResultCode(requestCode) != null) {
-                            requestCode = rand.nextInt(Short.MAX_VALUE);
-                        }
-
-                        CTFActivityRun activityRun = new CTFActivityRun(
-                                UUID.randomUUID().toString(),
-                                requestCode,
-                                item.activity,
-                                null
-                        );
-
-                        this.activityRunLinkedList.add(activityRun);
-
                         SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
-                        Task newTask = dataProvider.loadTask(getContext(), item);
+                        CTFActivityRun activityRun = dataProvider.activityRunForItem(item);
+                        Task newTask = dataProvider.loadTask(getContext(), activityRun);
 
                         if (newTask == null) {
                             Toast.makeText(getActivity(),
@@ -140,41 +122,25 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
 
                         Intent intent = ViewTaskActivity.newIntent(getContext(), newTask);
 
-                        startActivityForResult(intent, requestCode);
+                        startActivityForResult(intent, activityRun.requestId);
                     });
                 });
-    }
-
-    @Nullable
-    private CTFActivityRun activityRunForResultCode(Integer resultId) {
-        for (CTFActivityRun run : activityRunLinkedList) {
-            if (run.resultId.equals(resultId)) {
-                return run;
-            }
-        }
-        return null;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        CTFActivityRun activityRun = activityRunForResultCode(requestCode);
+        SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+        CTFActivityRun activityRun = dataProvider.popActivityRunForRequestCode(requestCode);
 
         if (activityRun != null) {
-
-            this.activityRunLinkedList.remove(activityRun);
 
             if(resultCode == Activity.RESULT_OK)
             {
                 LogExt.d(getClass(), "Received task result from task activity");
 
                 TaskResult taskResult = (TaskResult) data.getSerializableExtra(ViewTaskActivity.EXTRA_TASK_RESULT);
-
-                SampleDataProvider dataProvider = (SampleDataProvider)DataProvider.getInstance();
-
-//            dataProvider.uploadTaskResult(getActivity(), taskResult, guid);
-//            StorageAccess.getInstance().getAppDatabase().saveTaskResult(taskResult);
-//            DataProvider.getInstance().uploadTaskResult(getActivity(), taskResult);
+                dataProvider.completeActivity(getActivity(), taskResult, activityRun);
 
                 setUpAdapter();
             }
