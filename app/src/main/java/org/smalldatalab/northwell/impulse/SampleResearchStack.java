@@ -4,6 +4,7 @@ import android.content.Context;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.storage.database.AppDatabase;
 import org.researchstack.backbone.storage.database.sqlite.SqlCipherDatabaseHelper;
 import org.researchstack.backbone.storage.database.sqlite.UpdatablePassphraseProvider;
@@ -12,7 +13,8 @@ import org.researchstack.backbone.storage.file.FileAccess;
 import org.researchstack.backbone.storage.file.PinCodeConfig;
 import org.researchstack.backbone.storage.file.SimpleFileAccess;
 import org.researchstack.backbone.storage.file.aes.AesProvider;
-import org.smalldatalab.northwell.impulse.bridge.BridgeEncryptedDatabase;
+import org.sagebionetworks.bridge.android.manager.BridgeManagerProvider;
+//import org.smalldatalab.northwell.impulse.bridge.BridgeEncryptedDatabase;
 import org.researchstack.skin.AppPrefs;
 import org.researchstack.skin.DataProvider;
 import org.researchstack.skin.PermissionRequestManager;
@@ -23,17 +25,74 @@ import org.researchstack.skin.UiManager;
 import org.researchstack.skin.notification.NotificationConfig;
 import org.researchstack.skin.notification.SimpleNotificationConfig;
 
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilder;
+
+//import org.sagebionetworks.bridge.android.
+
 public class SampleResearchStack extends ResearchStack
 {
+
+
+
+    public static void init(Context context, SampleResearchStack concreteResearchStack)
+    {
+
+        concreteResearchStack.createBridgeManagerProvider(context);
+
+
+        ResearchStack.init(context, concreteResearchStack);
+
+        //initialize RSTB
+        CTFTaskBuilderManager.init(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
+
+        //initialize RSRP
+        ImpulsivityBridgeManagerProvider provider = new ImpulsivityBridgeManagerProvider(
+                concreteResearchStack.bridgeManagerProvider.getBridgeConfig(),
+                concreteResearchStack.bridgeManagerProvider.getUploadManager()
+        );
+
+        CTFResultsProcessorManager.init(context, provider);
+
+        //first, create BridgeManagerProvider
+        //inject into
+//        concreteResearchStack.createBridgeManagerProvider(context);
+
+
+    }
+
+
+
+
+
+
+    private BridgeManagerProvider bridgeManagerProvider;
+
+    protected BridgeManagerProvider createBridgeManagerProvider(Context context) {
+
+        BridgeManagerProvider.init(context);
+        bridgeManagerProvider = BridgeManagerProvider.getInstance();
+        return BridgeManagerProvider.getInstance();
+
+    }
+
     @Override
     protected AppDatabase createAppDatabaseImplementation(Context context)
     {
         SQLiteDatabase.loadLibs(context);
-        return new BridgeEncryptedDatabase(context,
+
+        return new SqlCipherDatabaseHelper(
+                context,
                 SqlCipherDatabaseHelper.DEFAULT_NAME,
                 null,
                 SqlCipherDatabaseHelper.DEFAULT_VERSION,
-                new UpdatablePassphraseProvider());
+                new UpdatablePassphraseProvider()
+        );
+
+//        return new BridgeEncryptedDatabase(context,
+//                SqlCipherDatabaseHelper.DEFAULT_NAME,
+//                null,
+//                SqlCipherDatabaseHelper.DEFAULT_VERSION,
+//                new UpdatablePassphraseProvider());
     }
 
     @Override
@@ -71,7 +130,7 @@ public class SampleResearchStack extends ResearchStack
     @Override
     protected DataProvider createDataProviderImplementation(Context context)
     {
-        return new SampleDataProvider();
+        return new SampleDataProvider(bridgeManagerProvider);
     }
 
     @Override

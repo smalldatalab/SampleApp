@@ -43,6 +43,8 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
     static String BASELINE_BEHAVIOR_RESULTS  = "BaselineBehaviorResults";
     static String COMPLETED_TRIAL_ACTIVITIES = "CompeltedTrialActivities";
 
+    static String CONSENTED = "Consented";
+
     static int SURVEY_TIME_AFTER_INTERVAL_HOURS = 6;
     static int SURVEY_TIME_BEFORE_INTERVAL_HOURS = 2;
     static int DAY_21_DELAY_INTERVAL_DAYS = 21;
@@ -392,8 +394,24 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 
     }
 
+    public boolean isConsented(Context context) {
 
+        byte[] bytes = this.valueInState(context, CONSENTED);
+        if (bytes == null) {
+            return false;
+        }
 
+        Boolean consented = bytes[0] != 0;
+
+        return consented;
+    }
+
+    public void setConsented(Context context, Boolean consented) {
+
+        byte[] bytes = new byte[] { (byte) (consented?1:0)};
+
+        this.setValueInState(context, CONSENTED, bytes);
+    }
 
     private String pathForKey(String key) {
         StringBuilder pathBuilder = new StringBuilder(this.pathName);

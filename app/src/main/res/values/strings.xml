@@ -25,6 +25,7 @@
     <string name="overlay_image_path">images</string>
     <string name="overlay_image_ext">png</string>
     <string name="impulse_external_id">External ID</string>
+    <string name="impulse_consent">Consent</string>
 
     <string name="plus">Plus</string>
 
@@ -41,4 +42,10 @@
     <string name="morning_notification_text">Hey, it\'s time to take your morning survey!</string>
     <string name="evening_notification_text">Hey, it\'s time to take your evening survey!</string>
     <string name="day_21_notification_text">Hey, it\'s time to take your 21 day survey!</string>
+
+    <string name="bridge_external_id_format">jdk288+%s@cornell.edu</string>
+    <string name="osb_base_url">https://webservices.sagebridge.org/</string>
+    <string name="osb_study_id">cornell-mhealth-eval</string>
+    <string name="osb_study_name">mPulse DMT</string>
+
 </resources>

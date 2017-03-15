@@ -6,13 +6,16 @@ import android.view.View;
 import android.widget.Button;
 
 import org.researchstack.backbone.StorageAccess;
+import org.researchstack.backbone.answerformat.BooleanAnswerFormat;
 import org.researchstack.backbone.answerformat.TextAnswerFormat;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.QuestionStep;
+import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.ui.PinCodeActivity;
 import org.researchstack.backbone.ui.ViewTaskActivity;
 import org.researchstack.skin.AppPrefs;
+import org.researchstack.skin.DataProvider;
 import org.researchstack.skin.step.PassCodeCreationStep;
 import org.researchstack.skin.task.OnboardingTask;
 import org.researchstack.skin.task.SignInTask;
@@ -20,19 +23,29 @@ import org.researchstack.skin.task.SignUpTask;
 import org.researchstack.skin.ui.ConsentTaskActivity;
 import org.researchstack.skin.ui.EmailVerificationActivity;
 import org.researchstack.skin.ui.MainActivity;
+import org.smalldatalab.northwell.impulse.RSExtensions.CTFBridgeLogInStepLayout;
 import org.smalldatalab.northwell.impulse.RSExtensions.ConfirmationStep;
 import org.smalldatalab.northwell.impulse.RSExtensions.ConfirmationTextAnswerFormat;
+
+import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFLogInStep;
+import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFLogInStepLayout;
+import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFOhmageLogInStepLayout;
 
 /**
  * Created by jameskizer on 11/29/16.
  */
 public class ImpulseOnboardingActivity extends PinCodeActivity {
 
+    public static final String LOG_IN_STEP_IDENTIFIER = "login step identifier";
+    public static final String LOG_IN_TASK_IDENTIFIER = "login task identifier";
+
 //    public static final int REQUEST_CODE_SIGN_UP  = 21473;
-//    public static final int REQUEST_CODE_SIGN_IN  = 31473;
-    public static final int REQUEST_CODE_PASSCODE = 41473;
+    public static final int REQUEST_CODE_SIGN_IN = 31473;
+    public static final int REQUEST_CODE_CONSENT = 41473;
 
     private Button external_id;
+
+    private Boolean consented = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +53,16 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.impulse_activity_onboarding);
 
-//        this.external_id = (Button) findViewById(R.id.external_id);
+        this.external_id = (Button) findViewById(R.id.external_id);
 
+        this.consented = DataProvider.getInstance().isConsented(this);
+
+        if (this.consented) {
+            this.external_id.setText(R.string.impulse_external_id);
+        }
+        else {
+            this.external_id.setText(R.string.impulse_consent);
+        }
 
     }
 
@@ -58,32 +79,57 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
         }
     }
 
+
+    public void showOnboardingScreen() {
+        if (this.consented) {
+
+            boolean hasPasscode = StorageAccess.getInstance().hasPinCode(this);
+            if(! hasPasscode)
+            {
+
+                CTFLogInStep logInStep = new CTFLogInStep(
+                        LOG_IN_STEP_IDENTIFIER,
+                        "Sign In",
+                        "Please enter your participant ID",
+                        CTFBridgeLogInStepLayout.class
+                );
+
+                logInStep.setForgotPasswordButtonTitle("Skip Log In");
+                logInStep.setOptional(false);
+
+                PassCodeCreationStep passcodeStep = new PassCodeCreationStep(OnboardingTask.SignUpPassCodeCreationStepIdentifier,
+                        org.researchstack.skin.R.string.rss_passcode);
+
+                OrderedTask task = new OrderedTask("PasscodeTask", logInStep, passcodeStep);
+                startActivityForResult(ConsentTaskActivity.newIntent(this, task),
+                        REQUEST_CODE_SIGN_IN);
+            }
+            else
+            {
+                skipToMainActivity();
+            }
+
+        }
+
+        else {
+
+            BooleanAnswerFormat booleanAnswerFormat = new BooleanAnswerFormat("Yes", "No");
+
+            QuestionStep qs = new QuestionStep("consent", "Have you provided consent?", booleanAnswerFormat);
+            qs.setText("Please select \"Yes\" if you have completed the consent form for the study with a researcher.");
+
+            OrderedTask task = new OrderedTask("ConsentedTask", qs);
+            startActivityForResult(ConsentTaskActivity.newIntent(this, task),
+                    REQUEST_CODE_CONSENT);
+
+        }
+    }
+
     public void onExternalIdClicked(View view)
     {
-//        hidePager();
-        boolean hasPasscode = StorageAccess.getInstance().hasPinCode(this);
-        if(! hasPasscode)
-        {
-            PassCodeCreationStep step = new PassCodeCreationStep(OnboardingTask.SignUpPassCodeCreationStepIdentifier,
-                    org.researchstack.skin.R.string.rss_passcode);
 
-            TextAnswerFormat answerFormat = new TextAnswerFormat();
+        this.showOnboardingScreen();
 
-            QuestionStep qs = new QuestionStep("externalId", "Participant ID", answerFormat);
-            qs.setPlaceholder("Enter Participant ID");
-
-            ConfirmationTextAnswerFormat confirmationFormat = new ConfirmationTextAnswerFormat();
-            ConfirmationStep cs = new ConfirmationStep("confirmExternalId", "Confirm Participant ID", confirmationFormat, "externalId");
-            cs.setPlaceholder("Confirm Participant ID");
-
-            OrderedTask task = new OrderedTask("PasscodeTask", step, qs, cs);
-            startActivityForResult(ConsentTaskActivity.newIntent(this, task),
-                    REQUEST_CODE_PASSCODE);
-        }
-        else
-        {
-            skipToMainActivity();
-        }
     }
 
     private void skipToMainActivity()
@@ -112,14 +158,31 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if(requestCode == REQUEST_CODE_PASSCODE && resultCode == RESULT_OK)
+        if(requestCode == REQUEST_CODE_SIGN_IN && resultCode == RESULT_OK)
         {
             TaskResult result = (TaskResult) data.getSerializableExtra(ViewTaskActivity.EXTRA_TASK_RESULT);
-            String passcode = (String) result.getStepResult(OnboardingTask.SignUpPassCodeCreationStepIdentifier)
-                    .getResult();
-            StorageAccess.getInstance().createPinCode(this, passcode);
 
-            skipToMainActivity();
+            Boolean signedIn = (Boolean) result.getStepResult(LOG_IN_STEP_IDENTIFIER).getResultForIdentifier(CTFLogInStepLayout.LoggedInResultIdentifier);
+            if (signedIn) {
+                String passcode = (String) result.getStepResult(OnboardingTask.SignUpPassCodeCreationStepIdentifier)
+                        .getResult();
+                StorageAccess.getInstance().createPinCode(this, passcode);
+
+                ((SampleDataProvider) DataProvider.getInstance()).setConsented(this, consented);
+
+                skipToMainActivity();
+            }
+        }
+        else if(requestCode == REQUEST_CODE_CONSENT && resultCode == RESULT_OK)
+        {
+            TaskResult result = (TaskResult) data.getSerializableExtra(ViewTaskActivity.EXTRA_TASK_RESULT);
+
+            Boolean consented = (Boolean) result.getStepResult("consent").getResult();
+            if (consented) {
+                this.consented = consented;
+                this.onExternalIdClicked(null);
+            }
+
         }
         else
         {

@@ -5,6 +5,7 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
+
     }
 
     dependencies {
@@ -24,6 +25,7 @@ allprojects {
         maven { url "https://jitpack.io" } // for MPAndroidChard, not on jcenter yet
         maven { url "https://dl.bintray.com/edu-cornell-tech-foundry/SDLRSX" }
         maven { url "https://dl.bintray.com/edu-cornell-tech-foundry/ResearchSuiteAppFramework" }
+        maven { url 'http://repo-maven.sagebridge.org/' }
         mavenLocal()        // for updates to local rstack
     }
 }

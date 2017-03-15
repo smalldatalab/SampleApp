@@ -23,7 +23,7 @@ public class SampleApplication extends Application
         // Init RS Singleton
         //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-        ResearchStack.init(this, new SampleResearchStack());
+        SampleResearchStack.init(this, new SampleResearchStack());
 
         //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
         // Init permission objects

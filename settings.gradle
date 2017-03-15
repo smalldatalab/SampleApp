@@ -1,1 +1,3 @@
+include ':android-sdk'
+project(':android-sdk').projectDir = file('../ResearchSuite/Android/BridgeAndroidSDK/android-sdk')
 include ':app'

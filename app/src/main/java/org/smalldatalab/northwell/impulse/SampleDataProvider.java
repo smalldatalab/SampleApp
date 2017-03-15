@@ -1,10 +1,12 @@
 package org.smalldatalab.northwell.impulse;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
 import org.researchstack.backbone.ResourcePathManager;
+import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.Step;
@@ -13,10 +15,19 @@ import org.researchstack.backbone.task.Task;
 
 import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPResultsProcessor;
 import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilder;
+import rx.Completable;
 import rx.Observable;
+import rx.functions.Action0;
 
+import org.researchstack.skin.DataProvider;
 import org.researchstack.skin.DataResponse;
-import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
+import org.researchstack.skin.model.User;
+import org.sagebionetworks.bridge.android.BridgeConfig;
+import org.sagebionetworks.bridge.android.manager.AuthenticationManager;
+import org.sagebionetworks.bridge.android.manager.BridgeManagerProvider;
+import org.sagebionetworks.bridge.android.manager.ConsentManager;
+import org.sagebionetworks.bridge.rest.model.SignUp;
+//import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
 import org.researchstack.skin.ResourceManager;
 import org.researchstack.skin.model.SchedulesAndTasksModel;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
@@ -34,9 +45,14 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 
-public class SampleDataProvider extends BridgeDataProvider
+
+public class SampleDataProvider extends DataProvider
 {
+
+    public static final Observable<DataResponse> SUCCESS_DATA_RESPONSE = Observable.just(new DataResponse(true, "success"))
+            .cache();
 
     private static final String TAG = "SampleDataProvider";
 
@@ -53,8 +69,14 @@ public class SampleDataProvider extends BridgeDataProvider
     private CTFSchedule trialActivitiesSchedule;
     private List<CTFScheduleItem>  trialActivities;
 
+//    private final ResearchStackDAO researchStackDAO;
+//    private final BridgeManagerProvider bridgeManagerProvider;
+//    private final BridgeConfig bridgeConfig;
+    private final AuthenticationManager authenticationManager;
+//    private final ConsentManager consentManager;
 
-    public SampleDataProvider()
+
+    public SampleDataProvider(BridgeManagerProvider bridgeManagerProvider)
     {
         super();
 //        CTFStepBuilder.init(new CTFStepBuilder());
@@ -62,6 +84,8 @@ public class SampleDataProvider extends BridgeDataProvider
 
         activityRunLinkedList = new LinkedList<>();
         rand = new Random();
+
+        this.authenticationManager = bridgeManagerProvider.getAuthenticationManager();
 
     }
 
@@ -84,7 +108,7 @@ public class SampleDataProvider extends BridgeDataProvider
 
         CTFActivityRun activityRun = new CTFActivityRun(
                 item.identifier,
-                UUID.randomUUID().toString(),
+                UUID.randomUUID(),
                 requestCode,
                 item.activity,
                 item.resultTransforms
@@ -112,8 +136,173 @@ public class SampleDataProvider extends BridgeDataProvider
     {
         this.activitiesSchedule = this.loadSchedule(context, context.getString(R.string.ctf_scheduled_activities_filename));
         this.trialActivitiesSchedule = this.loadSchedule(context, context.getString(R.string.ctf_trial_activities_filename));
+//
+//        return Observable.defer(() -> {
+//            userSessionInfo = loadUserSession(context);
+//            signedIn = userSessionInfo != null;
+//
+//            buildRetrofitService(userSessionInfo);
+//            return Observable.just(new DataResponse(true, null));
+//
+//        }).doOnNext(response -> {
+//            // will crash if the user hasn't created a pincode yet, need to fix needsAuth()
+//            if(StorageAccess.getInstance().hasPinCode(context))
+//            {
+//                checkForTempConsentAndUpload(context);
+//                uploadPendingFiles(context);
+//            }
+//        });
 
-        return super.initialize(context);
+        return SUCCESS_DATA_RESPONSE;
+
+//        return super.initialize(context);
+
+    }
+
+    @Override
+    public Observable<DataResponse> signUp(Context context, String email, String username,
+                                           String password) {
+        Log.d(this.TAG,"Called signUp");
+        // we should pass in data groups, removeConsent roles
+//        SignUp signUp = new SignUp().study(getStudyId()).email(email).password(password);
+//        return signUp(signUp);
+
+        //not supported
+        return null;
+    }
+
+//    public Observable<DataResponse> signUp(SignUp signUp) {
+//        // saving email to user object should exist elsewhere.
+//        // Save email to user object.
+//
+//        return signUp(signUp.getEmail(), signUp.getPassword());
+//    }
+//
+//    @NonNull
+//    public Observable<DataResponse> signUp(@NonNull String email, @NonNull String password) {
+//        checkNotNull(email);
+//        checkNotNull(password);
+//
+//        return authenticationManager
+//                .signUp(email, password)
+//                .andThen(SUCCESS_DATA_RESPONSE);
+//    }
+
+    @Override
+    @NonNull
+    public Observable<DataResponse> signIn(@Nullable Context context, @NonNull String username, @NonNull String password) {
+
+        return signIn(username, password)
+                .andThen(SUCCESS_DATA_RESPONSE);
+    }
+
+    /**
+     * @param email    the participant's email
+     * @param password participant's password
+     * @return completion
+     * @see DataProvider#signIn(Context, String, String)
+     * <p>
+     * May fail with ConsentRequiredException, to indicate
+     * consent is required.
+     * NotAuthenticatedException could indicate the user has not verified their email
+     */
+    @NonNull
+    public Completable signIn(@NonNull String email, @NonNull String password) {
+        checkNotNull(email);
+        checkNotNull(password);
+
+        return authenticationManager
+                .signIn(email, password)
+                .toCompletable().doOnCompleted((Action0) () -> {
+                    // TODO: upload pending files
+                });
+    }
+
+    @Override
+    public Observable<DataResponse> signOut(Context context) {
+        Log.d(this.TAG,"Called signOut");
+
+        return signOut().andThen(SUCCESS_DATA_RESPONSE);
+    }
+
+    @NonNull
+    public Completable signOut() {
+        return authenticationManager.signOut();
+    }
+
+    @Override
+    public Observable<DataResponse> resendEmailVerification(Context context, String email) {
+        return null;
+    }
+
+    @Override
+    public boolean isSignedUp(Context context) {
+        return authenticationManager.getEmail() != null;
+    }
+
+    public boolean isSignedIn() {
+        return authenticationManager.getEmail() != null;
+    }
+
+    @Override
+    public boolean isSignedIn(Context context) {
+        return this.isConsented(context) && this.isSignedIn();
+    }
+
+    @Override
+    public boolean isConsented(Context context) {
+        return ImpulsivityAppStateManager.getInstance().isConsented(context);
+    }
+
+    public void setConsented(Context context, Boolean consented) {
+        ImpulsivityAppStateManager.getInstance().setConsented(context, consented);
+    }
+
+    @Override
+    public Observable<DataResponse> withdrawConsent(Context context, String reason) {
+        return null;
+    }
+
+    @Override
+    public void uploadConsent(Context context, TaskResult consentResult) {
+
+
+    }
+
+    @Override
+    public void saveConsent(Context context, TaskResult consentResult) {
+
+    }
+
+
+    @Override
+    public User getUser(Context context) {
+        return null;
+    }
+
+    @Override
+    public String getUserSharingScope(Context context) {
+        return null;
+    }
+
+    @Override
+    public void setUserSharingScope(Context context, String scope) {
+
+    }
+
+    @Override
+    public String getUserEmail(Context context) {
+        return null;
+    }
+
+    @Override
+    public void uploadTaskResult(Context context, TaskResult taskResult) {
+
+    }
+
+    @Override
+    public SchedulesAndTasksModel loadTasksAndSchedules(Context context) {
+        return null;
     }
 
     @Override
@@ -123,36 +312,37 @@ public class SampleDataProvider extends BridgeDataProvider
     }
 
     @Override
+    public Observable<DataResponse> forgotPassword(Context context, String email) {
+        return null;
+    }
+
     protected ResourcePathManager.Resource getPublicKeyResId()
     {
         return new SampleResourceManager.PemResource("bridge_key");
     }
 
-    @Override
-    protected ResourcePathManager.Resource getTasksAndSchedules()
-    {
-        return ResourceManager.getInstance().getTasksAndSchedules();
-    }
+//    @Override
+//    protected ResourcePathManager.Resource getTasksAndSchedules()
+//    {
+//        return ResourceManager.getInstance().getTasksAndSchedules();
+//    }
 
-
-
-    @Override
     protected String getBaseUrl()
     {
         return BuildConfig.STUDY_BASE_URL;
     }
 
-    @Override
+
     protected String getStudyId()
     {
         return BuildConfig.STUDY_ID;
     }
-
-    @Override
-    protected String getUserAgent()
-    {
-        return BuildConfig.STUDY_NAME + "/" + BuildConfig.VERSION_CODE;
-    }
+//
+//    @Override
+//    protected String getUserAgent()
+//    {
+//        return BuildConfig.STUDY_NAME + "/" + BuildConfig.VERSION_CODE;
+//    }
 
 //    //account stuff
 //    @Override
@@ -306,16 +496,9 @@ public class SampleDataProvider extends BridgeDataProvider
     @Nullable
     public Task loadTask(Context context, CTFActivityRun activityRun) {
 
-        RSTBTaskBuilder taskBuilder = new RSTBTaskBuilder(
-                context,
-                ResourceManager.getInstance(),
-                ImpulsivityAppStateManager.getInstance());
-
-        taskBuilder.getStepBuilderHelper().setDefaultResourceType(SampleResourceManager.SURVEY);
-
         List<Step> stepList = null;
         try {
-            stepList = taskBuilder.stepsForElement(activityRun.activity);
+            stepList = CTFTaskBuilderManager.getTaskBuilder().stepsForElement(activityRun.activity);
         }
         catch(Exception e) {
             Log.w(this.TAG, "could not create steps from task json", e);
@@ -338,6 +521,13 @@ public class SampleDataProvider extends BridgeDataProvider
 
         if (activityRun != null) {
             this.handleActivityResult(context, taskResult);
+
+            CTFResultsProcessorManager.getResultsProcessor().processResult(
+                    context,
+                    taskResult,
+                    activityRun.taskRunUUID,
+                    activityRun.resultTransforms
+            );
 
 //            RSRPResultsProcessor resultsProcessor = new RSRPResultsProcessor()
 
