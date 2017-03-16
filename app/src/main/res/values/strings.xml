@@ -47,5 +47,6 @@
     <string name="osb_base_url">https://webservices.sagebridge.org/</string>
     <string name="osb_study_id">cornell-mhealth-eval</string>
     <string name="osb_study_name">mPulse DMT</string>
+    <string name="osb_study_public_key">cornell-mhealth-eval.pem</string>
 
 </resources>

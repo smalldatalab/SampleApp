@@ -1,5 +1,6 @@
 package org.smalldatalab.northwell.impulse;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -522,12 +523,23 @@ public class SampleDataProvider extends DataProvider
         if (activityRun != null) {
             this.handleActivityResult(context, taskResult);
 
-            CTFResultsProcessorManager.getResultsProcessor().processResult(
-                    context,
-                    taskResult,
-                    activityRun.taskRunUUID,
-                    activityRun.resultTransforms
-            );
+            class UploadResultsTask extends AsyncTask<Void, Void, Void> {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+
+                    CTFResultsProcessorManager.getResultsProcessor().processResult(
+                            context,
+                            taskResult,
+                            activityRun.taskRunUUID,
+                            activityRun.resultTransforms
+                    );
+
+                    return null;
+                }
+            }
+
+            new UploadResultsTask().execute();
 
 //            RSRPResultsProcessor resultsProcessor = new RSRPResultsProcessor()
 

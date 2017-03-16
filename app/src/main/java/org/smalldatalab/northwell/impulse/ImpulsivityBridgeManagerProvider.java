@@ -3,6 +3,7 @@ package org.smalldatalab.northwell.impulse;
 import android.content.Context;
 import android.util.Log;
 
+import org.researchstack.backbone.storage.file.StorageAccessException;
 import org.researchstack.backbone.utils.FileUtils;
 import org.sagebionetworks.bridge.android.BridgeConfig;
 import org.sagebionetworks.bridge.android.data.Archive;
@@ -34,14 +35,19 @@ public class ImpulsivityBridgeManagerProvider implements RSRPBackEnd {
     public static String getFileName(Context context, String schemaIdentifier) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append(context.getFilesDir())
-                .append("/upload_request/")
+        sb.append("upload_request/")
                 .append(schemaIdentifier)
                 .append("_")
                 .append(UUID.randomUUID().toString())
                 .append(".temp");
 
         return sb.toString();
+    }
+
+    public static void makeParent(String filename)
+    {
+        File file = new File(filename);
+        FileUtils.makeParent(file);
     }
 
     @Override
@@ -53,18 +59,10 @@ public class ImpulsivityBridgeManagerProvider implements RSRPBackEnd {
             Archive archive = builder.toArchive(this.bridgeConfig);
 
             String filename = getFileName(context, builder.getSchemaIdentifier());
-            File tempFile = new File(filename);
-            FileUtils.makeParent(tempFile);
+            makeParent(context.getFilesDir().getAbsolutePath() + File.separator + filename);
 
-            try {
-
-                this.uploadManager.upload(filename, archive).get();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (CMSException e) {
-                e.printStackTrace();
-            }
+            Log.d("Uploader", archive.toString());
+            this.uploadManager.upload(filename, archive).toCompletable().await();
         }
 
 
