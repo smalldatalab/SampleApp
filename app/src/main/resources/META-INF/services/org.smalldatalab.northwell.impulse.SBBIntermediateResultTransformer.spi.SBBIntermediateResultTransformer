@@ -1,2 +1,7 @@
-org.smalldatalab.northwell.impulse.RSRP.SBBBARTSummaryResultTransformer
-org.smalldatalab.northwell.impulse.RSRP.SBBDelayDiscountingRawResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBBARTSummaryResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBDelayDiscountingRawResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBGoNoGoSummaryResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBPAMRawResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBPAMMultipleRawResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBScaleFormResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBDemographicsArchiveResultTransformer

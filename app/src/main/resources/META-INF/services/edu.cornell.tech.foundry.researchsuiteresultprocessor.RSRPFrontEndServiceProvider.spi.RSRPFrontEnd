@@ -1,3 +1,7 @@
 edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFBARTSummaryResultFrontEnd
 edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFDelayDiscountingRawResultFrontEnd
 edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFGoNoGoSummaryResultFrontEnd
+org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFPAMRawTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFPAMMultipleRawTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFScaleFormResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFDemographicsResultTransformer

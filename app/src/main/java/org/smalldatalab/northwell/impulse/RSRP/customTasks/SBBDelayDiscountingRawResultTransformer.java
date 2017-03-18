@@ -1,10 +1,12 @@
-package org.smalldatalab.northwell.impulse.RSRP;
+package org.smalldatalab.northwell.impulse.RSRP.customTasks;
 
 import android.content.Context;
 
+import org.smalldatalab.northwell.impulse.RSRP.SBBDataArchiveConvertible;
 import org.smalldatalab.northwell.impulse.SBBIntermediateResultTransformer.spi.SBBIntermediateResultTransformer;
 
-import edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFBARTSummary;
+import java.util.Map;
+
 import edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFDelayDiscountingRaw;
 import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateResult;
 
@@ -17,7 +19,15 @@ public class SBBDelayDiscountingRawResultTransformer implements SBBIntermediateR
     @Override
     public SBBDataArchiveConvertible transform(Context context, RSRPIntermediateResult intermediateResult) {
         CTFDelayDiscountingRaw ddRaw = (CTFDelayDiscountingRaw) intermediateResult;
-        return new SBBDelayDiscountingRawArchiveConvertible(ddRaw);
+        Map<String, Object> parameters = ddRaw.getParameters();
+        if (parameters != null &&
+                parameters.get("schemaID") instanceof String &&
+                parameters.get("schemaVersion") instanceof Number) {
+            String schemaId = (String)parameters.get("schemaID");
+            Number schemaVersion = (Number)parameters.get("schemaVersion");
+            return new SBBDelayDiscountingRawArchiveConvertible(ddRaw, schemaId, schemaVersion.intValue());
+        }
+        return null;
     }
 
     @Override

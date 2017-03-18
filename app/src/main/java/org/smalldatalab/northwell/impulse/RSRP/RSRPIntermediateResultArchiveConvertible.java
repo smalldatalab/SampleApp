@@ -17,8 +17,27 @@ public abstract class RSRPIntermediateResultArchiveConvertible extends SBBDataAr
 
     public final RSRPIntermediateResult intermediateResult;
 
-    public RSRPIntermediateResultArchiveConvertible(RSRPIntermediateResult intermediateResult) {
+    private String schemaIdentifier;
+    private int schemaVersion;
+
+    public RSRPIntermediateResultArchiveConvertible(
+            RSRPIntermediateResult intermediateResult,
+            String schemaIdentifier,
+            int schemaVersion
+    ) {
         this.intermediateResult = intermediateResult;
+        this.schemaIdentifier = schemaIdentifier;
+        this.schemaVersion = schemaVersion;
+    }
+
+    @Override
+    public String getSchemaIdentifier() {
+        return this.schemaIdentifier;
+    }
+
+    @Override
+    public int getSchemaVersion() {
+        return this.schemaVersion;
     }
 
     @Override

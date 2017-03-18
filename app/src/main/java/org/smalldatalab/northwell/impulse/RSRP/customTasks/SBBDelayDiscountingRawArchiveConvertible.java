@@ -1,4 +1,6 @@
-package org.smalldatalab.northwell.impulse.RSRP;
+package org.smalldatalab.northwell.impulse.RSRP.customTasks;
+
+import org.smalldatalab.northwell.impulse.RSRP.RSRPIntermediateResultArchiveConvertible;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,18 +14,9 @@ import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateRes
  */
 
 public class SBBDelayDiscountingRawArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
-    public SBBDelayDiscountingRawArchiveConvertible(RSRPIntermediateResult intermediateResult) {
-        super(intermediateResult);
-    }
 
-    @Override
-    public String getSchemaIdentifier() {
-        return "delay_discounting_raw";
-    }
-
-    @Override
-    public int getSchemaVersion() {
-        return 6;
+    public SBBDelayDiscountingRawArchiveConvertible(RSRPIntermediateResult intermediateResult, String schemaIdentifier, int schemaVersion) {
+        super(intermediateResult, schemaIdentifier, schemaVersion);
     }
 
     @Override

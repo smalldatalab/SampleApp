@@ -427,24 +427,26 @@ public class SampleDataProvider extends DataProvider
 
     private boolean shouldShowScheduledActivity(Context context, CTFScheduleItem scheduleItem) {
 
-        switch(scheduleItem.identifier) {
+        return true;
 
-            case "baseline":
-            case "reenrollment":
-                return ImpulsivityAppStateManager.getInstance().shouldShowBaselineSurvey(context);
-
-            case "21-day-assessment":
-                return ImpulsivityAppStateManager.getInstance().shouldShow21DaySurvey(context);
-
-            case "am_survey":
-                return ImpulsivityAppStateManager.getInstance().shouldShowMorningSurvey(context);
-
-            case "pm_survey":
-                return ImpulsivityAppStateManager.getInstance().shouldShowEveningSurvey(context);
-
-            default:
-                return false;
-        }
+//        switch(scheduleItem.identifier) {
+//
+//            case "baseline":
+//            case "reenrollment":
+//                return ImpulsivityAppStateManager.getInstance().shouldShowBaselineSurvey(context);
+//
+//            case "21-day-assessment":
+//                return ImpulsivityAppStateManager.getInstance().shouldShow21DaySurvey(context);
+//
+//            case "am_survey":
+//                return ImpulsivityAppStateManager.getInstance().shouldShowMorningSurvey(context);
+//
+//            case "pm_survey":
+//                return ImpulsivityAppStateManager.getInstance().shouldShowEveningSurvey(context);
+//
+//            default:
+//                return false;
+//        }
 
     }
 
@@ -646,13 +648,16 @@ public class SampleDataProvider extends DataProvider
     private void handleBaselineBehaviorResults(Context context, TaskResult taskResult) {
 
         StepResult behaviorResult = taskResult.getStepResult("baseline_behaviors_4");
-        Object[] behaviorsArray = (Object[])behaviorResult.getResult();
-        String[] behaviorStrings = new String[behaviorsArray.length];
-        for (int i=0; i<behaviorsArray.length; i++) {
-            behaviorStrings[i] = (String)behaviorsArray[i];
+        if (behaviorResult != null && behaviorResult.getResult() != null) {
+            Object[] behaviorsArray = (Object[])behaviorResult.getResult();
+            String[] behaviorStrings = new String[behaviorsArray.length];
+            for (int i=0; i<behaviorsArray.length; i++) {
+                behaviorStrings[i] = (String)behaviorsArray[i];
+            }
+
+            ImpulsivityAppStateManager.getInstance().saveBaselineBehaviors(context, behaviorStrings);
         }
 
-        ImpulsivityAppStateManager.getInstance().saveBaselineBehaviors(context, behaviorStrings);
 
     }
 
