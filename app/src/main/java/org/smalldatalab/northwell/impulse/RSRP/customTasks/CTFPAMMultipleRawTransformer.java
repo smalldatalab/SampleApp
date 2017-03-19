@@ -36,7 +36,7 @@ public class CTFPAMMultipleRawTransformer implements RSRPFrontEnd {
         Object[] responses = (Object[]) result;
         if(responses.length > 0) {
 
-            List<Map<String, Serializable>> pamChoices = new ArrayList<>();
+            ArrayList<Map<String, Serializable>> pamChoices = new ArrayList<>();
             for (Object response : responses) {
                 if (response instanceof String) {
                     Map<String, Serializable> pamChoice = CTFPAMRawTransformer.convertPAMChoiceToMap((String)response);
@@ -67,7 +67,7 @@ public class CTFPAMMultipleRawTransformer implements RSRPFrontEnd {
 
     @Override
     public boolean supportsType(String type) {
-        if (type.equals(CTFPAMMultipleRaw.TYPE)) return true;
+        if (type.equals(CTFPAMRaw.TYPE)) return true;
         else return false;
     }
 

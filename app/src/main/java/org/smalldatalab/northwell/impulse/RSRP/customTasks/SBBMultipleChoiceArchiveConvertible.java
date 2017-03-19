@@ -6,27 +6,23 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFGoNoGoSummary;
 import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateResult;
 
 /**
- * Created by jameskizer on 3/17/17.
+ * Created by jameskizer on 3/18/17.
  */
 
-public class SBBPAMMultipleRawArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
-
-
-    public SBBPAMMultipleRawArchiveConvertible(CTFPAMMultipleRaw intermediateResult, String schemaIdentifier, int schemaVersion) {
+public class SBBMultipleChoiceArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
+    public SBBMultipleChoiceArchiveConvertible(CTFMultipleChoiceIntermediateResult intermediateResult, String schemaIdentifier, int schemaVersion) {
         super(intermediateResult, schemaIdentifier, schemaVersion);
     }
 
     @Override
     public Map<String, Serializable> getData() {
-        CTFPAMMultipleRaw pamMultipleRaw = (CTFPAMMultipleRaw)this.intermediateResult;
+        CTFMultipleChoiceIntermediateResult multiple = (CTFMultipleChoiceIntermediateResult)this.intermediateResult;
 
         Map<String, Serializable> data = new HashMap<>();
-        data.put("selected", pamMultipleRaw.getPamChoices());
+        data.put("selected", multiple.getChoices());
         return data;
     }
-
 }

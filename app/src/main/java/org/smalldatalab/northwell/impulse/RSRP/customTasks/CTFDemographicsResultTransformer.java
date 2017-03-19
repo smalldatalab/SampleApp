@@ -42,9 +42,10 @@ public class CTFDemographicsResultTransformer implements RSRPFrontEnd {
         String education = extractResult(parameters, "education");
 
         String[] employmentIncome = null;
-        {
+        Object[] employmentObjects = extractResult(parameters, "employment_income");
+        if (employmentObjects != null) {
             ArrayList<String> employmentStrings = new ArrayList<>();
-            for(Object obj : (Object [])extractResult(parameters, "employment_income")) {
+            for(Object obj : employmentObjects) {
                 if (obj instanceof String) {
                     employmentStrings.add((String)obj);
                 }
@@ -57,7 +58,7 @@ public class CTFDemographicsResultTransformer implements RSRPFrontEnd {
         String race = extractResult(parameters, "race");
 
         String[] religion = null;
-        {
+        if (extractResult(parameters, "religion") != null) {
             ArrayList<String> religionStrings = new ArrayList<>();
             for(Object obj : (Object [])extractResult(parameters, "religion")) {
                 if (obj instanceof String) {

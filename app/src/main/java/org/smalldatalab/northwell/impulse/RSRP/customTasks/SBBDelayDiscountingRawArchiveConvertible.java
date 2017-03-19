@@ -15,7 +15,7 @@ import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateRes
 
 public class SBBDelayDiscountingRawArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
 
-    public SBBDelayDiscountingRawArchiveConvertible(RSRPIntermediateResult intermediateResult, String schemaIdentifier, int schemaVersion) {
+    public SBBDelayDiscountingRawArchiveConvertible(CTFDelayDiscountingRaw intermediateResult, String schemaIdentifier, int schemaVersion) {
         super(intermediateResult, schemaIdentifier, schemaVersion);
     }
 

@@ -12,7 +12,7 @@ import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateRes
  */
 
 public class SBBScaleFormArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
-    public SBBScaleFormArchiveConvertible(RSRPIntermediateResult intermediateResult, String schemaIdentifier, int schemaVersion) {
+    public SBBScaleFormArchiveConvertible(CTFScaleFormResult intermediateResult, String schemaIdentifier, int schemaVersion) {
         super(intermediateResult, schemaIdentifier, schemaVersion);
     }
 

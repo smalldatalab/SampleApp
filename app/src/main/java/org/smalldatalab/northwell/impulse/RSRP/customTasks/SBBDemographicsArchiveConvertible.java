@@ -14,7 +14,7 @@ import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateRes
  */
 
 public class SBBDemographicsArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
-    public SBBDemographicsArchiveConvertible(RSRPIntermediateResult intermediateResult, String schemaIdentifier, int schemaVersion) {
+    public SBBDemographicsArchiveConvertible(CTFDemographicsResult intermediateResult, String schemaIdentifier, int schemaVersion) {
         super(intermediateResult, schemaIdentifier, schemaVersion);
     }
 

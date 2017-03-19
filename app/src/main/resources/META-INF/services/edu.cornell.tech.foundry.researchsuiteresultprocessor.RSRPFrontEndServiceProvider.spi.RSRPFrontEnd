@@ -5,3 +5,4 @@ org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFPAMRawTransformer
 org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFPAMMultipleRawTransformer
 org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFScaleFormResultTransformer
 org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFDemographicsResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFMultipleChoiceIntermediateResultTransformer

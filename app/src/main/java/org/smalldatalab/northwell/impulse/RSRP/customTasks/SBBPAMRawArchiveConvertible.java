@@ -18,7 +18,7 @@ import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateRes
 public class SBBPAMRawArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
 
 
-    public SBBPAMRawArchiveConvertible(RSRPIntermediateResult intermediateResult, String schemaIdentifier, int schemaVersion) {
+    public SBBPAMRawArchiveConvertible(CTFPAMRaw intermediateResult, String schemaIdentifier, int schemaVersion) {
         super(intermediateResult, schemaIdentifier, schemaVersion);
     }
 

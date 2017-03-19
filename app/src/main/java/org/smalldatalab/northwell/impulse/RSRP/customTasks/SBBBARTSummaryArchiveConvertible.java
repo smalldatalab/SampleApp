@@ -19,7 +19,7 @@ import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateRes
 public class SBBBARTSummaryArchiveConvertible extends RSRPIntermediateResultArchiveConvertible {
 
 
-    public SBBBARTSummaryArchiveConvertible(RSRPIntermediateResult intermediateResult, String schemaIdentifier, int schemaVersion) {
+    public SBBBARTSummaryArchiveConvertible(CTFBARTSummary intermediateResult, String schemaIdentifier, int schemaVersion) {
         super(intermediateResult, schemaIdentifier, schemaVersion);
     }
 
