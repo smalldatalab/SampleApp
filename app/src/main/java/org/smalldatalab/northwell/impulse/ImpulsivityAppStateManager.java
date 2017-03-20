@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -227,6 +228,45 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 
     }
 
+    public String getBaselineSurveyDate(Context context) {
+        Date baselineCompletedDate = this.getBaselineCompletedDate(context);
+        if (baselineCompletedDate != null) {
+            return new SimpleDateFormat("MMM d, yyyy").format(baselineCompletedDate);
+        }
+        else return "";
+    }
+
+    public String getMorningSurveyTime(Context context) {
+        return this.getSurveyTime(context, true);
+    }
+
+    public String getEveningSurveyTime(Context context) {
+        return this.getSurveyTime(context, false);
+    }
+
+    //if baseline not completed, return empty string
+    private String getSurveyTime(Context context, boolean morning) {
+
+        StringBuilder sb = new StringBuilder();
+
+        int hour = this.getTimeComponent(context, morning ? MORNING_SURVEY_TIME_HOUR : EVENING_SURVEY_TIME_HOUR);
+        if (hour == -1) {
+            return "";
+        }
+
+        int minute = this.getTimeComponent(context, morning ? MORNING_SURVEY_TIME_MINUTE : EVENING_SURVEY_TIME_MINUTE);
+        boolean am = true;
+        if (hour >= 12) {
+            am = false;
+        }
+
+        return String.format("%d:%02d %s", hour%12 == 0 ? 12 : hour%12, minute, am ? "AM" : "PM");
+    }
+
+    public String getEveningSurveyTime() {
+        return "8:00 PM";
+    }
+
     //presentational logic
     public boolean isBaselineCompleted(Context context) {
 
@@ -321,11 +361,14 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 
         Date lastCompletedTime = this.getLastMorningSurveyCompletedDate(context);
 
+        //if no last completed time, return true
+        if (lastCompletedTime == null) {
+            return true;
+        }
+
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
-        if (lastCompletedTime != null &&
-                (lastCompletedTime.after(lowerCalendar.getTime()) ||
-                        lastCompletedTime.before(upperCalendar.getTime()))
-                ) {
+        if (lastCompletedTime.after(lowerCalendar.getTime()) &&
+                lastCompletedTime.before(upperCalendar.getTime())) {
             return false;
         }
 
@@ -360,11 +403,14 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 
         Date lastCompletedTime = this.getLastEveningSurveyCompletedDate(context);
 
+        //if no last completed time, return true
+        if (lastCompletedTime == null) {
+            return true;
+        }
+
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
-        if (lastCompletedTime != null &&
-                (lastCompletedTime.after(lowerCalendar.getTime()) ||
-                        lastCompletedTime.before(upperCalendar.getTime()))
-                ) {
+        if (lastCompletedTime.after(lowerCalendar.getTime()) &&
+                lastCompletedTime.before(upperCalendar.getTime())) {
             return false;
         }
 

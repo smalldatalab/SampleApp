@@ -17,6 +17,7 @@
     <string name="ctf_scheduled_activities_filename">activities</string>
     <string name="ctf_trial_activities">Trial Activities</string>
     <string name="ctf_trial_activities_filename">trialActivities</string>
+    <string name="ctf_settings_activities_filename">settings</string>
 
     <string name="yadl_image_path">images/yadl</string>
     <string name="yadl_image_ext">jpeg</string>
@@ -43,10 +44,19 @@
     <string name="evening_notification_text">Hey, it\'s time to take your evening survey!</string>
     <string name="day_21_notification_text">Hey, it\'s time to take your 21 day survey!</string>
 
+    <string name="show_trial_activities">Show Trial Activities</string>
+    <string name="set_morning_survey_time">Set Morning Survey Time</string>
+    <string name="set_evening_survey_time">Set Evening Survey Time</string>
+    <string name="participant_since">Participant Since</string>
+    <string name="comments">Comments?</string>
+
+
     <string name="bridge_external_id_format">jdk288+%s@cornell.edu</string>
     <string name="osb_base_url">https://webservices.sagebridge.org/</string>
     <string name="osb_study_id">cornell-mhealth-eval</string>
     <string name="osb_study_name">mPulse DMT</string>
     <string name="osb_study_public_key">cornell-mhealth-eval.pem</string>
+
+
 
 </resources>

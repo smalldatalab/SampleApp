@@ -78,7 +78,7 @@ dependencies {
         exclude group: 'joda-time', module: 'joda-time'
     }
 
-    compile 'edu.cornell.tech.foundry:ohmageomhsdkrs:0.0.3'
+    compile 'edu.cornell.tech.foundry:ohmageomhsdkrs:0.0.4'
 
 
 }

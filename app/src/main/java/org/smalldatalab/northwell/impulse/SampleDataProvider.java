@@ -70,6 +70,9 @@ public class SampleDataProvider extends DataProvider
     private CTFSchedule trialActivitiesSchedule;
     private List<CTFScheduleItem>  trialActivities;
 
+    private CTFSchedule settingsActivitiesSchedule;
+    private List<CTFScheduleItem>  settingsActivities;
+
 //    private final ResearchStackDAO researchStackDAO;
 //    private final BridgeManagerProvider bridgeManagerProvider;
 //    private final BridgeConfig bridgeConfig;
@@ -137,6 +140,7 @@ public class SampleDataProvider extends DataProvider
     {
         this.activitiesSchedule = this.loadSchedule(context, context.getString(R.string.ctf_scheduled_activities_filename));
         this.trialActivitiesSchedule = this.loadSchedule(context, context.getString(R.string.ctf_trial_activities_filename));
+        this.settingsActivitiesSchedule = this.loadSchedule(context, context.getString(R.string.ctf_settings_activities_filename));
 //
 //        return Observable.defer(() -> {
 //            userSessionInfo = loadUserSession(context);
@@ -427,26 +431,24 @@ public class SampleDataProvider extends DataProvider
 
     private boolean shouldShowScheduledActivity(Context context, CTFScheduleItem scheduleItem) {
 
-        return true;
+        switch(scheduleItem.identifier) {
 
-//        switch(scheduleItem.identifier) {
-//
-//            case "baseline":
-//            case "reenrollment":
-//                return ImpulsivityAppStateManager.getInstance().shouldShowBaselineSurvey(context);
-//
-//            case "21-day-assessment":
-//                return ImpulsivityAppStateManager.getInstance().shouldShow21DaySurvey(context);
-//
-//            case "am_survey":
-//                return ImpulsivityAppStateManager.getInstance().shouldShowMorningSurvey(context);
-//
-//            case "pm_survey":
-//                return ImpulsivityAppStateManager.getInstance().shouldShowEveningSurvey(context);
-//
-//            default:
-//                return false;
-//        }
+            case "baseline":
+            case "reenrollment":
+                return ImpulsivityAppStateManager.getInstance().shouldShowBaselineSurvey(context);
+
+            case "21-day-assessment":
+                return ImpulsivityAppStateManager.getInstance().shouldShow21DaySurvey(context);
+
+            case "am_survey":
+                return ImpulsivityAppStateManager.getInstance().shouldShowMorningSurvey(context);
+
+            case "pm_survey":
+                return ImpulsivityAppStateManager.getInstance().shouldShowEveningSurvey(context);
+
+            default:
+                return false;
+        }
 
     }
 
@@ -465,10 +467,12 @@ public class SampleDataProvider extends DataProvider
 
     }
 
-
-
     public List<CTFScheduleItem> loadTrialActivities(Context context) {
         return this.trialActivitiesSchedule.getScheduleItems();
+    }
+
+    public List<CTFScheduleItem> loadSettingsActivities(Context context) {
+        return this.settingsActivitiesSchedule.getScheduleItems();
     }
 
 //    @Nullable
@@ -575,6 +579,12 @@ public class SampleDataProvider extends DataProvider
 
             case "pm_survey":
                 this.handleEveningSurvey(context, taskResult);
+                Log.w(this.TAG, taskResult.getIdentifier());
+                break;
+
+            case "set_morning_survey":
+            case "set_evening_survey":
+                this.handleMorningAndEveningSurveyTimes(context, taskResult);
                 Log.w(this.TAG, taskResult.getIdentifier());
                 break;
 

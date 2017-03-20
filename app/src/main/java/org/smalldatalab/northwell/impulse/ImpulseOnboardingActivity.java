@@ -94,7 +94,9 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
                         CTFBridgeLogInStepLayout.class
                 );
 
-                logInStep.setForgotPasswordButtonTitle("Skip Log In");
+//                logInStep.setForgotPasswordButtonTitle("Skip Log In");
+                logInStep.setIdentityFieldName("External ID");
+                logInStep.setPasswordFieldName("Confirm External ID");
                 logInStep.setOptional(false);
 
                 PassCodeCreationStep passcodeStep = new PassCodeCreationStep(OnboardingTask.SignUpPassCodeCreationStepIdentifier,

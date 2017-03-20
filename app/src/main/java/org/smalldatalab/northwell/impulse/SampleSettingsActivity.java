@@ -23,7 +23,7 @@ public class SampleSettingsActivity extends BaseActivity
         if(savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction()
-                    .add(org.researchstack.skin.R.id.container, new SampleSettingsFragment())
+                    .add(org.researchstack.skin.R.id.container, new CTFSettingsFragment())
                     .commit();
         }
     }
