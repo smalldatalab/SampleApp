@@ -6,3 +6,5 @@ org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBPAMMultipleRawResultTrans
 org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBScaleFormResultTransformer
 org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBDemographicsArchiveResultTransformer
 org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBMultipleChoiceResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBTimeOfDayResultTransformer
+org.smalldatalab.northwell.impulse.RSRP.customTasks.SBBTextResultTransformer
