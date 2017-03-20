@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ImpulsivityTrialActivitiesFragment extends ImpulsivityActivitiesFragment {
     @Override
-    protected List<CTFScheduleItem> getScheduledActivities(Context context, SampleDataProvider dataProvider) {
+    protected List<CTFScheduleItem> getScheduledActivities(Context context, ImpulsivityDataProvider dataProvider) {
         return dataProvider.loadTrialActivities(context);
     }
 

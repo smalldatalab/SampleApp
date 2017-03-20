@@ -8,14 +8,14 @@ import android.support.v4.content.ContextCompat;
 import org.researchstack.skin.AppPrefs;
 import org.researchstack.skin.PermissionRequestManager;
 
-public class SamplePermissionResultManager extends PermissionRequestManager
+public class ImpulsivityPermissionResultManager extends PermissionRequestManager
 {
     private static final int RESULT_REQUEST_CODE_NOTIFICATION = 143;
 
     @Override
     public boolean hasPermission(Context context, String permissionId)
     {
-        if (permissionId.equals(SampleApplication.PERMISSION_NOTIFICATIONS))
+        if (permissionId.equals(ImpulsivityApplication.PERMISSION_NOTIFICATIONS))
         {
             return AppPrefs.getInstance(context).isTaskReminderEnabled();
         }
@@ -35,9 +35,9 @@ public class SamplePermissionResultManager extends PermissionRequestManager
     @Override
     public boolean isNonSystemPermission(String permissionId)
     {
-        // SampleApplication.PERMISSION_NOTIFICATIONS is our non-system permission so we return true
+        // ImpulsivityApplication.PERMISSION_NOTIFICATIONS is our non-system permission so we return true
         // if permissionId's are the same
-        return permissionId.equals(SampleApplication.PERMISSION_NOTIFICATIONS);
+        return permissionId.equals(ImpulsivityApplication.PERMISSION_NOTIFICATIONS);
     }
 
     /**

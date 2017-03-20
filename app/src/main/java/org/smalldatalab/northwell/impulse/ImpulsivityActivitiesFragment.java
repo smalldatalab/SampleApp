@@ -31,12 +31,7 @@ import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
 import rx.Subscription;
@@ -82,7 +77,7 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
         }
     }
 
-    protected abstract List<CTFScheduleItem> getScheduledActivities(Context context, SampleDataProvider dataProvider);
+    protected abstract List<CTFScheduleItem> getScheduledActivities(Context context, ImpulsivityDataProvider dataProvider);
 
     private void setUpAdapter() {
         unsubscribe();
@@ -95,7 +90,7 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
 
         Observable.create(subscriber -> {
 
-            SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+            ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
 
             List<CTFScheduleItem> scheduledActivities = this.getScheduledActivities(getActivity(), dataProvider);
 
@@ -109,7 +104,7 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
 
                     subscription = adapter.getPublishSubject().subscribe(item -> {
 
-                        SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+                        ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
                         CTFActivityRun activityRun = dataProvider.activityRunForItem(item);
                         Task newTask = dataProvider.loadTask(getContext(), activityRun);
 
@@ -130,7 +125,7 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+        ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
         CTFActivityRun activityRun = dataProvider.popActivityRunForRequestCode(requestCode);
 
         if (activityRun != null) {

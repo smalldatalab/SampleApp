@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SampleTaskProvider extends TaskProvider
+public class ImpulsivityTaskProvider extends TaskProvider
 {
     private HashMap<String, Task> map = new HashMap<>();
 
-    public SampleTaskProvider(Context context)
+    public ImpulsivityTaskProvider(Context context)
     {
 //        put(TASK_ID_INITIAL, createInitialTask(context));
 //        put(TASK_ID_CONSENT, ConsentTask.create(context, TASK_ID_CONSENT));
@@ -38,7 +38,7 @@ public class SampleTaskProvider extends TaskProvider
     @Override
     public Task get(String taskId)
     {
-        Log.d("SampleTaskProvider", "Getting task "+taskId);
+        Log.d("ImpulsivityTaskProvider", "Getting task "+taskId);
         return map.get(taskId);
     }
 

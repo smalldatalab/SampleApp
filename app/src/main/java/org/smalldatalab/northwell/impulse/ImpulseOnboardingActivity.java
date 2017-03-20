@@ -7,10 +7,8 @@ import android.widget.Button;
 
 import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.answerformat.BooleanAnswerFormat;
-import org.researchstack.backbone.answerformat.TextAnswerFormat;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.QuestionStep;
-import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.ui.PinCodeActivity;
 import org.researchstack.backbone.ui.ViewTaskActivity;
@@ -18,18 +16,12 @@ import org.researchstack.skin.AppPrefs;
 import org.researchstack.skin.DataProvider;
 import org.researchstack.skin.step.PassCodeCreationStep;
 import org.researchstack.skin.task.OnboardingTask;
-import org.researchstack.skin.task.SignInTask;
-import org.researchstack.skin.task.SignUpTask;
 import org.researchstack.skin.ui.ConsentTaskActivity;
-import org.researchstack.skin.ui.EmailVerificationActivity;
 import org.researchstack.skin.ui.MainActivity;
 import org.smalldatalab.northwell.impulse.RSExtensions.CTFBridgeLogInStepLayout;
-import org.smalldatalab.northwell.impulse.RSExtensions.ConfirmationStep;
-import org.smalldatalab.northwell.impulse.RSExtensions.ConfirmationTextAnswerFormat;
 
 import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFLogInStep;
 import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFLogInStepLayout;
-import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFOhmageLogInStepLayout;
 
 /**
  * Created by jameskizer on 11/29/16.
@@ -170,7 +162,7 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
                         .getResult();
                 StorageAccess.getInstance().createPinCode(this, passcode);
 
-                ((SampleDataProvider) DataProvider.getInstance()).setConsented(this, consented);
+                ((ImpulsivityDataProvider) DataProvider.getInstance()).setConsented(this, consented);
 
                 skipToMainActivity();
             }

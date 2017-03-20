@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -15,50 +14,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import org.researchstack.backbone.StorageAccess;
-import org.researchstack.backbone.answerformat.AnswerFormat;
-import org.researchstack.backbone.answerformat.ChoiceAnswerFormat;
-import org.researchstack.backbone.model.Choice;
 import org.researchstack.backbone.result.TaskResult;
-import org.researchstack.backbone.step.ConsentSharingStep;
 import org.researchstack.backbone.storage.file.StorageAccessListener;
-import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 import org.researchstack.backbone.ui.ViewTaskActivity;
-import org.researchstack.backbone.ui.ViewWebDocumentActivity;
-import org.researchstack.backbone.utils.FormatHelper;
 import org.researchstack.backbone.utils.LogExt;
-import org.researchstack.backbone.utils.ObservableUtils;
-import org.researchstack.skin.AppPrefs;
 import org.researchstack.skin.DataProvider;
-import org.researchstack.skin.ResourceManager;
 import org.researchstack.skin.model.ConsentSectionModel;
-import org.researchstack.skin.notification.TaskAlertReceiver;
-import org.researchstack.skin.step.PassCodeCreationStep;
-import org.researchstack.skin.task.ConsentTask;
-import org.researchstack.skin.ui.OnboardingActivity;
-import org.researchstack.skin.ui.fragment.SettingsFragment;
-import org.researchstack.skin.ui.layout.SignUpPinCodeCreationStepLayout;
-import org.researchstack.skin.utils.ConsentFormUtils;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
-import org.smalldatalab.northwell.impulse.studyManagement.CTFSchedule;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-
-import rx.Observable;
 
 /**
  * Created by jameskizer on 3/20/17.
  */
 
-public class CTFSettingsFragment extends PreferenceFragmentCompat implements
+public class ImpulsivitySettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener, StorageAccessListener {
 
 //    private static final int REQUEST_CODE_SHARING_OPTIONS = 0;
@@ -175,7 +148,7 @@ public class CTFSettingsFragment extends PreferenceFragmentCompat implements
             CTFScheduleItem item = this.scheduleItemForPrefrenceKey(preference.getKey());
             if(item != null) {
 
-                SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+                ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
                 CTFActivityRun activityRun = dataProvider.activityRunForItem(item);
                 Task newTask = dataProvider.loadTask(getContext(), activityRun);
 
@@ -191,7 +164,7 @@ public class CTFSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     public CTFScheduleItem scheduleItemForPrefrenceKey(String key) {
-        SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+        ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
 
         List<CTFScheduleItem> settingsItems = dataProvider.loadSettingsActivities(getActivity());
 
@@ -206,7 +179,7 @@ public class CTFSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+        ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
         CTFActivityRun activityRun = dataProvider.popActivityRunForRequestCode(requestCode);
 
         if (activityRun != null) {

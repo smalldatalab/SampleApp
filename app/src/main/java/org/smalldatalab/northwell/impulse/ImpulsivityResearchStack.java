@@ -4,14 +4,12 @@ import android.content.Context;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.storage.database.AppDatabase;
 import org.researchstack.backbone.storage.database.sqlite.SqlCipherDatabaseHelper;
 import org.researchstack.backbone.storage.database.sqlite.UpdatablePassphraseProvider;
 import org.researchstack.backbone.storage.file.EncryptionProvider;
 import org.researchstack.backbone.storage.file.FileAccess;
 import org.researchstack.backbone.storage.file.PinCodeConfig;
-import org.researchstack.backbone.storage.file.SimpleFileAccess;
 import org.researchstack.backbone.storage.file.aes.AesProvider;
 import org.sagebionetworks.bridge.android.manager.BridgeManagerProvider;
 //import org.smalldatalab.northwell.impulse.bridge.BridgeEncryptedDatabase;
@@ -25,16 +23,14 @@ import org.researchstack.skin.UiManager;
 import org.researchstack.skin.notification.NotificationConfig;
 import org.researchstack.skin.notification.SimpleNotificationConfig;
 
-import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilder;
-
 //import org.sagebionetworks.bridge.android.
 
-public class SampleResearchStack extends ResearchStack
+public class ImpulsivityResearchStack extends ResearchStack
 {
 
 
 
-    public static void init(Context context, SampleResearchStack concreteResearchStack)
+    public static void init(Context context, ImpulsivityResearchStack concreteResearchStack)
     {
 
         concreteResearchStack.createBridgeManagerProvider(context);
@@ -118,7 +114,7 @@ public class SampleResearchStack extends ResearchStack
     @Override
     protected ResourceManager createResourceManagerImplementation(Context context)
     {
-        return new SampleResourceManager();
+        return new ImpulsivityResourceManager();
     }
 
     @Override
@@ -130,14 +126,14 @@ public class SampleResearchStack extends ResearchStack
     @Override
     protected DataProvider createDataProviderImplementation(Context context)
     {
-        return new SampleDataProvider(bridgeManagerProvider);
+        return new ImpulsivityDataProvider(bridgeManagerProvider);
     }
 
     @Override
     protected TaskProvider createTaskProviderImplementation(Context context)
     {
 
-        return new SampleTaskProvider(context);
+        return new ImpulsivityTaskProvider(context);
     }
 
     @Override
@@ -149,6 +145,6 @@ public class SampleResearchStack extends ResearchStack
     @Override
     protected PermissionRequestManager createPermissionRequestManagerImplementation(Context context)
     {
-        return new SamplePermissionResultManager();
+        return new ImpulsivityPermissionResultManager();
     }
 }

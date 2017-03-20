@@ -3,7 +3,7 @@ package org.smalldatalab.northwell.impulse.SDL;
 import com.google.gson.JsonObject;
 
 import org.researchstack.backbone.step.Step;
-import org.smalldatalab.northwell.impulse.SampleResourceManager;
+import org.smalldatalab.northwell.impulse.ImpulsivityResourceManager;
 
 import java.util.Arrays;
 
@@ -30,7 +30,7 @@ public class PAMMultipleStepGenerator extends RSTBBaseStepGenerator {
 
         RSTBCustomStepDescriptor stepDescriptor = helper.getCustomStepDescriptor(jsonObject);
 
-        String jsonPath = helper.getResourceManager().generatePath(SampleResourceManager.SURVEY, stepDescriptor.parameterFileName);
+        String jsonPath = helper.getResourceManager().generatePath(ImpulsivityResourceManager.SURVEY, stepDescriptor.parameterFileName);
         PAMMultipleSelectionStep step = PAMMultipleSelectionStep.create(stepDescriptor.identifier, jsonPath, helper.getContext());
 
         step.setOptional(stepDescriptor.optional);

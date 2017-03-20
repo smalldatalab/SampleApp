@@ -6,7 +6,7 @@ import android.view.MenuItem;
 
 import org.researchstack.skin.ui.BaseActivity;
 
-public class SampleSettingsActivity extends BaseActivity
+public class ImpulsivitySettingsActivity extends BaseActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -23,7 +23,7 @@ public class SampleSettingsActivity extends BaseActivity
         if(savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction()
-                    .add(org.researchstack.skin.R.id.container, new CTFSettingsFragment())
+                    .add(org.researchstack.skin.R.id.container, new ImpulsivitySettingsFragment())
                     .commit();
         }
     }

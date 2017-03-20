@@ -5,17 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.apache.commons.lang3.StringUtils;
 import org.researchstack.backbone.ResourcePathManager;
-import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 
-import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPResultsProcessor;
-import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilder;
 import rx.Completable;
 import rx.Observable;
 import rx.functions.Action0;
@@ -23,11 +19,8 @@ import rx.functions.Action0;
 import org.researchstack.skin.DataProvider;
 import org.researchstack.skin.DataResponse;
 import org.researchstack.skin.model.User;
-import org.sagebionetworks.bridge.android.BridgeConfig;
 import org.sagebionetworks.bridge.android.manager.AuthenticationManager;
 import org.sagebionetworks.bridge.android.manager.BridgeManagerProvider;
-import org.sagebionetworks.bridge.android.manager.ConsentManager;
-import org.sagebionetworks.bridge.rest.model.SignUp;
 //import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
 import org.researchstack.skin.ResourceManager;
 import org.researchstack.skin.model.SchedulesAndTasksModel;
@@ -38,7 +31,6 @@ import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,13 +41,13 @@ import java.util.UUID;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 
-public class SampleDataProvider extends DataProvider
+public class ImpulsivityDataProvider extends DataProvider
 {
 
     public static final Observable<DataResponse> SUCCESS_DATA_RESPONSE = Observable.just(new DataResponse(true, "success"))
             .cache();
 
-    private static final String TAG = "SampleDataProvider";
+    private static final String TAG = "ImpulsivityDataProvider";
 
     //these map taskID -> Schedule GUID
 //    private HashMap<String, String> scheduleActivitiesMap;
@@ -80,7 +72,7 @@ public class SampleDataProvider extends DataProvider
 //    private final ConsentManager consentManager;
 
 
-    public SampleDataProvider(BridgeManagerProvider bridgeManagerProvider)
+    public ImpulsivityDataProvider(BridgeManagerProvider bridgeManagerProvider)
     {
         super();
 //        CTFStepBuilder.init(new CTFStepBuilder());
@@ -323,7 +315,7 @@ public class SampleDataProvider extends DataProvider
 
     protected ResourcePathManager.Resource getPublicKeyResId()
     {
-        return new SampleResourceManager.PemResource("bridge_key");
+        return new ImpulsivityResourceManager.PemResource("bridge_key");
     }
 
 //    @Override
@@ -399,7 +391,7 @@ public class SampleDataProvider extends DataProvider
 
     @Nullable
     private CTFSchedule loadSchedule(Context context, String filename) {
-        SampleResourceManager resourceManager = (SampleResourceManager)ResourceManager.getInstance();
+        ImpulsivityResourceManager resourceManager = (ImpulsivityResourceManager)ResourceManager.getInstance();
         CTFSchedule schedule = resourceManager.loadSchedule(filename).create(context);
 
         if (!this.validateSchedule(schedule)) {

@@ -65,7 +65,7 @@ public class ImpulseUiManager extends UiManager
         navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_settings)
                 .setTitle(R.string.rss_settings)
                 .setIcon(R.drawable.rss_ic_action_settings)
-                .setClass(SampleSettingsActivity.class)
+                .setClass(ImpulsivitySettingsActivity.class)
                 .build());
 
         return navItems;

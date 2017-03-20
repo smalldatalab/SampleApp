@@ -11,9 +11,7 @@ import org.researchstack.skin.model.StudyOverviewModel;
 import org.researchstack.skin.model.TaskModel;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFSchedule;
 
-import java.util.List;
-
-public class SampleResourceManager extends ResourceManager
+public class ImpulsivityResourceManager extends ResourceManager
 {
     private static final String BASE_PATH_HTML        = "html";
     private static final String BASE_PATH_JSON        = "json";
@@ -153,7 +151,7 @@ public class SampleResourceManager extends ResourceManager
 
         public PemResource(String name)
         {
-            super(SampleResourceManager.PEM, null, name);
+            super(ImpulsivityResourceManager.PEM, null, name);
         }
     }
 }

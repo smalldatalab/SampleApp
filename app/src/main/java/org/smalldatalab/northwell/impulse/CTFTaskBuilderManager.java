@@ -1,11 +1,9 @@
 package org.smalldatalab.northwell.impulse;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.researchstack.skin.ResourceManager;
-import org.sagebionetworks.bridge.android.manager.BridgeManagerProvider;
 
 import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilder;
 
@@ -60,7 +58,7 @@ public class CTFTaskBuilderManager {
                 resourceManager,
                 appStateManager);
 
-        this.taskBuilder.getStepBuilderHelper().setDefaultResourceType(SampleResourceManager.SURVEY);
+        this.taskBuilder.getStepBuilderHelper().setDefaultResourceType(ImpulsivityResourceManager.SURVEY);
 
     }
 
