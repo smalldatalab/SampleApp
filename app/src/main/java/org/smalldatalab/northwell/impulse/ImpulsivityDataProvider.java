@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.researchstack.backbone.ResourcePathManager;
+import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.Step;
+import org.researchstack.backbone.storage.database.sqlite.SqlCipherDatabaseHelper;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 
@@ -18,6 +20,7 @@ import rx.functions.Action0;
 
 import org.researchstack.skin.DataProvider;
 import org.researchstack.skin.DataResponse;
+import org.researchstack.skin.ResearchStack;
 import org.researchstack.skin.model.User;
 import org.sagebionetworks.bridge.android.manager.AuthenticationManager;
 import org.sagebionetworks.bridge.android.manager.BridgeManagerProvider;
@@ -28,6 +31,7 @@ import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFSchedule;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,6 +75,8 @@ public class ImpulsivityDataProvider extends DataProvider
     private final AuthenticationManager authenticationManager;
 //    private final ConsentManager consentManager;
 
+    private boolean debugMode = false;
+
 
     public ImpulsivityDataProvider(BridgeManagerProvider bridgeManagerProvider)
     {
@@ -82,8 +88,9 @@ public class ImpulsivityDataProvider extends DataProvider
         rand = new Random();
 
         this.authenticationManager = bridgeManagerProvider.getAuthenticationManager();
-
     }
+
+
 
     @Nullable
     private CTFActivityRun activityRunForRequestCode(Integer resultId) {
@@ -218,6 +225,15 @@ public class ImpulsivityDataProvider extends DataProvider
     @Override
     public Observable<DataResponse> signOut(Context context) {
         Log.d(this.TAG,"Called signOut");
+
+        //dump db
+        String version = context.getDatabasePath(SqlCipherDatabaseHelper.DEFAULT_NAME).getPath();
+        File dbPathFile = new File(version);
+        dbPathFile.delete();
+
+        ImpulsivityAppStateManager.getInstance().clearState(context);
+
+        ((ImpulsivityResearchStack)ResearchStack.getInstance()).initStorageAccess(context, (ImpulsivityResearchStack)ResearchStack.getInstance());
 
         return signOut().andThen(SUCCESS_DATA_RESPONSE);
     }
@@ -422,6 +438,10 @@ public class ImpulsivityDataProvider extends DataProvider
 //    }
 
     private boolean shouldShowScheduledActivity(Context context, CTFScheduleItem scheduleItem) {
+
+        if (this.debugMode) {
+            return true;
+        }
 
         switch(scheduleItem.identifier) {
 
@@ -682,7 +702,11 @@ public class ImpulsivityDataProvider extends DataProvider
 
     }
 
+    public boolean isDebugMode() {
+        return debugMode;
+    }
 
-
-
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
 }

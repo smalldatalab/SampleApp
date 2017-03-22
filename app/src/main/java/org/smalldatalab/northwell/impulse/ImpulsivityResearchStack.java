@@ -4,6 +4,7 @@ import android.content.Context;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.storage.database.AppDatabase;
 import org.researchstack.backbone.storage.database.sqlite.SqlCipherDatabaseHelper;
 import org.researchstack.backbone.storage.database.sqlite.UpdatablePassphraseProvider;
@@ -29,14 +30,27 @@ public class ImpulsivityResearchStack extends ResearchStack
 {
 
 
-
     public static void init(Context context, ImpulsivityResearchStack concreteResearchStack)
     {
 
         concreteResearchStack.createBridgeManagerProvider(context);
 
+        instance = concreteResearchStack;
 
-        ResearchStack.init(context, concreteResearchStack);
+        ResourceManager.init(concreteResearchStack.createResourceManagerImplementation(context));
+
+        UiManager.init(concreteResearchStack.createUiManagerImplementation(context));
+
+        DataProvider.init(concreteResearchStack.createDataProviderImplementation(context));
+
+        initStorageAccess(context, concreteResearchStack);
+
+        TaskProvider.init(concreteResearchStack.createTaskProviderImplementation(context));
+
+        NotificationConfig.init(concreteResearchStack.createNotificationConfigImplementation(context));
+
+        PermissionRequestManager.init(concreteResearchStack.createPermissionRequestManagerImplementation(
+                context));
 
         //initialize RSTB
         CTFTaskBuilderManager.init(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
@@ -49,14 +63,17 @@ public class ImpulsivityResearchStack extends ResearchStack
 
         CTFResultsProcessorManager.init(context, provider);
 
-        //first, create BridgeManagerProvider
-        //inject into
-//        concreteResearchStack.createBridgeManagerProvider(context);
-
 
     }
 
 
+    public static void initStorageAccess(Context context, ImpulsivityResearchStack concreteResearchStack) {
+        StorageAccess.getInstance()
+                .init(concreteResearchStack.getPinCodeConfig(context),
+                        concreteResearchStack.getEncryptionProvider(context),
+                        concreteResearchStack.createFileAccessImplementation(context),
+                        concreteResearchStack.createAppDatabaseImplementation(context));
+    }
 
 
 

@@ -12,6 +12,7 @@ import org.researchstack.backbone.utils.FormatHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -67,6 +68,27 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
     {
         this.pathName = pathName;
     }
+
+    public void clearState(Context context) {
+
+        StorageAccess.getInstance().removePinCode(context);
+        //delete files and db
+        File rootPath = new File(context.getFilesDir() + this.pathName);
+        deleteRecursive(rootPath);
+
+    }
+
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
+
+
+
+
 
     public void markBaselineSurveyAsCompleted(Context context, Date completedDate) {
         //set date

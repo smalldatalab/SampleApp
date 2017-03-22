@@ -21,7 +21,16 @@
         android:title="@string/comments"/>
 
     <Preference
+        android:key="sign_out"
+        android:title="@string/sign_out"/>
+
+    <Preference
         android:key="rss_settings_version"
         android:summary="@string/rss_settings_version"/>
+
+    <SwitchPreference
+        android:key="debug_mode"
+        android:title="Debug Mode" />
+
 
 </PreferenceScreen>

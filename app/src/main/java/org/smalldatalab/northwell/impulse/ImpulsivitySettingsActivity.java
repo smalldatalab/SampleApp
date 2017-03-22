@@ -1,10 +1,15 @@
 package org.smalldatalab.northwell.impulse;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import org.researchstack.backbone.utils.LogExt;
+import org.researchstack.backbone.utils.ObservableUtils;
+import org.researchstack.skin.DataProvider;
 import org.researchstack.skin.ui.BaseActivity;
+import org.researchstack.skin.ui.MainActivity;
 
 public class ImpulsivitySettingsActivity extends BaseActivity
 {
@@ -39,5 +44,32 @@ public class ImpulsivitySettingsActivity extends BaseActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void launchOnboardingActivity()
+    {
+        startActivity(new Intent(this, ImpulseOnboardingActivity.class));
+    }
+
+
+    public void signOut() {
+        LogExt.d(getClass(), "Signing Out");
+
+
+        DataProvider.getInstance().signOut(this)
+                .compose(ObservableUtils.applyDefault())
+                .subscribe(dataResponse -> {
+
+                    launchOnboardingActivity();
+                    finish();
+
+                }, throwable -> {
+
+                    launchOnboardingActivity();
+                    finish();
+
+                });
+
+
     }
 }

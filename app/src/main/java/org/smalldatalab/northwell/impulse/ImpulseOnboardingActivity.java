@@ -49,13 +49,23 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
 
         this.consented = DataProvider.getInstance().isConsented(this);
 
+        updateUI();
+    }
+
+    protected void updateUI() {
         if (this.consented) {
             this.external_id.setText(R.string.impulse_external_id);
         }
         else {
             this.external_id.setText(R.string.impulse_consent);
         }
+    }
 
+    @Override
+    protected void onResume()
+    {
+        updateUI();
+        super.onResume();
     }
 
     @Override
@@ -128,7 +138,6 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
 
     private void skipToMainActivity()
     {
-        AppPrefs.getInstance(this).setSkippedOnboarding(true);
         startMainActivity();
     }
 
@@ -138,7 +147,7 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
         // to MainActivity even if we haven't signed in. We want to set this true in every case so
         // the user is really only forced through Onboarding once. If they leave the study, they must
         // re-enroll in Settings, which starts OnboardingActivty.
-        AppPrefs.getInstance(this).setOnboardingComplete(true);
+//        AppPrefs.getInstance(this).setOnboardingComplete(true);
 
         // Start MainActivity w/ clear_top and single_top flags. MainActivity may
         // already be on the activity-task. We want to re-use that activity instead

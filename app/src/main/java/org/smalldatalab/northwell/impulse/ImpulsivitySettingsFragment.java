@@ -69,6 +69,8 @@ public class ImpulsivitySettingsFragment extends PreferenceFragmentCompat implem
     public static final String KEY_SET_MORNING_SURVEY = "set_morning_survey";
     public static final String KEY_SET_EVENING_SURVEY = "set_evening_survey";
     public static final String KEY_PARTICIPANT_SINCE = "participant_since";
+    public static final String KEY_SIGN_OUT = "sign_out";
+    public static final String KEY_DEBUG_MODE = "debug_mode";
 
     //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
     // Preference Items
@@ -139,11 +141,20 @@ public class ImpulsivitySettingsFragment extends PreferenceFragmentCompat implem
     {
         LogExt.i(getClass(), String.valueOf(preference.getTitle()));
 
-        if (!ImpulsivityAppStateManager.getInstance().isBaselineCompleted(getActivity())) {
-            return super.onPreferenceTreeClick(preference);
-        }
-
         if(preference.hasKey()) {
+
+            if (preference.getKey().equals(KEY_SIGN_OUT)) {
+                //TODO: Fix sign out pin code / encryption issue
+                if(getActivity() instanceof ImpulsivitySettingsActivity) {
+                    ((ImpulsivitySettingsActivity)getActivity()).signOut();
+                }
+
+                return true;
+            }
+
+            if (!ImpulsivityAppStateManager.getInstance().isBaselineCompleted(getActivity())) {
+                return super.onPreferenceTreeClick(preference);
+            }
 
             CTFScheduleItem item = this.scheduleItemForPrefrenceKey(preference.getKey());
             if(item != null) {
@@ -155,6 +166,7 @@ public class ImpulsivitySettingsFragment extends PreferenceFragmentCompat implem
                 if (newTask != null) {
                     Intent intent = ViewTaskActivity.newIntent(getContext(), newTask);
                     startActivityForResult(intent, activityRun.requestId);
+                    return true;
                 }
 
             }
@@ -234,17 +246,15 @@ public class ImpulsivitySettingsFragment extends PreferenceFragmentCompat implem
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
+        switch(key) {
+            case KEY_DEBUG_MODE:
+                boolean debugMode = sharedPreferences.getBoolean(KEY_DEBUG_MODE, false);
+                ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
+                dataProvider.setDebugMode(debugMode);
+                break;
+        }
 
-//        switch(key)
-//        {
-//            case KEY_AUTO_LOCK_ENABLED:
-//            case KEY_AUTO_LOCK_TIME:
-//                long autoLockTime = AppPrefs.getInstance(getContext()).getAutoLockTime();
-//                StorageAccess.getInstance().getPinCodeConfig().setPinAutoLockTime(autoLockTime);
-//                break;
-//        }
-
-        updateUI();
+//        updateUI();
     }
 
     @Override

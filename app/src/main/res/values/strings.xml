@@ -49,6 +49,7 @@
     <string name="set_evening_survey_time">Set Evening Survey Time</string>
     <string name="participant_since">Participant Since</string>
     <string name="comments">Comments?</string>
+    <string name="sign_out">Sign Out</string>
 
 
     <string name="bridge_external_id_format">jdk288+%s@cornell.edu</string>
