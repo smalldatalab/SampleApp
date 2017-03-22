@@ -1,1 +1,5 @@
+include ':android-sdk'
+project(':android-sdk').projectDir = file('./BridgeAndroidSDK/android-sdk')
+//include ':researchstack-sdk'
+//project(':researchstack-sdk').projectDir = file('./BridgeAndroidSDK/researchstack-sdk')
 include ':app'

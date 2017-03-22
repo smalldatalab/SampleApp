@@ -10,7 +10,6 @@ import org.researchstack.skin.ActionItem;
 import org.researchstack.skin.UiManager;
 import org.researchstack.skin.task.OnboardingTask;
 import org.researchstack.skin.ui.LearnActivity;
-import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduledActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,7 @@ public class ImpulseUiManager extends UiManager
         navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_settings)
                 .setTitle(R.string.rss_settings)
                 .setIcon(R.drawable.rss_ic_action_settings)
-                .setClass(SampleSettingsActivity.class)
+                .setClass(ImpulsivitySettingsActivity.class)
                 .build());
 
         return navItems;

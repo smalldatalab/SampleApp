@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <Preference
+        android:key="set_morning_survey"
+        android:title="@string/set_morning_survey_time"/>
+
+    <Preference
+        android:key="set_evening_survey"
+        android:title="@string/set_evening_survey_time"/>
+
+    <Preference
+        android:key="participant_since"
+        android:title="@string/participant_since"/>
+
+    <Preference
+        android:key="comments"
+        android:title="@string/comments"/>
+
+    <Preference
+        android:key="sign_out"
+        android:title="@string/sign_out"/>
+
+    <Preference
+        android:key="rss_settings_version"
+        android:summary="@string/rss_settings_version"/>
+
+    <SwitchPreference
+        android:key="debug_mode"
+        android:title="Debug Mode" />
+
+
+</PreferenceScreen>

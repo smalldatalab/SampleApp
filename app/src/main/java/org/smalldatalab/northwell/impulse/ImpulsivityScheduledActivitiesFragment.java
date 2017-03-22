@@ -2,7 +2,7 @@ package org.smalldatalab.northwell.impulse;
 
 import android.content.Context;
 
-import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduledActivity;
+import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 
 import java.util.List;
 
@@ -11,7 +11,8 @@ import java.util.List;
  */
 public class ImpulsivityScheduledActivitiesFragment extends ImpulsivityActivitiesFragment {
     @Override
-    protected List<CTFScheduledActivity> getScheduledActivities(Context context, SampleDataProvider dataProvider) {
+    protected List<CTFScheduleItem> getScheduledActivities(Context context, ImpulsivityDataProvider dataProvider) {
+        //TODO: if empty, add thank you activity
         return dataProvider.loadScheduledActivities(context);
     }
 }

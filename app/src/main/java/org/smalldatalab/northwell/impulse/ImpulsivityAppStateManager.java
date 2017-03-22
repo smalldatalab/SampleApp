@@ -12,6 +12,7 @@ import org.researchstack.backbone.utils.FormatHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,18 +20,18 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import edu.cornell.tech.foundry.CTFStateHelper;
-import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.IntegerStepDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBStateHelper;
 
 /**
  * Created by jameskizer on 1/20/17.
  */
-public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFStateHelper {
+public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTBStateHelper {
 
 
     static String MORNING_SURVEY_TIME_HOUR = "MorningSurveyTimeHR";
@@ -43,6 +44,8 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
     static String DAY_21_SURVEY_COMPLETED = "21DaySurveyCompleted";
     static String BASELINE_BEHAVIOR_RESULTS  = "BaselineBehaviorResults";
     static String COMPLETED_TRIAL_ACTIVITIES = "CompeltedTrialActivities";
+
+    static String CONSENTED = "Consented";
 
     static int SURVEY_TIME_AFTER_INTERVAL_HOURS = 6;
     static int SURVEY_TIME_BEFORE_INTERVAL_HOURS = 2;
@@ -65,6 +68,27 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
     {
         this.pathName = pathName;
     }
+
+    public void clearState(Context context) {
+
+        StorageAccess.getInstance().removePinCode(context);
+        //delete files and db
+        File rootPath = new File(context.getFilesDir() + this.pathName);
+        deleteRecursive(rootPath);
+
+    }
+
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
+
+
+
+
 
     public void markBaselineSurveyAsCompleted(Context context, Date completedDate) {
         //set date
@@ -226,6 +250,45 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
 
     }
 
+    public String getBaselineSurveyDate(Context context) {
+        Date baselineCompletedDate = this.getBaselineCompletedDate(context);
+        if (baselineCompletedDate != null) {
+            return new SimpleDateFormat("MMM d, yyyy").format(baselineCompletedDate);
+        }
+        else return "";
+    }
+
+    public String getMorningSurveyTime(Context context) {
+        return this.getSurveyTime(context, true);
+    }
+
+    public String getEveningSurveyTime(Context context) {
+        return this.getSurveyTime(context, false);
+    }
+
+    //if baseline not completed, return empty string
+    private String getSurveyTime(Context context, boolean morning) {
+
+        StringBuilder sb = new StringBuilder();
+
+        int hour = this.getTimeComponent(context, morning ? MORNING_SURVEY_TIME_HOUR : EVENING_SURVEY_TIME_HOUR);
+        if (hour == -1) {
+            return "";
+        }
+
+        int minute = this.getTimeComponent(context, morning ? MORNING_SURVEY_TIME_MINUTE : EVENING_SURVEY_TIME_MINUTE);
+        boolean am = true;
+        if (hour >= 12) {
+            am = false;
+        }
+
+        return String.format("%d:%02d %s", hour%12 == 0 ? 12 : hour%12, minute, am ? "AM" : "PM");
+    }
+
+    public String getEveningSurveyTime() {
+        return "8:00 PM";
+    }
+
     //presentational logic
     public boolean isBaselineCompleted(Context context) {
 
@@ -320,11 +383,14 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
 
         Date lastCompletedTime = this.getLastMorningSurveyCompletedDate(context);
 
+        //if no last completed time, return true
+        if (lastCompletedTime == null) {
+            return true;
+        }
+
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
-        if (lastCompletedTime != null &&
-                (lastCompletedTime.after(lowerCalendar.getTime()) ||
-                        lastCompletedTime.before(upperCalendar.getTime()))
-                ) {
+        if (lastCompletedTime.after(lowerCalendar.getTime()) &&
+                lastCompletedTime.before(upperCalendar.getTime())) {
             return false;
         }
 
@@ -359,11 +425,14 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
 
         Date lastCompletedTime = this.getLastEveningSurveyCompletedDate(context);
 
+        //if no last completed time, return true
+        if (lastCompletedTime == null) {
+            return true;
+        }
+
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
-        if (lastCompletedTime != null &&
-                (lastCompletedTime.after(lowerCalendar.getTime()) ||
-                        lastCompletedTime.before(upperCalendar.getTime()))
-                ) {
+        if (lastCompletedTime.after(lowerCalendar.getTime()) &&
+                lastCompletedTime.before(upperCalendar.getTime())) {
             return false;
         }
 
@@ -393,8 +462,24 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements CTFS
 
     }
 
+    public boolean isConsented(Context context) {
 
+        byte[] bytes = this.valueInState(context, CONSENTED);
+        if (bytes == null) {
+            return false;
+        }
 
+        Boolean consented = bytes[0] != 0;
+
+        return consented;
+    }
+
+    public void setConsented(Context context, Boolean consented) {
+
+        byte[] bytes = new byte[] { (byte) (consented?1:0)};
+
+        this.setValueInState(context, CONSENTED, bytes);
+    }
 
     private String pathForKey(String key) {
         StringBuilder pathBuilder = new StringBuilder(this.pathName);

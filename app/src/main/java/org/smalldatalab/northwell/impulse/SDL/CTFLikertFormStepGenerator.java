@@ -16,14 +16,15 @@ import org.smalldatalab.northwell.impulse.SDL.descriptors.CTFLikertScaleFormPara
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cornell.tech.foundry.CTFStepBuilderHelper;
-import edu.cornell.tech.foundry.DefaultStepGenerators.CTFBaseStepGenerator;
-import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.CustomStepDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBBaseStepGenerator;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.descriptors.RSTBCustomStepDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilderHelper;
+
 
 /**
  * Created by jameskizer on 12/8/16.
  */
-public class CTFLikertFormStepGenerator extends CTFBaseStepGenerator {
+public class CTFLikertFormStepGenerator extends RSTBBaseStepGenerator {
 
     public CTFLikertFormStepGenerator()
     {
@@ -72,9 +73,9 @@ public class CTFLikertFormStepGenerator extends CTFBaseStepGenerator {
     }
 
     @Override
-    public Step generateStep(CTFStepBuilderHelper helper, String type, JsonObject jsonObject) {
+    public Step generateStep(RSTBTaskBuilderHelper helper, String type, JsonObject jsonObject) {
 
-        CustomStepDescriptor stepDescriptor = helper.getCustomStepDescriptor(jsonObject);
+        RSTBCustomStepDescriptor stepDescriptor = helper.getCustomStepDescriptor(jsonObject);
 
         CTFLikertScaleFormParameters parameters = helper.getGson().fromJson(stepDescriptor.parameters, CTFLikertScaleFormParameters.class);
 

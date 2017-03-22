@@ -9,17 +9,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cornell.tech.foundry.CTFStepBuilderHelper;
-import edu.cornell.tech.foundry.DefaultStepGenerators.MultipleChoiceStepGenerator;
-import edu.cornell.tech.foundry.DefaultStepGenerators.descriptors.ChoiceStepItemDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBBaseStepGenerator;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBChoiceStepGenerator;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBMultipleChoiceStepGenerator;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.descriptors.RSTBChoiceStepItemDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.descriptors.RSTBCustomStepDescriptor;
+import edu.cornell.tech.foundry.researchsuitetaskbuilder.RSTBTaskBuilderHelper;
 
 /**
  * Created by jameskizer on 1/21/17.
  */
-public class CTFExtendedMultipleChoiceStepGenerator extends MultipleChoiceStepGenerator {
+public class CTFExtendedMultipleChoiceStepGenerator extends RSTBMultipleChoiceStepGenerator {
 
     @Override
-    public ChoiceFilter generateFilter(CTFStepBuilderHelper helper, String type, JsonObject jsonObject) {
+    public RSTBChoiceStepGenerator.ChoiceFilter generateFilter(RSTBTaskBuilderHelper helper, String type, JsonObject jsonObject) {
 
         if (jsonObject.has("filterItemsByValueInListKeyedBy") &&
                 jsonObject.get("filterItemsByValueInListKeyedBy").isJsonPrimitive()) {
@@ -35,10 +38,10 @@ public class CTFExtendedMultipleChoiceStepGenerator extends MultipleChoiceStepGe
                     List<String> includedItems = Arrays.asList((TextUtils.split(joinedItems, ",")));
 
                     if (includedItems.size() > 0) {
-                        return new ChoiceFilter() {
+                        return new RSTBChoiceStepGenerator.ChoiceFilter() {
                             //note that items stored may contain suffix
                             @Override
-                            public boolean filter(ChoiceStepItemDescriptor itemDescriptor) {
+                            public boolean filter(RSTBChoiceStepItemDescriptor itemDescriptor) {
 
                                 if (itemDescriptor.value instanceof String) {
                                     String value = (String)itemDescriptor.value;
@@ -64,9 +67,9 @@ public class CTFExtendedMultipleChoiceStepGenerator extends MultipleChoiceStepGe
 
         }
 
-        return new ChoiceFilter() {
+        return new RSTBChoiceStepGenerator.ChoiceFilter() {
             @Override
-            public boolean filter(ChoiceStepItemDescriptor itemDescriptor) {
+            public boolean filter(RSTBChoiceStepItemDescriptor itemDescriptor) {
                 return true;
             }
         };

@@ -3,13 +3,13 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId 'org.smalldatalab.northwell.impulse'
         minSdkVersion 21
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName '1.0'
         multiDexEnabled true
@@ -58,13 +58,27 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'org.researchstack:skin:1.1.1-SNAPSHOT'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'net.zetetic:android-database-sqlcipher:3.3.1-2@aar'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.4@aar'
     apt 'co.touchlab.squeaky:squeaky-processor:0.4.0.0'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.madgag.spongycastle:core:1.54.0.0'
     compile 'com.madgag.spongycastle:prov:1.54.0.0'
     compile 'com.madgag.spongycastle:pkix:1.54.0.0'
+    compile 'edu.cornell.tech.foundry:researchsuitetaskbuilder:0.0.3'
+    compile 'edu.cornell.tech.foundry:researchsuiteresultsprocessor:0.0.3'
+
     compile 'edu.cornell.tech.foundry:sdl_rsx:0.0.3-SNAPSHOT'
-    compile 'tyrantgit:explosionfield:1.0.1'
+
+    compile 'edu.cornell.tech.foundry:behavioralextensionscore:0.0.2'
+    compile 'edu.cornell.tech.foundry:behavioralextensionsrstbsupport:0.0.2'
+    compile 'edu.cornell.tech.foundry:behavioralextensionsrsrpsupport:0.0.2'
+
+    compile project(':android-sdk'), {
+        exclude group: 'joda-time', module: 'joda-time'
+    }
+
+    compile 'edu.cornell.tech.foundry:ohmageomhsdkrs:0.0.4'
+
+
 }

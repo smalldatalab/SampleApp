@@ -36,8 +36,7 @@ public class ImpulseSplashActivity extends PinCodeActivity {
                 .compose(ObservableUtils.applyDefault())
                 .subscribe(response -> {
 
-                    if(AppPrefs.getInstance(this).isOnboardingComplete() ||
-                            DataProvider.getInstance().isSignedIn(this))
+                    if(DataProvider.getInstance().isSignedIn(this))
                     {
                         launchMainActivity();
                     }

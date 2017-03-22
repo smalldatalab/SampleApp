@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.storage.file.StorageAccessListener;
 import org.researchstack.backbone.task.Task;
@@ -27,13 +26,11 @@ import org.researchstack.backbone.ui.ViewTaskActivity;
 import org.researchstack.backbone.utils.LogExt;
 import org.researchstack.backbone.utils.ObservableUtils;
 import org.researchstack.skin.DataProvider;
-import org.researchstack.skin.model.SchedulesAndTasksModel;
 import org.researchstack.skin.ui.views.DividerItemDecoration;
-import org.smalldatalab.northwell.impulse.studyManagement.CTFActivity;
-import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduledActivity;
+import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
+import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import rx.Observable;
@@ -80,10 +77,9 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
         }
     }
 
-    protected abstract List<CTFScheduledActivity> getScheduledActivities(Context context, SampleDataProvider dataProvider);
+    protected abstract List<CTFScheduleItem> getScheduledActivities(Context context, ImpulsivityDataProvider dataProvider);
 
-    private void setUpAdapter()
-    {
+    private void setUpAdapter() {
         unsubscribe();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -94,24 +90,25 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
 
         Observable.create(subscriber -> {
 
-            SampleDataProvider dataProvider = (SampleDataProvider) DataProvider.getInstance();
+            ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
 
-            List<CTFScheduledActivity> scheduledActivities = this.getScheduledActivities(getActivity(), dataProvider);
+            List<CTFScheduleItem> scheduledActivities = this.getScheduledActivities(getActivity(), dataProvider);
 
             subscriber.onNext(scheduledActivities);
         })
                 .compose(ObservableUtils.applyDefault())
-                .map(o -> (List<CTFScheduledActivity>) o)
-                .subscribe(scheduledActivities -> {
-                    adapter = new ActivityAdapter(scheduledActivities);
+                .map(o -> (List<CTFScheduleItem>) o)
+                .subscribe(items -> {
+                    adapter = new ActivityAdapter(items);
                     recyclerView.setAdapter(adapter);
 
-                    subscription = adapter.getPublishSubject().subscribe(scheduledActivity -> {
+                    subscription = adapter.getPublishSubject().subscribe(item -> {
 
-                        Task newTask = DataProvider.getInstance().loadTask(getContext(), scheduledActivity.getActivity().toTask());
+                        ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
+                        CTFActivityRun activityRun = dataProvider.activityRunForItem(item);
+                        Task newTask = dataProvider.loadTask(getContext(), activityRun);
 
-                        if(newTask == null)
-                        {
+                        if (newTask == null) {
                             Toast.makeText(getActivity(),
                                     org.researchstack.skin.R.string.rss_local_error_load_task,
                                     Toast.LENGTH_SHORT).show();
@@ -119,9 +116,8 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
                         }
 
                         Intent intent = ViewTaskActivity.newIntent(getContext(), newTask);
-                        intent.putExtra("guid", scheduledActivity.getGuid());
 
-                        startActivityForResult(intent, REQUEST_TASK);
+                        startActivityForResult(intent, activityRun.requestId);
                     });
                 });
     }
@@ -129,21 +125,35 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TASK)
-        {
-            LogExt.d(getClass(), "Received task result from task activity");
+        ImpulsivityDataProvider dataProvider = (ImpulsivityDataProvider) DataProvider.getInstance();
+        CTFActivityRun activityRun = dataProvider.popActivityRunForRequestCode(requestCode);
 
-            TaskResult taskResult = (TaskResult) data.getSerializableExtra(ViewTaskActivity.EXTRA_TASK_RESULT);
-            StorageAccess.getInstance().getAppDatabase().saveTaskResult(taskResult);
-            DataProvider.getInstance().uploadTaskResult(getActivity(), taskResult);
+        if (activityRun != null) {
 
-            setUpAdapter();
+            if(resultCode == Activity.RESULT_OK)
+            {
+                LogExt.d(getClass(), "Received task result from task activity");
+
+                TaskResult taskResult = (TaskResult) data.getSerializableExtra(ViewTaskActivity.EXTRA_TASK_RESULT);
+                dataProvider.completeActivity(getActivity(), taskResult, activityRun);
+
+                setUpAdapter();
+            }
+            else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
         }
         else
         {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState)
+//    {
+//        super.onSaveInstanceState(outState);
+//    }
 
     @Override
     public void onDataReady()
@@ -167,18 +177,18 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
 
     public static class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder> {
 
-        List<CTFScheduledActivity> scheduledActivities;
+        List<CTFScheduleItem> items;
 
-        PublishSubject<CTFScheduledActivity> publishSubject = PublishSubject.create();
+        PublishSubject<CTFScheduleItem> publishSubject = PublishSubject.create();
 
-        public ActivityAdapter(List<CTFScheduledActivity> scheduledActivities)
+        public ActivityAdapter(List<CTFScheduleItem> scheduledActivities)
         {
             super();
 
-            this.scheduledActivities = new ArrayList<>(scheduledActivities);
+            this.items = new ArrayList<>(scheduledActivities);
         }
 
-        public PublishSubject<CTFScheduledActivity> getPublishSubject()
+        public PublishSubject<CTFScheduleItem> getPublishSubject()
         {
             return publishSubject;
         }
@@ -194,13 +204,12 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
         @Override
         public void onBindViewHolder(ActivityAdapter.ViewHolder holder, int position)
         {
-            CTFScheduledActivity scheduledActivity = scheduledActivities.get(position);
+            CTFScheduleItem item = items.get(position);
 
             Resources res = holder.itemView.getResources();
             int tintColor = res.getColor(org.researchstack.skin.R.color.rss_recurring_color);
 
-            holder.title.setText(Html.fromHtml("<b>" + scheduledActivity.getTitle() + "</b>"));
-            holder.title.append("\n" + scheduledActivity.getTimeEstimate());
+            holder.title.setText(Html.fromHtml("<b>" + item.title + "</b>"));
             holder.title.setTextColor(tintColor);
 
             Drawable drawable = holder.dailyIndicator.getDrawable();
@@ -209,15 +218,15 @@ public abstract class ImpulsivityActivitiesFragment extends Fragment implements 
             holder.dailyIndicator.setImageDrawable(drawable);
 
             holder.itemView.setOnClickListener(v -> {
-                LogExt.d(getClass(), "Item clicked: " + scheduledActivity.getGuid());
-                publishSubject.onNext(scheduledActivity);
+                LogExt.d(getClass(), "Item clicked: " + item.guid);
+                publishSubject.onNext(item);
             });
         }
 
         @Override
         public int getItemCount()
         {
-            return this.scheduledActivities.size();
+            return this.items.size();
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder
