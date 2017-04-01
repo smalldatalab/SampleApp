@@ -24,25 +24,41 @@ public class ImpulseSplashActivity extends PinCodeActivity {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public void onDataReady()
     {
         super.onDataReady();
         // Init all notifications
-        sendBroadcast(new Intent(TaskAlertReceiver.ALERT_CREATE_ALL));
+//        sendBroadcast(new Intent(TaskAlertReceiver.ALERT_CREATE_ALL));
 
         DataProvider.getInstance()
                 .initialize(this)
                 .compose(ObservableUtils.applyDefault())
                 .subscribe(response -> {
 
-                    if(DataProvider.getInstance().isSignedIn(this))
+                    FirstRunDAO firstRunDAO = new FirstRunDAO(this);
+
+                    if(firstRunDAO.getFirstRun() != null
+                            && firstRunDAO.getFirstRun() &&
+                            DataProvider.getInstance().isSignedIn(this))
                     {
                         launchMainActivity();
                     }
                     else
                     {
-                        launchOnboardingActivity();
+                        firstRunDAO.setFirstRun(true);
+                        DataProvider.getInstance().signOut(this)
+                                .compose(ObservableUtils.applyDefault())
+                                .subscribe(dataResponse -> {
+
+                                    launchOnboardingActivity();
+
+                                }, throwable -> {
+
+                                    launchOnboardingActivity();
+
+                                });
                     }
 
                     finish();

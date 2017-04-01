@@ -321,6 +321,23 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
         }
     }
 
+    public Calendar yesterdaysMorningSurvey(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+
+        int hour =  this.getTimeComponent(context, MORNING_SURVEY_TIME_HOUR);
+        int minute =  this.getTimeComponent(context, MORNING_SURVEY_TIME_MINUTE);
+
+        if (hour != -1 && minute != -1) {
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            return calendar;
+        }
+        else {
+            return null;
+        }
+    }
+
     @Nullable
     public Calendar baselineCalendar(Context context) {
 
@@ -351,6 +368,30 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
         }
     }
 
+    public Calendar yesterdaysEveningSurvey(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+
+        int hour =  this.getTimeComponent(context, EVENING_SURVEY_TIME_HOUR);
+        int minute =  this.getTimeComponent(context, EVENING_SURVEY_TIME_MINUTE);
+
+        if (hour != -1 && minute != -1) {
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            return calendar;
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    public boolean inTimeRage(Calendar testCalendar, Calendar lowerCalendar, Calendar upperCalendar) {
+        return testCalendar.getTime().after(lowerCalendar.getTime()) &&
+                testCalendar.getTime().before(upperCalendar.getTime());
+    }
+
+    // TODO: Fix after midnight thing
     public boolean shouldShowMorningSurvey(Context context) {
         //show am survey if the following are true
         //1) Baseline has been completed
@@ -361,23 +402,37 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
             return false;
         }
 
-        Calendar lowerCalendar = this.todaysMorningSurvey(context);
-        if (lowerCalendar == null) {
+        Calendar lowerTodayCalendar = this.todaysMorningSurvey(context);
+        if (lowerTodayCalendar == null) {
             return false;
         }
-        lowerCalendar.add(Calendar.HOUR_OF_DAY, -1 * SURVEY_TIME_BEFORE_INTERVAL_HOURS);
+        lowerTodayCalendar.add(Calendar.HOUR_OF_DAY, -1 * SURVEY_TIME_BEFORE_INTERVAL_HOURS);
 
-        Calendar upperCalendar = this.todaysMorningSurvey(context);
-        if (upperCalendar == null) {
+        Calendar upperTodayCalendar = this.todaysMorningSurvey(context);
+        if (upperTodayCalendar == null) {
             return false;
         }
-        upperCalendar.add(Calendar.HOUR_OF_DAY, SURVEY_TIME_AFTER_INTERVAL_HOURS);
+        upperTodayCalendar.add(Calendar.HOUR_OF_DAY, SURVEY_TIME_AFTER_INTERVAL_HOURS);
+
+        Calendar lowerYesterdayCalendar = this.yesterdaysMorningSurvey(context);
+        if (lowerYesterdayCalendar == null) {
+            return false;
+        }
+        lowerYesterdayCalendar.add(Calendar.HOUR_OF_DAY, -1 * SURVEY_TIME_BEFORE_INTERVAL_HOURS);
+
+        Calendar upperYesterdayCalendar = this.yesterdaysMorningSurvey(context);
+        if (upperYesterdayCalendar == null) {
+            return false;
+        }
+        upperYesterdayCalendar.add(Calendar.HOUR_OF_DAY, SURVEY_TIME_AFTER_INTERVAL_HOURS);
 
         Calendar nowCalendar = Calendar.getInstance();
 
+        boolean inTodays = this.inTimeRage(nowCalendar, lowerTodayCalendar, upperTodayCalendar);
+        boolean inYesterdays = this.inTimeRage(nowCalendar, lowerYesterdayCalendar, upperYesterdayCalendar);
+
         //if now is not in range [lowerCalendar, upperCalendar], return false
-        if (nowCalendar.getTime().before(lowerCalendar.getTime()) ||
-                nowCalendar.getTime().after(upperCalendar.getTime())) {
+        if (!inTodays && !inYesterdays) {
             return false;
         }
 
@@ -388,9 +443,11 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
             return true;
         }
 
+        Calendar lastCompletedCalendar = Calendar.getInstance();
+        lastCompletedCalendar.setTime(lastCompletedTime);
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
-        if (lastCompletedTime.after(lowerCalendar.getTime()) &&
-                lastCompletedTime.before(upperCalendar.getTime())) {
+        if ( (inYesterdays && this.inTimeRage(lastCompletedCalendar, lowerYesterdayCalendar, upperYesterdayCalendar)) ||
+                this.inTimeRage(lastCompletedCalendar, lowerTodayCalendar, lowerTodayCalendar) ) {
             return false;
         }
 
@@ -403,23 +460,38 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
             return false;
         }
 
-        Calendar lowerCalendar = this.todaysEveningSurvey(context);
-        if (lowerCalendar == null) {
+        Calendar lowerTodayCalendar = this.todaysEveningSurvey(context);
+        if (lowerTodayCalendar == null) {
             return false;
         }
-        lowerCalendar.add(Calendar.HOUR_OF_DAY, -1 * SURVEY_TIME_BEFORE_INTERVAL_HOURS);
+        lowerTodayCalendar.add(Calendar.HOUR_OF_DAY, -1 * SURVEY_TIME_BEFORE_INTERVAL_HOURS);
 
-        Calendar upperCalendar = this.todaysEveningSurvey(context);
-        if (upperCalendar == null) {
+        Calendar upperTodayCalendar = this.todaysEveningSurvey(context);
+        if (upperTodayCalendar == null) {
             return false;
         }
-        upperCalendar.add(Calendar.HOUR_OF_DAY, SURVEY_TIME_AFTER_INTERVAL_HOURS);
+        upperTodayCalendar.add(Calendar.HOUR_OF_DAY, SURVEY_TIME_AFTER_INTERVAL_HOURS);
+
+        Calendar lowerYesterdayCalendar = this.yesterdaysEveningSurvey(context);
+        if (lowerYesterdayCalendar == null) {
+            return false;
+        }
+        lowerYesterdayCalendar.add(Calendar.HOUR_OF_DAY, -1 * SURVEY_TIME_BEFORE_INTERVAL_HOURS);
+
+        Calendar upperYesterdayCalendar = this.yesterdaysEveningSurvey(context);
+        if (upperYesterdayCalendar == null) {
+            return false;
+        }
+        upperYesterdayCalendar.add(Calendar.HOUR_OF_DAY, SURVEY_TIME_AFTER_INTERVAL_HOURS);
 
         Calendar nowCalendar = Calendar.getInstance();
 
         //if now is not in range [lowerCalendar, upperCalendar], return false
-        if (nowCalendar.getTime().before(lowerCalendar.getTime()) ||
-                nowCalendar.getTime().after(upperCalendar.getTime())) {
+        boolean inTodays = this.inTimeRage(nowCalendar, lowerTodayCalendar, upperTodayCalendar);
+        boolean inYesterdays = this.inTimeRage(nowCalendar, lowerYesterdayCalendar, upperYesterdayCalendar);
+
+        //if now is not in range [lowerCalendar, upperCalendar], return false
+        if (!inTodays && !inYesterdays) {
             return false;
         }
 
@@ -430,9 +502,12 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
             return true;
         }
 
+        Calendar lastCompletedCalendar = Calendar.getInstance();
+        lastCompletedCalendar.setTime(lastCompletedTime);
+
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
-        if (lastCompletedTime.after(lowerCalendar.getTime()) &&
-                lastCompletedTime.before(upperCalendar.getTime())) {
+        if ( (inYesterdays && this.inTimeRage(lastCompletedCalendar, lowerYesterdayCalendar, upperYesterdayCalendar)) ||
+                this.inTimeRage(lastCompletedCalendar, lowerTodayCalendar, lowerTodayCalendar) ) {
             return false;
         }
 

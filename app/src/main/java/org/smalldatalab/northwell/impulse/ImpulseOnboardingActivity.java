@@ -7,8 +7,10 @@ import android.widget.Button;
 
 import org.researchstack.backbone.StorageAccess;
 import org.researchstack.backbone.answerformat.BooleanAnswerFormat;
+import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
 import org.researchstack.backbone.step.QuestionStep;
+import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.ui.PinCodeActivity;
 import org.researchstack.backbone.ui.ViewTaskActivity;
@@ -19,6 +21,9 @@ import org.researchstack.skin.task.OnboardingTask;
 import org.researchstack.skin.ui.ConsentTaskActivity;
 import org.researchstack.skin.ui.MainActivity;
 import org.smalldatalab.northwell.impulse.RSExtensions.CTFBridgeLogInStepLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFLogInStep;
 import edu.cornell.tech.foundry.ohmageomhsdkrs.CTFLogInStepLayout;
@@ -85,9 +90,9 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
     public void showOnboardingScreen() {
         if (this.consented) {
 
-            boolean hasPasscode = StorageAccess.getInstance().hasPinCode(this);
-            if(! hasPasscode)
-            {
+            List<Step> steps = new ArrayList<>();
+
+            if (!DataProvider.getInstance().isSignedIn(this)) {
 
                 CTFLogInStep logInStep = new CTFLogInStep(
                         LOG_IN_STEP_IDENTIFIER,
@@ -97,19 +102,28 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
                 );
 
 //                logInStep.setForgotPasswordButtonTitle("Skip Log In");
+                logInStep.setLogInButtonTitle("Sign In");
                 logInStep.setIdentityFieldName("External ID");
                 logInStep.setPasswordFieldName("Confirm External ID");
                 logInStep.setOptional(false);
+                steps.add(logInStep);
+
+                StorageAccess.getInstance().removePinCode(this);
 
                 PassCodeCreationStep passcodeStep = new PassCodeCreationStep(OnboardingTask.SignUpPassCodeCreationStepIdentifier,
                         org.researchstack.skin.R.string.rss_passcode);
+                steps.add(passcodeStep);
 
-                OrderedTask task = new OrderedTask("PasscodeTask", logInStep, passcodeStep);
+                OrderedTask task = new OrderedTask("OnboardingTask", steps);
                 startActivityForResult(ConsentTaskActivity.newIntent(this, task),
                         REQUEST_CODE_SIGN_IN);
+
             }
             else
             {
+                assert(DataProvider.getInstance().isConsented(this));
+                assert(DataProvider.getInstance().isSignedIn(this));
+                assert(StorageAccess.getInstance().hasPinCode(this));
                 skipToMainActivity();
             }
 
@@ -167,11 +181,14 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
 
             Boolean signedIn = (Boolean) result.getStepResult(LOG_IN_STEP_IDENTIFIER).getResultForIdentifier(CTFLogInStepLayout.LoggedInResultIdentifier);
             if (signedIn) {
+                StepResult passcodeResult = result.getStepResult(OnboardingTask.SignUpPassCodeCreationStepIdentifier);
+
                 String passcode = (String) result.getStepResult(OnboardingTask.SignUpPassCodeCreationStepIdentifier)
                         .getResult();
                 StorageAccess.getInstance().createPinCode(this, passcode);
 
                 ((ImpulsivityDataProvider) DataProvider.getInstance()).setConsented(this, consented);
+
 
                 skipToMainActivity();
             }
@@ -183,6 +200,7 @@ public class ImpulseOnboardingActivity extends PinCodeActivity {
             Boolean consented = (Boolean) result.getStepResult("consent").getResult();
             if (consented) {
                 this.consented = consented;
+
                 this.onExternalIdClicked(null);
             }
 

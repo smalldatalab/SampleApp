@@ -1,3 +1,6 @@
+# Debugging info
+debug/
+
 # Built application files
 *.apk
 *.ap_

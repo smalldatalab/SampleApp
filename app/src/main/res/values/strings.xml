@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Northwell Impulsivity</string>
+    <string name="app_name">mPulse DMT</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="task_inital_toolbar_title">Initial Task</string>
@@ -25,8 +25,8 @@
     <string name="medl_image_ext">jpg</string>
     <string name="overlay_image_path">images</string>
     <string name="overlay_image_ext">png</string>
-    <string name="impulse_external_id">External ID</string>
-    <string name="impulse_consent">Consent</string>
+    <string name="impulse_external_id">Sign In</string>
+    <string name="impulse_consent">Sign In</string>
 
     <string name="plus">Plus</string>
 

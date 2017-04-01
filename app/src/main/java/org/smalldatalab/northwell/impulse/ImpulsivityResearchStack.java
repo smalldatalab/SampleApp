@@ -29,6 +29,7 @@ import org.researchstack.skin.notification.SimpleNotificationConfig;
 public class ImpulsivityResearchStack extends ResearchStack
 {
 
+    CTFTaskBuilderManager taskBuilderManager;
 
     public static void init(Context context, ImpulsivityResearchStack concreteResearchStack)
     {
@@ -53,7 +54,8 @@ public class ImpulsivityResearchStack extends ResearchStack
                 context));
 
         //initialize RSTB
-        CTFTaskBuilderManager.init(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
+//        CTFTaskBuilderManager.init(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
+        concreteResearchStack.taskBuilderManager = new CTFTaskBuilderManager(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
 
         //initialize RSRP
         ImpulsivityBridgeManagerProvider provider = new ImpulsivityBridgeManagerProvider(
@@ -64,6 +66,19 @@ public class ImpulsivityResearchStack extends ResearchStack
         CTFResultsProcessorManager.init(context, provider);
 
 
+    }
+
+    public CTFTaskBuilderManager getTaskBuilderManager() {
+        return taskBuilderManager;
+    }
+
+    public static void reinitialize(Context context, ImpulsivityResearchStack concreteResearchStack) {
+
+        initStorageAccess(context, concreteResearchStack);
+        //initialize RSTB
+//        CTFTaskBuilderManager.init(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
+//        CTFTaskBuilderManager.init(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
+        concreteResearchStack.taskBuilderManager = new CTFTaskBuilderManager(context, ResourceManager.getInstance(), ImpulsivityAppStateManager.getInstance());
     }
 
 
@@ -100,6 +115,8 @@ public class ImpulsivityResearchStack extends ResearchStack
                 SqlCipherDatabaseHelper.DEFAULT_VERSION,
                 new UpdatablePassphraseProvider()
         );
+
+
 
 //        return new BridgeEncryptedDatabase(context,
 //                SqlCipherDatabaseHelper.DEFAULT_NAME,

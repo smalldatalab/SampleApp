@@ -56,11 +56,11 @@ public class ImpulseUiManager extends UiManager
     {
         List<ActionItem> navItems = new ArrayList<>();
 
-        navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_learn)
-                .setTitle(R.string.rss_learn)
-                .setIcon(R.drawable.rss_ic_action_learn)
-                .setClass(LearnActivity.class)
-                .build());
+//        navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_learn)
+//                .setTitle(R.string.rss_learn)
+//                .setIcon(R.drawable.rss_ic_action_learn)
+//                .setClass(LearnActivity.class)
+//                .build());
 
         navItems.add(new ActionItem.ActionItemBuilder().setId(R.id.nav_settings)
                 .setTitle(R.string.rss_settings)

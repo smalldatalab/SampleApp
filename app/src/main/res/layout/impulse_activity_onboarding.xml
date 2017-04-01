@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/whiteColor"
+    >
+
+    <TextView
+        android:id="@+id/layout_studyoverview_landing_title"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-medium"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="36sp"
+        android:text="@string/app_name" />
+
+    <ImageView
+        android:id="@+id/layout_studyoverview_landing_logo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:src="@drawable/dmt_512px"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/external_id"
         style="@style/Widget.Sample.Onboarding.Button"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
         android:onClick="onExternalIdClicked"
-        android:text="@string/impulse_external_id"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp" />
+        android:text="@string/impulse_external_id" />
 
 </LinearLayout>

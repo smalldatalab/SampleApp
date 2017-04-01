@@ -31,7 +31,7 @@ public class ImpulsivityNotificationManager {
     public static final String KEY_NOTIFICATION_ID = "CreateAlertReceiver.KEY_NOTIFICATION_ID";
 
     public static final int DAILY_SURVEY_NOTIFICATION_WINDOW_BEFORE_INTERVAL_MINS = 0;
-    public static final int DAILY_SURVEY_NOTIFICATION_WINDOW_AFTER_INTERVAL_MINS = 30;
+    public static final int DAILY_SURVEY_NOTIFICATION_WINDOW_AFTER_INTERVAL_MINS = 2;
 
     static public Calendar combineDateWithDateComponents(Calendar calendar, int hour, int minute) {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -216,7 +216,9 @@ public class ImpulsivityNotificationManager {
     {
         // Add Alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, fireDate.getTime(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, fireDate.getTime(), pendingIntent);
+
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, fireDate.getTime(), 1000 * 60 * 1, pendingIntent);
 
         DateFormat format = FormatHelper.getFormat(DateFormat.LONG, DateFormat.LONG);
         LogExt.i(ImpulsivityNotificationManager.class.getName(),
@@ -227,6 +229,8 @@ public class ImpulsivityNotificationManager {
     {
         // Remove pending intent if one already exists
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        LogExt.i(ImpulsivityNotificationManager.class.getName(),
+                "Alarm  Canceled.");
         alarmManager.cancel(pendingIntent);
     }
 
@@ -240,6 +244,8 @@ public class ImpulsivityNotificationManager {
             // Create alert
             createAlert(context, pendingIntent, fireDate);
         }
+
+
     }
 
     static private void cancelNotification(Context context, int notificationId) {

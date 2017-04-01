@@ -40,7 +40,12 @@ public class CTFScaleFormResultTransformer implements RSRPFrontEnd {
             }
         }
 
-        String suffix = (String)parameters.getOrDefault("identifierSuffix", "");
+//        String suffix = (String)parameters.getOrDefault("identifierSuffix", "");
+
+        String suffix = "";
+        if (parameters.get("identifierSuffix") != null) {
+            suffix = (String)parameters.get("identifierSuffix");
+        }
 
         Map<String, Serializable> totalChildResults = new HashMap<>();
         for (StepResult stepResult : stepResults) {

@@ -25,7 +25,7 @@ public class ImpulsivityTaskNotificationReceiver extends BroadcastReceiver
         int notificationId = intent.getIntExtra(ImpulsivityNotificationManager.KEY_NOTIFICATION_ID, 0);
 
         // Create pending intent wrapper that will open MainActivity
-        Intent activityIntent = new Intent(context, MainActivity.class);
+        Intent activityIntent = new Intent(context, ImpulseSplashActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context,
                 0,
                 activityIntent,

@@ -56,6 +56,7 @@ public class ImpulsivitySettingsActivity extends BaseActivity
         LogExt.d(getClass(), "Signing Out");
 
 
+
         DataProvider.getInstance().signOut(this)
                 .compose(ObservableUtils.applyDefault())
                 .subscribe(dataResponse -> {

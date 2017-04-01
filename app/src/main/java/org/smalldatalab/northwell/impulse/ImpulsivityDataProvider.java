@@ -15,7 +15,9 @@ import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 
 import rx.Completable;
+import rx.CompletableSubscriber;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action0;
 
 import org.researchstack.skin.DataProvider;
@@ -233,9 +235,19 @@ public class ImpulsivityDataProvider extends DataProvider
 
         ImpulsivityAppStateManager.getInstance().clearState(context);
 
-        ((ImpulsivityResearchStack)ResearchStack.getInstance()).initStorageAccess(context, (ImpulsivityResearchStack)ResearchStack.getInstance());
+        return signOut()
+                .andThen(this.reinit(context))
+                .andThen(SUCCESS_DATA_RESPONSE);
+    }
 
-        return signOut().andThen(SUCCESS_DATA_RESPONSE);
+    private Completable reinit(Context context) {
+
+        return Completable.fromAction(new Action0() {
+            @Override
+            public void call() {
+                ImpulsivityResearchStack.reinitialize(context, (ImpulsivityResearchStack)ResearchStack.getInstance());
+            }
+        });
     }
 
     @NonNull
@@ -259,7 +271,7 @@ public class ImpulsivityDataProvider extends DataProvider
 
     @Override
     public boolean isSignedIn(Context context) {
-        return this.isConsented(context) && this.isSignedIn();
+        return this.isSignedIn() && this.isConsented(context);
     }
 
     @Override
@@ -468,13 +480,15 @@ public class ImpulsivityDataProvider extends DataProvider
 
         List<CTFScheduleItem> scheduledActivities = new ArrayList();
 
-        for (CTFScheduleItem scheduleItem: this.activitiesSchedule.getScheduleItems()) {
+        if (this.activitiesSchedule != null) {
+            for (CTFScheduleItem scheduleItem: this.activitiesSchedule.getScheduleItems()) {
 
-            if (this.shouldShowScheduledActivity(context, scheduleItem)) {
-                scheduledActivities.add(scheduleItem);
+                if (this.shouldShowScheduledActivity(context, scheduleItem)) {
+                    scheduledActivities.add(scheduleItem);
+                }
             }
         }
-
+        
         return scheduledActivities;
 
     }
@@ -517,7 +531,8 @@ public class ImpulsivityDataProvider extends DataProvider
 
         List<Step> stepList = null;
         try {
-            stepList = CTFTaskBuilderManager.getTaskBuilder().stepsForElement(activityRun.activity);
+            ImpulsivityResearchStack rs = (ImpulsivityResearchStack)ResearchStack.getInstance();
+            stepList = rs.getTaskBuilderManager().getTaskBuilder().stepsForElement(activityRun.activity);
         }
         catch(Exception e) {
             Log.w(this.TAG, "could not create steps from task json", e);
