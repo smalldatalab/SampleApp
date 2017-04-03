@@ -129,7 +129,7 @@ public class ImpulsivityResearchStack extends ResearchStack
     protected FileAccess createFileAccessImplementation(Context context)
     {
         String pathName = context.getString(R.string.ctf_state_helper_path);
-        return new ImpulsivityAppStateManager(pathName);
+        return new ImpulsivityAppStateManager(context, pathName);
     }
 
     @Override

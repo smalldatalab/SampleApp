@@ -44,6 +44,7 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
     static String DAY_21_SURVEY_COMPLETED = "21DaySurveyCompleted";
     static String BASELINE_BEHAVIOR_RESULTS  = "BaselineBehaviorResults";
     static String COMPLETED_TRIAL_ACTIVITIES = "CompeltedTrialActivities";
+    static String GROUP_LABEL  = "GroupLabel";
 
     static String CONSENTED = "Consented";
 
@@ -52,6 +53,7 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
     static int DAY_21_DELAY_INTERVAL_DAYS = 21;
 
     private String pathName;
+    private String groupLabel;
 
     public static ImpulsivityAppStateManager getInstance()
     {
@@ -64,7 +66,7 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 //        ImpulsivityAppStateManager.instance = instance;
 //    }
 
-    public ImpulsivityAppStateManager(String pathName)
+    public ImpulsivityAppStateManager(Context context, String pathName)
     {
         this.pathName = pathName;
     }
@@ -512,7 +514,7 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
         if ( (inYesterdays && this.inTimeRage(lastCompletedCalendar, lowerYesterdayCalendar, upperYesterdayCalendar)) ||
-                this.inTimeRage(lastCompletedCalendar, lowerTodayCalendar, lowerTodayCalendar) ) {
+                this.inTimeRage(lastCompletedCalendar, lowerTodayCalendar, upperTodayCalendar) ) {
             return false;
         }
 
@@ -540,6 +542,28 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 
         return !this.is21DayCompelted(context);
 
+    }
+
+    public void setGroupLabel(Context context, String groupLabel) {
+        this.groupLabel = groupLabel;
+        this.setValueInState(context, GROUP_LABEL, groupLabel.getBytes());
+    }
+
+    public String getGroupLabel(Context context) {
+        //lazy load group label
+        if (this.groupLabel == null) {
+            this.groupLabel = loadGroupLabel(context);
+        }
+        return this.groupLabel;
+    }
+
+    private String loadGroupLabel(Context context) {
+        byte[] bytes = this.valueInState(context, GROUP_LABEL);
+        if (bytes == null) {
+            return null;
+        }
+
+        return new String(bytes);
     }
 
     public boolean isConsented(Context context) {

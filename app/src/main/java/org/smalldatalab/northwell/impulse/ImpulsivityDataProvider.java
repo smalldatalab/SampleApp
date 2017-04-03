@@ -627,6 +627,12 @@ public class ImpulsivityDataProvider extends DataProvider
 
         ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
 
+        StepResult groupLabelStepResult = taskResult.getStepResult("group_label");
+        if (groupLabelStepResult != null) {
+            String groupLabel = (String) groupLabelStepResult.getResult();
+            ImpulsivityAppStateManager.getInstance().setGroupLabel(context, groupLabel);
+        }
+
         this.handleMorningAndEveningSurveyTimes(context, taskResult);
 
         //handle baseline behaviors
@@ -644,6 +650,12 @@ public class ImpulsivityDataProvider extends DataProvider
 
             Date baselineCompletedDate = baselineCalendar.getTime();
             ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, baselineCompletedDate);
+        }
+
+        StepResult groupLabelStepResult = taskResult.getStepResult("group_label");
+        if (groupLabelStepResult != null) {
+            String groupLabel = (String) groupLabelStepResult.getResult();
+            ImpulsivityAppStateManager.getInstance().setGroupLabel(context, groupLabel);
         }
 
         this.handleMorningAndEveningSurveyTimes(context, taskResult);

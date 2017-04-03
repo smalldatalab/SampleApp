@@ -14,6 +14,9 @@ import org.spongycastle.cms.CMSException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPBackEnd;
@@ -28,10 +31,14 @@ public class ImpulsivityBridgeManagerProvider implements RSRPBackEnd {
     private BridgeConfig bridgeConfig;
     private UploadManager uploadManager;
 
-    public ImpulsivityBridgeManagerProvider(BridgeConfig bridgeConfig, UploadManager uploadManager) {
+    public ImpulsivityBridgeManagerProvider(
+            BridgeConfig bridgeConfig,
+            UploadManager uploadManager
+    ) {
         this.bridgeConfig = bridgeConfig;
         this.uploadManager = uploadManager;
     }
+
     public static String getFileName(Context context, String schemaIdentifier) {
 
         StringBuilder sb = new StringBuilder();
@@ -54,6 +61,20 @@ public class ImpulsivityBridgeManagerProvider implements RSRPBackEnd {
     public void add(Context context, RSRPIntermediateResult intermediateResult) {
         //convert intermediateResult to a data archive
         SBBDataArchiveBuilder builder = (SBBDataArchiveBuilder)SBBIntermediateResultTransformerService.getInstance().transform(context, intermediateResult);
+
+        String groupLabel = ImpulsivityAppStateManager.getInstance().getGroupLabel(context);
+        if (groupLabel != null) {
+
+            if (intermediateResult.getUserInfo() == null) {
+                Map<String, Serializable> userInfo = new HashMap<>();
+                userInfo.put("groupLabel", groupLabel);
+                intermediateResult.setUserInfo(userInfo);
+            }
+            else {
+                intermediateResult.getUserInfo().put("groupLabel", groupLabel);
+            }
+
+        }
 
         if (builder != null) {
             Archive archive = builder.toArchive(this.bridgeConfig);
