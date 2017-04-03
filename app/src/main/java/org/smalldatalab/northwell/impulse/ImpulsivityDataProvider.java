@@ -488,7 +488,7 @@ public class ImpulsivityDataProvider extends DataProvider
                 }
             }
         }
-        
+
         return scheduledActivities;
 
     }

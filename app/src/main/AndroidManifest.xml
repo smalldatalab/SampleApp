@@ -34,6 +34,7 @@
         <activity
             android:name="org.smalldatalab.northwell.impulse.ImpulseOnboardingActivity"
             android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.Sample.Onboarding"
         />
 
@@ -124,11 +125,7 @@
             android:exported="false"
             />
 
-        <receiver
-            android:name="org.smalldatalab.northwell.impulse.Impulsivity2nd21DayNotificationReceiver"
-            android:enabled="true"
-            android:exported="false"
-            />
+        <receiver android:name="org.smalldatalab.northwell.impulse.Impulsivity2nd21DayNotificationReceiver"/>
 
         <receiver
             android:name="org.researchstack.skin.notification.DeviceBootReceiver"

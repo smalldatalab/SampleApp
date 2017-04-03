@@ -71,6 +71,11 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
 
     public void clearState(Context context) {
 
+        //cancel notifications
+        ImpulsivityNotificationManager.cancelMorningNotifications(context);
+        ImpulsivityNotificationManager.cancelEveningNotifications(context);
+        ImpulsivityNotificationManager.cancel21DayNotifications(context);
+
         StorageAccess.getInstance().removePinCode(context);
         //delete files and db
         File rootPath = new File(context.getFilesDir() + this.pathName);
@@ -447,7 +452,7 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
         lastCompletedCalendar.setTime(lastCompletedTime);
         //if lastCompletedTime is in range [lowerCalendar, upperCalendar], return false
         if ( (inYesterdays && this.inTimeRage(lastCompletedCalendar, lowerYesterdayCalendar, upperYesterdayCalendar)) ||
-                this.inTimeRage(lastCompletedCalendar, lowerTodayCalendar, lowerTodayCalendar) ) {
+                this.inTimeRage(lastCompletedCalendar, lowerTodayCalendar, upperTodayCalendar) ) {
             return false;
         }
 

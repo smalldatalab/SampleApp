@@ -31,7 +31,9 @@ public class ImpulsivityNotificationManager {
     public static final String KEY_NOTIFICATION_ID = "CreateAlertReceiver.KEY_NOTIFICATION_ID";
 
     public static final int DAILY_SURVEY_NOTIFICATION_WINDOW_BEFORE_INTERVAL_MINS = 0;
-    public static final int DAILY_SURVEY_NOTIFICATION_WINDOW_AFTER_INTERVAL_MINS = 2;
+    public static final int DAILY_SURVEY_NOTIFICATION_WINDOW_AFTER_INTERVAL_MINS = 30;
+
+    public static final int SURVEY_SECOND_NOTIFICATION_DELAY_MINS = 30;
 
     static public Calendar combineDateWithDateComponents(Calendar calendar, int hour, int minute) {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -89,7 +91,7 @@ public class ImpulsivityNotificationManager {
         //set notification 1
         setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
 
-        fireCalendar.add(Calendar.MINUTE, 30);
+        fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
         //set notification 2
         setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
 
@@ -107,7 +109,7 @@ public class ImpulsivityNotificationManager {
         //set notification 1
         setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
 
-        fireCalendar.add(Calendar.MINUTE, 30);
+        fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
         //set notification 2
         setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
 
@@ -127,7 +129,7 @@ public class ImpulsivityNotificationManager {
         //set notification 1
         setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
 
-        fireCalendar.add(Calendar.MINUTE, 30);
+        fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
         //set notification 2
         setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
 
@@ -203,7 +205,7 @@ public class ImpulsivityNotificationManager {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                     0,
                     taskNotificationIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    0);
 
             return pendingIntent;
 
@@ -223,6 +225,8 @@ public class ImpulsivityNotificationManager {
         DateFormat format = FormatHelper.getFormat(DateFormat.LONG, DateFormat.LONG);
         LogExt.i(ImpulsivityNotificationManager.class.getName(),
                 "Alarm  Created. Executing on or near " + format.format(fireDate));
+        LogExt.i(ImpulsivityNotificationManager.class.getName(),
+                "Pending intent: " + pendingIntent.getIntentSender().toString());
     }
 
     static private void cancelAlert(Context context, PendingIntent pendingIntent)
