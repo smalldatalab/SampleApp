@@ -25,6 +25,8 @@ import org.researchstack.skin.model.ConsentSectionModel;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -224,23 +226,23 @@ public class ImpulsivitySettingsFragment extends PreferenceFragmentCompat implem
 
     public String getVersionString()
     {
-        int versionCode;
-        String versionName;
         PackageManager manager = getActivity().getPackageManager();
 
         try
         {
             PackageInfo info = manager.getPackageInfo(getActivity().getPackageName(), 0);
-            versionCode = info.versionCode;
-            versionName = info.versionName;
+            int versionCode = info.versionCode;
+            String versionName = info.versionName;
+            Date versionDate = new Date(info.lastUpdateTime);
+            String versionDateString = new SimpleDateFormat("MMM d, yyyy").format(versionDate);
+            return getString(R.string.impulsivity_settings_version, versionName, versionCode, versionDateString);
         }
         catch(PackageManager.NameNotFoundException e)
         {
             LogExt.e(getClass(), "Could not find package version info");
-            versionCode = 0;
-            versionName = getString(org.researchstack.skin.R.string.rss_settings_version_unknown);
+            return getString(org.researchstack.skin.R.string.rss_settings_version_unknown);
         }
-        return getString(org.researchstack.skin.R.string.rss_settings_version, versionName, versionCode);
+
     }
 
     @Override

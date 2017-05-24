@@ -10,7 +10,7 @@ android {
         applicationId 'org.smalldatalab.northwell.impulse'
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 2
+        versionCode 3
         versionName '1.0'
         multiDexEnabled true
     }
@@ -57,7 +57,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'org.researchstack:skin:1.1.1-SNAPSHOT'
+    compile 'org.researchstack:skin:1.1.2'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'net.zetetic:android-database-sqlcipher:3.5.4@aar'
     apt 'co.touchlab.squeaky:squeaky-processor:0.4.0.0'
@@ -68,7 +68,7 @@ dependencies {
     compile 'edu.cornell.tech.foundry:researchsuitetaskbuilder:0.0.3'
     compile 'edu.cornell.tech.foundry:researchsuiteresultsprocessor:0.0.3'
 
-    compile 'edu.cornell.tech.foundry:sdl_rsx:0.0.3-SNAPSHOT'
+    compile 'edu.cornell.tech.foundry:sdl_rsx:0.0.4'
 
     compile 'edu.cornell.tech.foundry:behavioralextensionscore:0.0.2'
     compile 'edu.cornell.tech.foundry:behavioralextensionsrstbsupport:0.0.2'
