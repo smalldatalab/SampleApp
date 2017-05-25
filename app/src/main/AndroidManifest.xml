@@ -96,6 +96,22 @@
         <!--/>-->
 
         <receiver
+            android:name="org.smalldatalab.northwell.impulse.ImpulsivityNotificationManager"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.CREATE_ALL_ALERTS_FROM_STATE"/>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.SET_MORNING_NOTIFICATION"/>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.SET_MORNING_NOTIFICATION_2ND"/>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.SET_EVENING_NOTIFICATION"/>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.SET_EVENING_NOTIFICATION_2ND"/>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.SET_21_DAY_NOTIFICATION"/>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.SET_21_DAY_NOTIFICATION_2ND"/>
+                <action android:name="org.smalldatalab.northwell.impulse.notification.CLEAR_NOTIFICATIONS"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name="org.smalldatalab.northwell.impulse.ImpulsivityMorningNotificationReceiver"
             android:enabled="true"
             android:exported="false"
@@ -128,25 +144,12 @@
         <receiver android:name="org.smalldatalab.northwell.impulse.Impulsivity2nd21DayNotificationReceiver"/>
 
         <receiver
-            android:name="org.researchstack.skin.notification.DeviceBootReceiver"
+            android:name="org.smalldatalab.northwell.impulse.ImpulsivityDeviceBootReceiver"
             android:enabled="true"
             android:exported="false"
         >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name="org.researchstack.skin.notification.TaskAlertReceiver"
-            android:enabled="true"
-            android:exported="false"
-        >
-            <intent-filter>
-                <action android:name="org.researchstack.skin.notification.ALERT_CREATE"/>
-                <action android:name="org.researchstack.skin.notification.ALERT_CREATE_ALL"/>
-                <action android:name="org.researchstack.skin.notification.ALERT_DELETE"/>
-                <action android:name="org.researchstack.skin.notification.ALERT_DELETE_ALL"/>
             </intent-filter>
         </receiver>
 

@@ -11,13 +11,14 @@ import org.researchstack.skin.notification.NotificationConfig;
 import org.researchstack.skin.ui.MainActivity;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by jameskizer on 1/25/17.
  */
-public class ImpulsivityTaskNotificationReceiver extends BroadcastReceiver
+public abstract class ImpulsivityTaskNotificationReceiver extends BroadcastReceiver
 {
-
+    protected abstract Intent rescheduleAlarmIntent(Context context, Date rescheduleTime);
     public void onReceive(Context context, Intent intent)
     {
         Log.i(getClass().getName(), "onReceive()");
@@ -34,7 +35,8 @@ public class ImpulsivityTaskNotificationReceiver extends BroadcastReceiver
         //reschedule alarm for 24hrs from now
         Calendar newFireCal = Calendar.getInstance();
         newFireCal.add(Calendar.DAY_OF_YEAR, 1);
-        ImpulsivityNotificationManager.setDailyNotification(context, notificationId, newFireCal.getTime());
+        Intent rescheduleIntent = rescheduleAlarmIntent(context, newFireCal.getTime());
+        context.sendBroadcast(rescheduleIntent);
 
         NotificationConfig config = NotificationConfig.getInstance();
         Notification notification = new NotificationCompat.Builder(context).setContentIntent(

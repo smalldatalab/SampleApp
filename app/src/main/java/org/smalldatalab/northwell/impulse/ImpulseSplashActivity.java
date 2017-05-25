@@ -31,6 +31,7 @@ public class ImpulseSplashActivity extends PinCodeActivity {
         super.onDataReady();
         // Init all notifications
 //        sendBroadcast(new Intent(TaskAlertReceiver.ALERT_CREATE_ALL));
+        ImpulsivityNotificationManager.loadNotificationsFromState(this);
 
         DataProvider.getInstance()
                 .initialize(this)

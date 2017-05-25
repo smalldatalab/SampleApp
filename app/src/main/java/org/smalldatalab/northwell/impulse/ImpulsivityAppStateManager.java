@@ -1,6 +1,7 @@
 package org.smalldatalab.northwell.impulse;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 
 import org.researchstack.backbone.ResourcePathManager;
@@ -74,9 +75,11 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
     public void clearState(Context context) {
 
         //cancel notifications
-        ImpulsivityNotificationManager.cancelMorningNotifications(context);
-        ImpulsivityNotificationManager.cancelEveningNotifications(context);
-        ImpulsivityNotificationManager.cancel21DayNotifications(context);
+//        ImpulsivityNotificationManager.cancelMorningNotifications(context);
+//        ImpulsivityNotificationManager.cancelEveningNotifications(context);
+//        ImpulsivityNotificationManager.cancel21DayNotifications(context);
+
+        ImpulsivityNotificationManager.clearNotifications(context);
 
         StorageAccess.getInstance().removePinCode(context);
         //delete files and db
@@ -165,9 +168,11 @@ public class ImpulsivityAppStateManager extends SimpleFileAccess implements RSTB
     public void mark21DaySurveyCompleted(Context context, Date completedDate) {
         this.setDateInState(context, DAY_21_SURVEY_COMPLETED, completedDate);
 
-        ImpulsivityNotificationManager.cancelMorningNotifications(context);
-        ImpulsivityNotificationManager.cancelEveningNotifications(context);
-        ImpulsivityNotificationManager.cancel21DayNotifications(context);
+//        ImpulsivityNotificationManager.cancelMorningNotifications(context);
+//        ImpulsivityNotificationManager.cancelEveningNotifications(context);
+//        ImpulsivityNotificationManager.cancel21DayNotifications(context);
+
+        ImpulsivityNotificationManager.clearNotifications(context);
     }
 
     public void saveBaselineBehaviors(Context context, String[] behaviors) {

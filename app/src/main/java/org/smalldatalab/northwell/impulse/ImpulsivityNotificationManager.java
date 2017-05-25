@@ -2,9 +2,11 @@ package org.smalldatalab.northwell.impulse;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.researchstack.backbone.utils.FormatHelper;
 import org.researchstack.backbone.utils.LogExt;
@@ -17,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by jameskizer on 1/22/17.
  */
-public class ImpulsivityNotificationManager {
+public class ImpulsivityNotificationManager extends BroadcastReceiver {
 
     public static final int MORNING_NOTIFICATION_IDENTIFIER = 1;
     public static final int MORNING_NOTIFICATION_IDENTIFIER_2ND = 2;
@@ -66,6 +68,9 @@ public class ImpulsivityNotificationManager {
         }
         else {
             baseCalendar = combineDateWithDateComponents(Calendar.getInstance(), hour, minute);
+            if (baseCalendar.before(Calendar.getInstance())) {
+                baseCalendar.add(Calendar.DAY_OF_YEAR, 1);
+            }
         }
 
         Calendar fromCalendar = Calendar.getInstance();
@@ -88,37 +93,53 @@ public class ImpulsivityNotificationManager {
 
         Calendar fireCalendar = getNotificationFireDate(latestCompletion, hour, minute);
 
-        //set notification 1
-        setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
-
+        context.sendBroadcast(
+                createSetMorningNotificationIntent(context, fireCalendar.getTime())
+        );
         fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
-        //set notification 2
-        setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
+        context.sendBroadcast(
+                createSetMorningNotificationIntent2nd(context, fireCalendar.getTime())
+        );
+
+        //set notification 1
+//        setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
+//
+//        fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
+//        //set notification 2
+//        setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
 
     }
 
-    static public void cancelMorningNotifications(Context context) {
-        cancelNotification(context, MORNING_NOTIFICATION_IDENTIFIER);
-        cancelNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND);
-    }
+//    static private void cancelMorningNotifications(Context context) {
+//        cancelNotification(context, MORNING_NOTIFICATION_IDENTIFIER);
+//        cancelNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND);
+//    }
 
     static public void setEveningNotification(Context context, @Nullable Date latestCompletion, int hour, int minute) {
 
         Calendar fireCalendar = getNotificationFireDate(latestCompletion, hour, minute);
 
-        //set notification 1
-        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
-
+        context.sendBroadcast(
+                createSetEveningNotificationIntent(context, fireCalendar.getTime())
+        );
         fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
-        //set notification 2
-        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
+        context.sendBroadcast(
+                createSetEveningNotificationIntent2nd(context, fireCalendar.getTime())
+        );
+
+//        //set notification 1
+//        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
+//
+//        fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
+//        //set notification 2
+//        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
 
     }
 
-    static public void cancelEveningNotifications(Context context) {
-        cancelNotification(context, EVENING_NOTIFICATION_IDENTIFIER);
-        cancelNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND);
-    }
+//    static private void cancelEveningNotifications(Context context) {
+//        cancelNotification(context, EVENING_NOTIFICATION_IDENTIFIER);
+//        cancelNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND);
+//    }
 
     static public void set21DayNotification(Context context, Date baselineCompletion) {
 
@@ -126,19 +147,27 @@ public class ImpulsivityNotificationManager {
         fireCalendar.setTime(baselineCompletion);
         fireCalendar.add(Calendar.DAY_OF_YEAR, 21);
 
-        //set notification 1
-        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
-
+        context.sendBroadcast(
+                createSet21DayNotificationIntent(context, fireCalendar.getTime())
+        );
         fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
-        //set notification 2
-        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
+        context.sendBroadcast(
+                createSet21DayNotificationIntent2nd(context, fireCalendar.getTime())
+        );
+
+//        //set notification 1
+//        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, fireCalendar.getTime());
+//
+//        fireCalendar.add(Calendar.MINUTE, SURVEY_SECOND_NOTIFICATION_DELAY_MINS);
+//        //set notification 2
+//        setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, fireCalendar.getTime());
 
     }
 
-    static public void cancel21DayNotifications(Context context) {
-        cancelNotification(context, DAY21_NOTIFICATION_IDENTIFIER);
-        cancelNotification(context, DAY21_NOTIFICATION_IDENTIFIER_2ND);
-    }
+//    static private void cancel21DayNotifications(Context context) {
+//        cancelNotification(context, DAY21_NOTIFICATION_IDENTIFIER);
+//        cancelNotification(context, DAY21_NOTIFICATION_IDENTIFIER_2ND);
+//    }
 
     @Nullable
     static private Class receiverClassForNotificationId(int notificationId) {
@@ -261,4 +290,193 @@ public class ImpulsivityNotificationManager {
         }
     }
 
+    //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+    // Intent Actions
+    //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+    private static final String CREATE_ALL_ALERTS_FROM_STATE     = "org.smalldatalab.northwell.impulse.notification.CREATE_ALL_ALERTS_FROM_STATE";
+    private static final String SET_MORNING_NOTIFICATION     = "org.smalldatalab.northwell.impulse.notification.SET_MORNING_NOTIFICATION";
+    private static final String SET_MORNING_NOTIFICATION_2ND     = "org.smalldatalab.northwell.impulse.notification.SET_MORNING_NOTIFICATION_2ND";
+    private static final String SET_EVENING_NOTIFICATION     = "org.smalldatalab.northwell.impulse.notification.SET_EVENING_NOTIFICATION";
+    private static final String SET_EVENING_NOTIFICATION_2ND     = "org.smalldatalab.northwell.impulse.notification.SET_EVENING_NOTIFICATION_2ND";
+    private static final String SET_21_DAY_NOTIFICATION     = "org.smalldatalab.northwell.impulse.notification.SET_21_DAY_NOTIFICATION";
+    private static final String SET_21_DAY_NOTIFICATION_2ND     = "org.smalldatalab.northwell.impulse.notification.SET_21_DAY_NOTIFICATION_2ND";
+    private static final String CLEAR_NOTIFICATIONS     = "org.smalldatalab.northwell.impulse.notification.CLEAR_NOTIFICATIONS";
+    private static final String INTENT_EXTRA_FIRST_NOTIFICATION = "org.smalldatalab.northwell.impulse.notification.intent.extra.first_notification";
+    private static final String INTENT_EXTRA_SECOND_NOTIFICATION = "org.smalldatalab.northwell.impulse.notification.intent.extra.second_notification";
+
+    static public void loadNotificationsFromState(Context context) {
+        context.sendBroadcast(new Intent(CREATE_ALL_ALERTS_FROM_STATE));
+    }
+
+    static public Intent createSetMorningNotificationIntent(Context context, Date firstNotification) {
+
+        Intent intent = new Intent(SET_MORNING_NOTIFICATION);
+        intent.putExtra(INTENT_EXTRA_FIRST_NOTIFICATION, firstNotification);
+        return intent;
+
+    }
+
+    static public Intent createSetMorningNotificationIntent2nd(Context context, Date secondNotification) {
+
+        Intent intent = new Intent(SET_MORNING_NOTIFICATION_2ND);
+        intent.putExtra(INTENT_EXTRA_SECOND_NOTIFICATION, secondNotification);
+        return intent;
+
+    }
+
+    static public Intent createSetEveningNotificationIntent(Context context, Date firstNotification) {
+        Intent intent = new Intent(SET_EVENING_NOTIFICATION);
+        intent.putExtra(INTENT_EXTRA_FIRST_NOTIFICATION, firstNotification);
+        return intent;
+    }
+
+    static public Intent createSetEveningNotificationIntent2nd(Context context, Date secondNotification) {
+        Intent intent = new Intent(SET_EVENING_NOTIFICATION_2ND);
+        intent.putExtra(INTENT_EXTRA_SECOND_NOTIFICATION, secondNotification);
+        return intent;
+    }
+
+    static public Intent createSet21DayNotificationIntent(Context context, Date firstNotification) {
+        Intent intent = new Intent(SET_21_DAY_NOTIFICATION);
+        intent.putExtra(INTENT_EXTRA_FIRST_NOTIFICATION, firstNotification);
+        return intent;
+    }
+
+    static public Intent createSet21DayNotificationIntent2nd(Context context, Date secondNotification) {
+        Intent intent = new Intent(SET_21_DAY_NOTIFICATION_2ND);
+        intent.putExtra(INTENT_EXTRA_SECOND_NOTIFICATION, secondNotification);
+        return intent;
+    }
+
+    static public void clearNotifications(Context context) {
+        context.sendBroadcast(new Intent(CLEAR_NOTIFICATIONS));
+    }
+
+    public void onReceive(Context context, Intent intent)
+    {
+        Log.i("CreateAlertReceiver", "onReceive() _ " + intent.getAction());
+
+        switch(intent.getAction())
+        {
+            case SET_MORNING_NOTIFICATION: {
+                Date firstNotification = (Date)intent.getSerializableExtra(INTENT_EXTRA_FIRST_NOTIFICATION);
+
+                ImpulsivityNotificationDAO dao = new ImpulsivityNotificationDAO(context);
+
+                dao.setMorningNotificationTime(firstNotification);
+
+                setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER, firstNotification);
+                break;
+            }
+
+            case SET_MORNING_NOTIFICATION_2ND: {
+                Date secondNotification = (Date)intent.getSerializableExtra(INTENT_EXTRA_SECOND_NOTIFICATION);
+
+                ImpulsivityNotificationDAO dao = new ImpulsivityNotificationDAO(context);
+
+                dao.setMorningNotificationTime2nd(secondNotification);
+
+                setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND, secondNotification);
+                break;
+            }
+
+
+            case SET_EVENING_NOTIFICATION: {
+                Date firstNotification = (Date)intent.getSerializableExtra(INTENT_EXTRA_FIRST_NOTIFICATION);
+
+                ImpulsivityNotificationDAO dao = new ImpulsivityNotificationDAO(context);
+
+                dao.setEveningNotificationTime(firstNotification);
+
+                setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, firstNotification);
+
+                break;
+            }
+
+            case SET_EVENING_NOTIFICATION_2ND: {
+                Date secondNotification = (Date)intent.getSerializableExtra(INTENT_EXTRA_SECOND_NOTIFICATION);
+
+                ImpulsivityNotificationDAO dao = new ImpulsivityNotificationDAO(context);
+
+                dao.setEveningNotificationTime2nd(secondNotification);
+
+                setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, secondNotification);
+
+                break;
+            }
+
+            case SET_21_DAY_NOTIFICATION: {
+                Date firstNotification = (Date)intent.getSerializableExtra(INTENT_EXTRA_FIRST_NOTIFICATION);
+
+                ImpulsivityNotificationDAO dao = new ImpulsivityNotificationDAO(context);
+
+                dao.set21DayNotificationTime(firstNotification);
+
+                setDailyNotification(context, DAY21_NOTIFICATION_IDENTIFIER, firstNotification);
+
+                break;
+            }
+
+            case SET_21_DAY_NOTIFICATION_2ND: {
+                Date secondNotification = (Date)intent.getSerializableExtra(INTENT_EXTRA_SECOND_NOTIFICATION);
+
+                ImpulsivityNotificationDAO dao = new ImpulsivityNotificationDAO(context);
+
+                dao.set21DayNotificationTime2nd(secondNotification);
+
+                setDailyNotification(context, DAY21_NOTIFICATION_IDENTIFIER_2ND, secondNotification);
+
+                break;
+            }
+
+
+            case CREATE_ALL_ALERTS_FROM_STATE: {
+                ImpulsivityNotificationDAO dao = new ImpulsivityNotificationDAO(context);
+
+                if (dao.getMorningNotificationTime() != null) {
+                    setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER, dao.getMorningNotificationTime());
+                }
+
+                if (dao.getMorningNotificationTime2nd() != null) {
+                    setDailyNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND, dao.getMorningNotificationTime2nd());
+                }
+
+                if (dao.getEveningNotificationTime() != null) {
+                    setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER, dao.getEveningNotificationTime());
+                }
+
+                if (dao.getEveningNotificationTime2nd() != null) {
+                    setDailyNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND, dao.getEveningNotificationTime2nd());
+                }
+
+                if (dao.get21DayNotificationTime() != null) {
+                    setDailyNotification(context, DAY21_NOTIFICATION_IDENTIFIER, dao.get21DayNotificationTime());
+                }
+
+                if (dao.get21DayNotificationTime2nd() != null) {
+                    setDailyNotification(context, DAY21_NOTIFICATION_IDENTIFIER_2ND, dao.get21DayNotificationTime2nd());
+                }
+
+                break;
+
+            }
+
+            case CLEAR_NOTIFICATIONS: {
+
+                cancelNotification(context, MORNING_NOTIFICATION_IDENTIFIER);
+                cancelNotification(context, MORNING_NOTIFICATION_IDENTIFIER_2ND);
+                cancelNotification(context, EVENING_NOTIFICATION_IDENTIFIER);
+                cancelNotification(context, EVENING_NOTIFICATION_IDENTIFIER_2ND);
+                cancelNotification(context, DAY21_NOTIFICATION_IDENTIFIER);
+                cancelNotification(context, DAY21_NOTIFICATION_IDENTIFIER_2ND);
+
+                break;
+
+            }
+
+
+            default:
+                break;
+        }
+    }
 }
