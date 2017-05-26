@@ -68,7 +68,10 @@ dependencies {
     compile 'edu.cornell.tech.foundry:researchsuitetaskbuilder:0.0.3'
     compile 'edu.cornell.tech.foundry:researchsuiteresultsprocessor:0.0.3'
 
-    compile 'edu.cornell.tech.foundry:sdl_rsx:0.0.4'
+    compile 'edu.cornell.tech.foundry:sdl_rsx:0.0.5'
+    compile 'edu.cornell.tech.foundry:sdl_rsx:0.0.5'
+    compile 'edu.cornell.tech.foundry:sdl_rsx:0.0.5'
+
 
     compile 'edu.cornell.tech.foundry:behavioralextensionscore:0.0.2'
     compile 'edu.cornell.tech.foundry:behavioralextensionsrstbsupport:0.0.2'

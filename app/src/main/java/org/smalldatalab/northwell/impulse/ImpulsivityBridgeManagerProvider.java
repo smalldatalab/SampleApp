@@ -83,7 +83,8 @@ public class ImpulsivityBridgeManagerProvider implements RSRPBackEnd {
             makeParent(context.getFilesDir().getAbsolutePath() + File.separator + filename);
 
             Log.d("Uploader", archive.toString());
-            this.uploadManager.upload(filename, archive).toCompletable().await();
+//            this.uploadManager.upload(filename, archive).toCompletable().await();
+            this.uploadManager.addArchive(filename, archive);
         }
 
 
