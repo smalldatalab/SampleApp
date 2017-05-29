@@ -4,8 +4,8 @@ edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBSing
 edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBIntegerStepGenerator
 edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBTimeOfDayStepGenerator
 edu.cornell.tech.foundry.researchsuitetaskbuilder.DefaultStepGenerators.RSTBDatePickerStepGenerator
-org.smalldatalab.northwell.impulse.SDL.PAMStepGenerator
-org.smalldatalab.northwell.impulse.SDL.PAMMultipleStepGenerator
+edu.cornell.tech.foundry.sdl_rsx_rstbsupport.PAMStepGenerator
+edu.cornell.tech.foundry.sdl_rsx_rstbsupport.PAMMultipleStepGenerator
 org.smalldatalab.northwell.impulse.SDL.CTFLikertFormStepGenerator
 org.smalldatalab.northwell.impulse.SDL.CTFSemanticDifferentialFormStepGenerator
 edu.cornell.tech.foundry.behavioralextensionsrstbsupport.CTFGoNoGoStepGenerator

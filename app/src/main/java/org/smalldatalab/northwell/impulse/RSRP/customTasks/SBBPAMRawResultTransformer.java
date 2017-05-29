@@ -7,8 +7,8 @@ import org.smalldatalab.northwell.impulse.SBBIntermediateResultTransformer.spi.S
 
 import java.util.Map;
 
-import edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFGoNoGoSummary;
 import edu.cornell.tech.foundry.researchsuiteresultprocessor.RSRPIntermediateResult;
+import edu.cornell.tech.foundry.sdl_rsx_rsrpsupport.PAMRaw;
 
 /**
  * Created by jameskizer on 3/17/17.
@@ -18,7 +18,7 @@ public class SBBPAMRawResultTransformer implements SBBIntermediateResultTransfor
 
     @Override
     public SBBDataArchiveConvertible transform(Context context, RSRPIntermediateResult intermediateResult) {
-        CTFPAMRaw raw = (CTFPAMRaw) intermediateResult;
+        PAMRaw raw = (PAMRaw) intermediateResult;
         Map<String, Object> parameters = raw.getParameters();
         if (parameters != null &&
                 parameters.get("schemaID") instanceof String &&
@@ -32,7 +32,7 @@ public class SBBPAMRawResultTransformer implements SBBIntermediateResultTransfor
 
     @Override
     public boolean canTransform(RSRPIntermediateResult intermediateResult) {
-        if( intermediateResult instanceof CTFPAMRaw) {
+        if( intermediateResult instanceof PAMRaw) {
             return true;
         }
         else {

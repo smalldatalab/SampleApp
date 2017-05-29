@@ -95,6 +95,12 @@ public class ImpulsivityResearchStack extends ResearchStack
 
     private BridgeManagerProvider bridgeManagerProvider;
 
+    public void startUpload() {
+        if(this.bridgeManagerProvider != null && this.bridgeManagerProvider.getUploadManager() != null) {
+            this.bridgeManagerProvider.getUploadManager().startUpload();
+        }
+    }
+
     protected BridgeManagerProvider createBridgeManagerProvider(Context context) {
 
         BridgeManagerProvider.init(context);

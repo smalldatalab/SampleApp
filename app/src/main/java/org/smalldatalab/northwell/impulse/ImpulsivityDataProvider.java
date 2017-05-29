@@ -44,6 +44,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 
@@ -556,23 +557,30 @@ public class ImpulsivityDataProvider extends DataProvider
         if (activityRun != null) {
             this.handleActivityResult(context, taskResult);
 
-            class UploadResultsTask extends AsyncTask<Void, Void, Void> {
+//            class UploadResultsTask extends AsyncTask<Void, Void, Void> {
+//
+//                @Override
+//                protected Void doInBackground(Void... params) {
+//
+//                    CTFResultsProcessorManager.getResultsProcessor().processResult(
+//                            context,
+//                            taskResult,
+//                            activityRun.taskRunUUID,
+//                            activityRun.resultTransforms
+//                    );
+//
+//                    return null;
+//                }
+//            }
+//
+//            new UploadResultsTask().execute().executeOnExecutor(THREAD_POOL_EXECUTOR);
 
-                @Override
-                protected Void doInBackground(Void... params) {
-
-                    CTFResultsProcessorManager.getResultsProcessor().processResult(
-                            context,
-                            taskResult,
-                            activityRun.taskRunUUID,
-                            activityRun.resultTransforms
-                    );
-
-                    return null;
-                }
-            }
-
-            new UploadResultsTask().execute();
+            CTFResultsProcessorManager.getResultsProcessor().processResult(
+                    context,
+                    taskResult,
+                    activityRun.taskRunUUID,
+                    activityRun.resultTransforms
+            );
 
 //            RSRPResultsProcessor resultsProcessor = new RSRPResultsProcessor()
 

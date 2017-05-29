@@ -52,11 +52,11 @@
     <string name="sign_out">Sign Out</string>
     <string name="impulsivity_settings_version">Version %1$s (Build %2$d). Installed on %3$s</string>
 
-    <string name="bridge_external_id_format">jdk288+%s@cornell.edu</string>
+    <string name="bridge_external_id_format">rvitale+%s@northwell.edu</string>
     <string name="osb_base_url">https://webservices.sagebridge.org/</string>
-    <string name="osb_study_id">cornell-mhealth-eval</string>
+    <string name="osb_study_id">digital-marshmallow</string>
     <string name="osb_study_name">mPulse DMT</string>
-    <string name="osb_study_public_key">cornell-mhealth-eval.pem</string>
+    <string name="osb_study_public_key">digital-marshmallow.pem</string>
 
 
 
