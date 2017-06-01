@@ -29,6 +29,7 @@ import org.sagebionetworks.bridge.android.manager.BridgeManagerProvider;
 //import org.smalldatalab.northwell.impulse.bridge.BridgeDataProvider;
 import org.researchstack.skin.ResourceManager;
 import org.researchstack.skin.model.SchedulesAndTasksModel;
+import org.sagebionetworks.bridge.android.manager.UploadManager;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFActivityRun;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFSchedule;
 import org.smalldatalab.northwell.impulse.studyManagement.CTFScheduleItem;
@@ -76,6 +77,7 @@ public class ImpulsivityDataProvider extends DataProvider
 //    private final BridgeManagerProvider bridgeManagerProvider;
 //    private final BridgeConfig bridgeConfig;
     private final AuthenticationManager authenticationManager;
+    private final UploadManager uploadManager;
 //    private final ConsentManager consentManager;
 
     private boolean debugMode = false;
@@ -91,6 +93,7 @@ public class ImpulsivityDataProvider extends DataProvider
         rand = new Random();
 
         this.authenticationManager = bridgeManagerProvider.getAuthenticationManager();
+        this.uploadManager = bridgeManagerProvider.getUploadManager();
     }
 
 
