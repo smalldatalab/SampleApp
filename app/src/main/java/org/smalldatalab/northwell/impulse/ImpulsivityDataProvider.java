@@ -636,10 +636,8 @@ public class ImpulsivityDataProvider extends DataProvider
 
     private void handleBaseline(Context context, TaskResult taskResult) {
 
-        ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
-
         StepResult groupLabelStepResult = taskResult.getStepResult("group_label");
-        if (groupLabelStepResult != null) {
+        if (groupLabelStepResult != null && groupLabelStepResult.getResult() != null) {
             String groupLabel = (String) groupLabelStepResult.getResult();
             ImpulsivityAppStateManager.getInstance().setGroupLabel(context, groupLabel);
         }
@@ -648,9 +646,22 @@ public class ImpulsivityDataProvider extends DataProvider
 
         //handle baseline behaviors
         this.handleBaselineBehaviorResults(context, taskResult);
+
+        ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, taskResult.getEndDate());
     }
 
     private void handleReenrollment(Context context, TaskResult taskResult) {
+
+        StepResult groupLabelStepResult = taskResult.getStepResult("group_label");
+        if (groupLabelStepResult != null && groupLabelStepResult.getResult() != null) {
+            String groupLabel = (String) groupLabelStepResult.getResult();
+            ImpulsivityAppStateManager.getInstance().setGroupLabel(context, groupLabel);
+        }
+
+        this.handleMorningAndEveningSurveyTimes(context, taskResult);
+
+        //handle baseline behaviors
+        this.handleBaselineBehaviorResults(context, taskResult);
 
         //get baseline completed date
         StepResult baselineCompletedTime = taskResult.getStepResult("baseline_completed_date_picker");
@@ -662,17 +673,6 @@ public class ImpulsivityDataProvider extends DataProvider
             Date baselineCompletedDate = baselineCalendar.getTime();
             ImpulsivityAppStateManager.getInstance().markBaselineSurveyAsCompleted(context, baselineCompletedDate);
         }
-
-        StepResult groupLabelStepResult = taskResult.getStepResult("group_label");
-        if (groupLabelStepResult != null) {
-            String groupLabel = (String) groupLabelStepResult.getResult();
-            ImpulsivityAppStateManager.getInstance().setGroupLabel(context, groupLabel);
-        }
-
-        this.handleMorningAndEveningSurveyTimes(context, taskResult);
-
-        //handle baseline behaviors
-        this.handleBaselineBehaviorResults(context, taskResult);
     }
 
     private void handleMorningAndEveningSurveyTimes(Context context, TaskResult taskResult) {

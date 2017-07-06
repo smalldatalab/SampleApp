@@ -44,6 +44,7 @@ public class ImpulseSplashActivity extends PinCodeActivity {
                             && firstRunDAO.getFirstRun() &&
                             DataProvider.getInstance().isSignedIn(this))
                     {
+                        finish();
                         launchMainActivity();
                     }
                     else
@@ -53,16 +54,16 @@ public class ImpulseSplashActivity extends PinCodeActivity {
                                 .compose(ObservableUtils.applyDefault())
                                 .subscribe(dataResponse -> {
 
+                                    finish();
                                     launchOnboardingActivity();
 
                                 }, throwable -> {
 
+                                    finish();
                                     launchOnboardingActivity();
 
                                 });
                     }
-
-                    finish();
                 });
     }
 
