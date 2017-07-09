@@ -8,3 +8,4 @@ org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFDemographicsResultTransfo
 org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFMultipleChoiceIntermediateResultTransformer
 org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFTimeOfDayResultTransformer
 org.smalldatalab.northwell.impulse.RSRP.customTasks.CTFTextResultTransformer
+edu.cornell.tech.foundry.behavioralextensionsrsrpsupport.CTFDiscountingRawResultFrontEnd
